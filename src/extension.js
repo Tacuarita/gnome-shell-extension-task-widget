@@ -714,7 +714,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Either sets and shows the active task list or shows the placeholder.
      *
-     * @param {number|undefiend} index - Index of the task list to activate or
+     * @param {number|undefined} index - Index of the task list to activate or
      * `undefined` to show the placeholder instead.
      * @param {string} [text] - Text for the placeholder.
      */
@@ -730,7 +730,7 @@ class TaskWidget extends St.BoxLayout {
             this._showActiveTaskListOnGoing = true;
             this._cancellable = new Gio.Cancellable();
 
-            if (index !== null && this._taskLists[index]) {
+            if (index !== undefined && this._taskLists[index]) {
                 const adjustment = this._scrollView.vscroll.adjustment.value;
 
                 if (await this._listTasks(this._taskLists[index]) === undefined)
