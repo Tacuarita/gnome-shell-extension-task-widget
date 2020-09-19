@@ -1,0 +1,14 @@
+{
+    "uuid": "@EXTENSION_UUID@",
+    "base": "@EXTENSION_BASE@",
+    "schemas": "@GSCHEMA_DIR@",
+    "locale": "@LOCALE_DIR@",
+    "gresource": "@EXTENSION_BASE@.gresource",
+    "epath": "/org/gnome/shell/extensions/task-widget",
+    "name": "Task Widget",
+    "description": "Display tasks next to the calendar widget.",
+    "version": @EXTENSION_VERSION@,
+    "shell-version": [ "3.36", "3.38" ],
+    "url": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget",
+    "wiki": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Home"
+}

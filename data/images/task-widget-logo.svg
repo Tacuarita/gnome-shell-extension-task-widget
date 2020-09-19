@@ -1,0 +1,19 @@
+<svg width="128" height="128" version="1.1" viewBox="0 0 33.867 33.867" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="linearGradient1064">
+   <stop stop-color="#59f" offset="0"/>
+   <stop stop-color="#04a" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient968" x1="199.18" x2="464.2" y1="332.55" y2="332.55" gradientTransform="matrix(.11289 0 0 .11288 27.561 25.037)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#59f" offset="0"/>
+   <stop stop-color="#04a" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient1717" x1="481.69" x2="181.69" y1="315.04" y2="315.04" gradientTransform="matrix(.11289 0 0 .11288 27.561 25.037)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient1064"/>
+  <linearGradient id="linearGradient1156" x1="75.547" x2="101.51" y1="99.505" y2="99.505" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient1064"/>
+ </defs>
+ <g transform="translate(-48.071 -43.666)">
+  <path d="m65.004 43.666a16.933 16.932 0 0 0-16.933 16.932 16.933 16.932 0 0 0 16.933 16.932 16.933 16.932 0 0 0 16.933-16.932 16.933 16.932 0 0 0-16.933-16.932zm0 3.9508a12.982 12.981 0 0 1 12.982 12.981 12.982 12.981 0 0 1-12.982 12.981 12.982 12.981 0 0 1-12.982-12.981 12.982 12.981 0 0 1 12.982-12.981z" fill="url(#linearGradient1717)" stroke-width=".10174"/>
+  <path d="m64.972 47.617a14.959 14.958 0 0 0-14.926 14.958 14.959 14.958 0 0 0 14.959 14.958 14.959 14.958 0 0 0 14.959-14.958 14.959 14.958 0 0 0-14.85-14.958 12.982 12.981 0 0 1 12.873 12.981 12.982 12.981 0 0 1-12.982 12.981 12.982 12.981 0 0 1-12.982-12.981 12.982 12.981 0 0 1 12.95-12.981z" fill="url(#linearGradient968)" stroke-width=".089882"/>
+  <text transform="matrix(.62434 0 0 .50083 10.378 10.942)" fill="url(#linearGradient1156)" font-family="sans-serif" font-size="50.8px" stroke-width="1.3338" style="line-height:1.25;shape-inside:url(#rect1727);white-space:pre" xml:space="preserve"><tspan x="68.179688" y="117.60234"><tspan fill="url(#linearGradient1156)" stroke-width="1.3338" style="shape-inside:url(#rect1727)">✓</tspan></tspan></text>
+ </g>
+</svg>

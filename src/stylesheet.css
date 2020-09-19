@@ -1,0 +1,32 @@
+.remove-margin:ltr {
+  margin-right: 0;
+}
+
+.remove-margin:rtl {
+  margin-left: 0;
+}
+
+.task-widget-column {
+  margin: 0;
+}
+
+.task-box {
+  spacing: 12px;
+}
+
+.task-icon  {
+  color: #bebebe;
+  icon-size: 52px;
+  height: 52px;
+}
+
+/**
+ * HACK: some custom Shell themes introduce huge gaps between checkboxes. This
+ * will remove them.
+*/
+.task-widget-column .check-box,
+.task-widget-column .check-box StBoxLayout {
+  padding: 0;
+  margin: 0;
+  min-height: auto;
+}

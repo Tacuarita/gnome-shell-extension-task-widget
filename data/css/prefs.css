@@ -1,0 +1,39 @@
+.row:not(:first-child) { 
+    border-top: 1px solid transparent; 
+    border-bottom: 1px solid transparent; 
+}
+
+.row:first-child { 
+    border-top: 1px solid transparent; 
+    border-bottom: 1px solid transparent; 
+}
+
+.row:last-child { 
+    border-top: 1px solid transparent; 
+    border-bottom: 1px solid transparent; 
+}
+
+.row.drag-icon { 
+    background: alpha(gray, 0.2);
+}
+
+.row.drag-row { 
+    background: alpha(gray, 0.2); 
+}
+
+.row.drag-row.drag-hover {
+    border-top: 1px solid green;
+    border-bottom: 1px solid green; 
+}
+
+.row.drag-hover-top {
+    border-top: 1px solid green; 
+}
+
+.row.drag-hover-bottom {
+    border-bottom: 1px solid green; 
+}
+
+.row-separator {
+    background: green;
+}
