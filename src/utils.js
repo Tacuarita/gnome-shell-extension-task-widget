@@ -216,7 +216,7 @@ function _sortByName(a, b) {
     if (b.get_summary() === null)
         return -1;
 
-    return lc(a).localeCompare(lc(b));
+    return lc(b).localeCompare(lc(a));
 }
 
 /**
