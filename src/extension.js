@@ -513,6 +513,9 @@ class TaskWidget extends St.BoxLayout {
             for (const task of tasks.sort(Utils._sortByName)
                 .sort(Utils._sortByDueDate)) {
 
+                if (task.get_summary() === null)
+                    continue;
+
                 const label = new St.Label({
                     style_class: 'world-clocks-header',
                 });

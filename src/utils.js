@@ -211,7 +211,12 @@ function _customSort(order, a, b) {
  */
 function _sortByName(a, b) {
     const lc = x => x.get_summary().get_value().toLowerCase();
-    return lc(b).localeCompare(lc(a));
+
+    try {
+        return lc(b).localeCompare(lc(a));
+    } catch (e) {
+        // Skip tasks with no title.
+    }
 }
 
 /**
