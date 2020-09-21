@@ -211,12 +211,12 @@ function _customSort(order, a, b) {
  */
 function _sortByName(a, b) {
     const lc = x => x.get_summary().get_value().toLowerCase();
+    if (a.get_summary() === null)
+        return 1;
+    if (b.get_summary() === null)
+        return -1;
 
-    try {
-        return lc(b).localeCompare(lc(a));
-    } catch (e) {
-        // Skip tasks with no title.
-    }
+    return lc(a).localeCompare(lc(b));
 }
 
 /**
