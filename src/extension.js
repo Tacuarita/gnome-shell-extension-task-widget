@@ -61,9 +61,6 @@ class TaskWidget extends St.BoxLayout {
             settings_schema: gschema.lookup(Me.metadata.base, true),
         });
 
-        this._onMenuOpenId = DateMenu.connect('open-state-changed',
-            this._onMenuOpen.bind(this));
-
         this.connect('destroy', this._onDestroy.bind(this));
 
         this._buildPlaceholder();
@@ -156,6 +153,9 @@ class TaskWidget extends St.BoxLayout {
 
             this._scrollView.add_actor(this._taskBox);
             this._contentBox.add_child(this._scrollView);
+
+            this._onMenuOpenId = DateMenu.connect('open-state-changed',
+                this._onMenuOpen.bind(this));
 
             const themeContext = St.ThemeContext.get_for_stage(global.stage);
             this._loadThemeHacks(themeContext);
@@ -937,7 +937,7 @@ class TaskWidget extends St.BoxLayout {
                     GLib.PRIORITY_DEFAULT, 2, () => {
                         this._showActiveTaskList(this._activeTaskList);
 
-                        if (i++ < 60)
+                        if (i++ < 60 && this._activeTaskList !== undefined)
                             return GLib.SOURCE_CONTINUE;
                         else
                             this._onMenuOpen(null, false);
@@ -955,7 +955,9 @@ class TaskWidget extends St.BoxLayout {
                 this._scrollView.vscroll.adjustment.set_values(
                     0, 0, 0, 0, 0, 0);
             }
-            this._taskBox.destroy_all_children();
+
+            if (this._taskBox.first_child)
+                this._taskBox.destroy_all_children();
         }
     }
 
