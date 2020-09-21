@@ -8,9 +8,7 @@ const Gettext = imports.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-let ECal = null,
-    EDataServer = null,
-    ICalGLib = null;
+let ECal, EDataServer, ICalGLib;
 
 if (Utils._HAS_EDS) {
     ECal = imports.gi.ECal;

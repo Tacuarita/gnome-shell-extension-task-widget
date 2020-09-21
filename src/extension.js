@@ -9,9 +9,7 @@ const Gettext = imports.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-let ECal = null,
-    EDataServer = null,
-    ICalGLib = null;
+let ECal, EDataServer, ICalGLib;
 
 if (Utils._HAS_EDS) {
     ECal = imports.gi.ECal;
@@ -956,8 +954,7 @@ class TaskWidget extends St.BoxLayout {
                     0, 0, 0, 0, 0, 0);
             }
 
-            if (this._taskBox.first_child)
-                this._taskBox.destroy_all_children();
+            this._taskBox.destroy_all_children();
         }
     }
 

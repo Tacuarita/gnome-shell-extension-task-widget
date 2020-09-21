@@ -8,9 +8,7 @@ var _MINUTES_PER_HOUR = 60;
 var _MINUTES_PER_DAY = _MINUTES_PER_HOUR * 24;
 var _MSECS_IN_DAY = _MINUTES_PER_DAY * 60 * 1000;
 
-let ECal = null,
-    EDataServer = null,
-    ICalGLib = null;
+let ECal, EDataServer, ICalGLib;
 
 try {
     ECal = imports.gi.ECal;
