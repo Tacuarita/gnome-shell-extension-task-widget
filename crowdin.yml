@@ -7,3 +7,5 @@ files:
     languages_mapping:
       locale:
         lt: lt
+        de: de
+        nl: nl_NL
