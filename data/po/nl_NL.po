@@ -1,22 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the org.gnome.shell.extensions.task-widget package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
+"Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-19 06:05+0200\n"
-"PO-Revision-Date: 2020-09-21 13:07+0200\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2020-09-21 18:08\n"
+"Last-Translator: \n"
+"Language-Team: Dutch\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
-"Language: nl_NL\n"
+"X-Crowdin-Project: task-widget\n"
+"X-Crowdin-Project-ID: 418358\n"
+"X-Crowdin-Language: nl\n"
+"X-Crowdin-File: /master/data/po/org.gnome.shell.extensions.task-widget.pot\n"
+"X-Crowdin-File-ID: 8\n"
 
 #: src/extension.js:95
 msgid "Loading"
@@ -62,8 +61,7 @@ msgstr "Fout: ontbrekende afhankelijkheden"
 
 #: src/prefs.js:85
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
+msgstr "Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
 
 #: src/prefs.js:224
 msgctxt "after X second(s)"
@@ -148,14 +146,8 @@ msgid "Copyright © 2020 Juozas Miškinis"
 msgstr "Auteursrecht © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:119
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het "
-"probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-"
-"informatie."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-informatie."
 
 #: data/ui/settings-menu.ui:131 data/ui/task-list-properties-dialog.ui:31
 msgid "Cancel"
@@ -210,8 +202,7 @@ msgid "Task Lists"
 msgstr "Takenlijsten"
 
 #: data/ui/settings-window.ui:496
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Je kunt rijen op de widget verslepen om de volgorde aan te passen."
 
 #: data/ui/task-list-properties-dialog.ui:13
@@ -245,3 +236,4 @@ msgstr "Eigenschappen"
 #: data/ui/task-list-row.ui:206
 msgid "Task list options"
 msgstr "Takenlijstopties"
+
