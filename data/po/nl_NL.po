@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
-"Language: nl\n"
+"Language: nl_NL\n"
 
 #: src/extension.js:95
 msgid "Loading"
