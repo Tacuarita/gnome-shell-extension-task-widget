@@ -484,10 +484,10 @@ class TaskWidget extends St.BoxLayout {
      * @param {Object} taskList - Task list object.
      * @param {string} taskList.uid - Unique task list identifier.
      * @param {string} taskList.name  - Task list name.
-     * @param {boolean} merged - Task lists are merged into one.
+     * @param {boolean} merge - Task lists will be merged into one.
      * @return {Promise<boolean>} `true` if there's at least one task.
      */
-    async _listTasks(taskList, merged) {
+    async _listTasks(taskList, merge) {
         try {
             let prev = false;
             const today = new Date();
@@ -504,10 +504,10 @@ class TaskWidget extends St.BoxLayout {
             // Clicking on a checkbox must carry information about the task
             // list the task belongs to. Thus, here we will assign a
             // corresponding task list uid to each task:
-            if (merged) {
+            if (merge) {
                 tasks = [].concat(...(await Promise.all(this._taskLists.map(
                     tl => this._filterTasks(this._clientViews.get(tl.uid)
-                    .client)))).map((tll, index) => tll.map(task =>
+                    .client)))).map((tl, index) => tl.map(task =>
                     [this._taskLists[index].uid, task])));
             } else {
                 tasks = await this._filterTasks(this._clientViews.get(
