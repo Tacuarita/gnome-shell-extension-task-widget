@@ -96,6 +96,7 @@ const TaskWidgetSettings = GObject.registerClass({
     GTypeName: 'TaskWidgetSettings',
     Template: `resource://${Me.metadata.epath}/settings-window.ui`,
     InternalChildren: [
+        'mtlSwitch',
         'gotSwitch',
         'hhfstlSwitch',
         'heactlSwitch',
@@ -158,6 +159,8 @@ const TaskWidgetSettings = GObject.registerClass({
             }
         });
 
+        this._settings.bind('merge-task-lists', this._mtlSwitch, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
         this._settings.bind('group-overdue-tasks', this._gotSwitch, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         this._settings.bind('hide-header-for-singular-task-lists',

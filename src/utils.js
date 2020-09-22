@@ -205,15 +205,17 @@ function _customSort(order, a, b) {
 /**
  * Sorts tasks by their name.
  *
- * @param {Object} a - Task object.
- * @param {Object} b - Task object.
+ * @param {[string, ECal.Component]} a - A list consisting of a task list uid
+ * and task object.
+ * @param {[string, ECal.Component]} b - A list consisting of a task list uid
+ * and task object.
  * @return {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByName(a, b) {
-    const lc = x => x.get_summary().get_value().toLowerCase();
-    if (a.get_summary() === null)
+    const lc = x => x[1].get_summary().get_value().toLowerCase();
+    if (a[1].get_summary() === null)
         return 1;
-    if (b.get_summary() === null)
+    if (b[1].get_summary() === null)
         return -1;
 
     return lc(b).localeCompare(lc(a));
@@ -223,15 +225,17 @@ function _sortByName(a, b) {
  * Sorts tasks by their due date. If task has no due date, move it to the
  * end of the list.
  *
- * @param {Object} a - Task object.
- * @param {Object} b - Task object.
+ * @param {[string, ECal.Component]} a - A list consisting of a task list uid
+ * and task object.
+ * @param {[string, ECal.Component]} b - A list consisting of a task list uid
+ * and task object.
  * @return {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByDueDate(a, b) {
-    const time = x => x.get_due().get_value().as_timet();
-    if (a.get_due() === null)
+    const time = x => x[1].get_due().get_value().as_timet();
+    if (a[1].get_due() === null)
         return 1;
-    if (b.get_due() === null)
+    if (b[1].get_due() === null)
         return -1;
     return time(a) - time(b);
 }

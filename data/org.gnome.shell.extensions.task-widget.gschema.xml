@@ -2,6 +2,9 @@
 <schemalist>
   <schema id="org.gnome.shell.extensions.task-widget"
         path="/org/gnome/shell/extensions/task-widget/">
+    <key name="merge-task-lists" type="b">
+      <default>false</default>
+    </key>
     <key name="group-overdue-tasks" type="b">
       <default>true</default>
     </key>

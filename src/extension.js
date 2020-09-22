@@ -361,14 +361,12 @@ class TaskWidget extends St.BoxLayout {
                 name: source.display_name,
             });
 
-            // If the extension is in its loading state (`taskBox` has not
-            // been mapped yet), we don't need to go any further:
-            if (!this._taskBox)
+            if (!this._taskBox || this._onSettingsChangedOnGoing)
                 return;
 
             if (this._activeTaskList === undefined)
                 this._showActiveTaskList(0);
-            else if (!this._onSettingsChangedOnGoing)
+            else
                 this._showActiveTaskList(this._activeTaskList);
         } catch (e) {
             if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
@@ -486,9 +484,10 @@ class TaskWidget extends St.BoxLayout {
      * @param {Object} taskList - Task list object.
      * @param {string} taskList.uid - Unique task list identifier.
      * @param {string} taskList.name  - Task list name.
+     * @param {boolean} merged - Task list are merged into one.
      * @return {Promise<boolean>} `true` if there's at least one task.
      */
-    async _listTasks(taskList) {
+    async _listTasks(taskList, merged) {
         try {
             let prev = false;
             const today = new Date();
@@ -500,8 +499,23 @@ class TaskWidget extends St.BoxLayout {
             const utc = x => Date.UTC(x.getFullYear(), x.getMonth(),
                 x.getDate());
 
-            const client = this._clientViews.get(taskList.uid).client;
-            const tasks = await this._filterTasks(client);
+            let tasks;
+
+            // Clicking on a checkbox must carry information about the task
+            // list the task belongs to. Thus, here we will assign a
+            // corresponding task list uid to each task:
+            if (merged) {
+                tasks = [].concat(...(await Promise.all(this._taskLists.map(
+                    tl => this._filterTasks(this._clientViews.get(tl.uid)
+                    .client)))).map((tll, index) => tll.map(task =>
+                    [this._taskLists[index].uid, task])));
+            } else {
+                tasks = await this._filterTasks(this._clientViews.get(
+                    taskList.uid).client);
+
+                if (tasks)
+                    tasks = tasks.map(task => [taskList.uid, task]);
+            }
 
             if (!tasks || this._cancellable.is_cancelled())
                 return;
@@ -510,7 +524,7 @@ class TaskWidget extends St.BoxLayout {
 
             // Initial sorting by name is necessary to ensure that tasks with no
             // due date are ordered consistently:
-            for (const task of tasks.sort(Utils._sortByName)
+            for (const [uid, task] of tasks.sort(Utils._sortByName)
                 .sort(Utils._sortByDueDate)) {
 
                 if (task.get_summary() === null)
@@ -532,7 +546,7 @@ class TaskWidget extends St.BoxLayout {
                 }
 
                 checkbox.connect('clicked', () => this._taskClicked(checkbox,
-                    this._clientViews.get(taskList.uid).client, task));
+                    this._clientViews.get(uid).client, task));
 
                 // If a task belongs to an already created group:
                 if ((due === null && due === prev) || (prev && due &&
@@ -730,19 +744,25 @@ class TaskWidget extends St.BoxLayout {
 
             this._showActiveTaskListOnGoing = true;
             this._cancellable = new Gio.Cancellable();
+            const merge = this._settings.get_boolean('merge-task-lists');
 
             if (index !== undefined && this._taskLists[index]) {
                 const adjustment = this._scrollView.vscroll.adjustment.value;
 
-                if (await this._listTasks(this._taskLists[index]) === undefined)
+                if (await this._listTasks(this._taskLists[index],
+                    merge) === undefined)
                     return;
 
                 // In the events that refresh the active task list (e.g.
                 // clicking on a checkbox), we want to maintain the position of
                 // the vertical scrollbar:
                 this._scrollView.vscroll.adjustment.set_value(adjustment);
-                this._taskListName.set_text(this._taskLists[index].name);
-                this._setHeader();
+
+                const name = merge ? _('All Tasks')
+                    : this._taskLists[index].name;
+
+                this._taskListName.set_text(name);
+                this._setHeader(merge);
 
                 if (!this._contentBox.visible)
                     this._contentBox.show();
@@ -834,9 +854,11 @@ class TaskWidget extends St.BoxLayout {
      * Sets task list header appearance: ensures that `back` and `forward`
      * buttons are shown to switch between task lists and optionally hides
      * task list header for singular task list:
+     *
+     * @param {boolean} merged - Task lists are merged into one.
      */
-    _setHeader() {
-        const singular = this._taskLists.length === 1;
+    _setHeader(merged) {
+        const singular = this._taskLists.length === 1 || merged;
 
         if (singular) {
             this._backButton.hide();
@@ -861,7 +883,8 @@ class TaskWidget extends St.BoxLayout {
      * @return {boolean} False to continue the propagation of the event.
      */
     _onHeaderScrolled(actor, event) {
-        if (this._taskLists.length !== 1) {
+        if (this._taskLists.length !== 1 &&
+            !this._settings.get_boolean('merge-task-lists')) {
             switch (event.get_scroll_direction()) {
                 case Clutter.ScrollDirection.DOWN:
                 case Clutter.ScrollDirection.RIGHT:
