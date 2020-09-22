@@ -484,7 +484,7 @@ class TaskWidget extends St.BoxLayout {
      * @param {Object} taskList - Task list object.
      * @param {string} taskList.uid - Unique task list identifier.
      * @param {string} taskList.name  - Task list name.
-     * @param {boolean} merged - Task list are merged into one.
+     * @param {boolean} merged - Task lists are merged into one.
      * @return {Promise<boolean>} `true` if there's at least one task.
      */
     async _listTasks(taskList, merged) {
