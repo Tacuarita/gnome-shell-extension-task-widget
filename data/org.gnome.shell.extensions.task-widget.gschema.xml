@@ -12,7 +12,7 @@
       <default>false</default>
     </key>
     <key name="hide-completed-tasks" type="i">
-      <default>0</default>
+      <default>3</default>
     </key>
     <key name="hct-apotac-unit" type="i">
       <default>1</default>
