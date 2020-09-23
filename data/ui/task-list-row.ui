@@ -122,6 +122,7 @@
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <property name="ellipsize">end</property>
+                    <property name="max_width_chars">25</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
