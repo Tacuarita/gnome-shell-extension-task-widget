@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-19 06:05+0200\n"
-"PO-Revision-Date: 2020-09-21 17:32\n"
+"PO-Revision-Date: 2020-09-22 14:46\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -19,221 +19,221 @@ msgstr ""
 
 #: src/extension.js:95
 msgid "Loading"
-msgstr ""
+msgstr "Lädt"
 
 #: src/extension.js:203
 msgid "Previous task list"
-msgstr ""
+msgstr "Vorige Aufgabenliste"
 
 #: src/extension.js:223
 msgid "Next task list"
-msgstr ""
+msgstr "Nächste Aufgabenliste"
 
 #: src/extension.js:544
 msgid "No due date"
-msgstr ""
+msgstr "Ohne Fälligkeitsdatum"
 
 #: src/extension.js:546
 msgid "Today"
-msgstr ""
+msgstr "Heute"
 
 #: src/extension.js:549
 msgid "Overdue"
-msgstr ""
+msgstr "Überfällig"
 
 #: src/extension.js:557
 msgctxt "task due date"
 msgid "%A, %B %-d"
-msgstr ""
+msgstr "%A, %B %-d"
 
 #: src/extension.js:559
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
-msgstr ""
+msgstr "%A, %B %-d, %Y"
 
 #: src/extension.js:772
 msgid "No Tasks"
-msgstr ""
+msgstr "Keine Aufgaben"
 
 #: src/extension.js:778 src/prefs.js:84
 msgid "Error: Missing Dependencies"
-msgstr ""
+msgstr "Fehler: Fehlende Abhängigkeiten"
 
 #: src/prefs.js:85
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
+msgstr "Installiere den Evolution Data Server um diese Erweiterung zu nutzen."
 
 #: src/prefs.js:224
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sekunde"
+msgstr[1] "Sekunden"
 
 #: src/prefs.js:226
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Minute"
+msgstr[1] "Minuten"
 
 #: src/prefs.js:227
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Stunde"
+msgstr[1] "Stunden"
 
 #: src/prefs.js:229
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tag"
+msgstr[1] "Tage"
 
 #: src/prefs.js:299
 msgid "No remote task lists found"
-msgstr ""
+msgstr "Keine Online-Aufgabenlisten gefunden"
 
 #: src/prefs.js:306 data/ui/settings-window.ui:569
 msgid "Refresh the list of account task lists"
-msgstr ""
+msgstr "Liste der Aufgabenlisten aktualisieren"
 
 #: src/prefs.js:369
 msgid "Refresh in progress"
-msgstr ""
+msgstr "Aktualisierung im Gange"
 
 #: src/prefs.js:854
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Minute"
+msgstr[1] "Minuten"
 
 #: src/prefs.js:856
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Stunde"
+msgstr[1] "Stunden"
 
 #: src/prefs.js:858
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tag"
+msgstr[1] "Tage"
 
 #: src/prefs.js:924
 msgctxt "translator name <email>"
 msgid "translator-credits"
-msgstr ""
+msgstr "lightonflux"
 
 #: data/ui/settings-menu.ui:21 data/ui/settings-menu.ui:118
 msgid "Support Log"
-msgstr ""
+msgstr "Support-Protokoll"
 
 #: data/ui/settings-menu.ui:34
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: data/ui/settings-menu.ui:47
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: data/ui/settings-menu.ui:80
 msgid "Copyright © 2020 Juozas Miškinis"
-msgstr ""
+msgstr "Copyright © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:119
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr ""
+msgstr "Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, entfernen oder zensieren."
 
 #: data/ui/settings-menu.ui:131 data/ui/task-list-properties-dialog.ui:31
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: data/ui/settings-menu.ui:144
 msgid "Review Log"
-msgstr ""
+msgstr "Protokoll ansehen"
 
 #: data/ui/settings-window.ui:50
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: data/ui/settings-window.ui:91
 msgid "Group overdue tasks"
-msgstr ""
+msgstr "Überfällige Aufgaben gruppieren"
 
 #: data/ui/settings-window.ui:157
 msgid "Hide header for singular tasks lists"
-msgstr ""
+msgstr "Kopfzeile für einzelne Aufgabenlisten ausblenden"
 
 #: data/ui/settings-window.ui:222
 msgid "Hide empty and completed task lists"
-msgstr ""
+msgstr "Verstecke leere und abgeschlossene Aufgabelisten"
 
 #: data/ui/settings-window.ui:287
 msgid "Hide completed tasks"
-msgstr ""
+msgstr "Abgeschlossene Aufgaben verbergen"
 
 #: data/ui/settings-window.ui:300
 msgid "Never"
-msgstr ""
+msgstr "Nie"
 
 #: data/ui/settings-window.ui:301
 msgid "Immediately"
-msgstr ""
+msgstr "Sofort"
 
 #: data/ui/settings-window.ui:302
 msgid "After a period of time after completion"
-msgstr ""
+msgstr "Nach einer Zeitspanne nach Fertigstellung"
 
 #: data/ui/settings-window.ui:303
 msgid "After a specific time of the day"
-msgstr ""
+msgstr "Nach einer bestimmten Tageszeit"
 
 #: data/ui/settings-window.ui:341 data/ui/settings-window.ui:390
 msgid "After"
-msgstr ""
+msgstr "Nach"
 
 #: data/ui/settings-window.ui:480
 msgid "Task Lists"
-msgstr ""
+msgstr "Aufgabenlisten"
 
 #: data/ui/settings-window.ui:496
 msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
+msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der Aufgabenlisten im Widget zu ändern."
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
-msgstr ""
+msgstr "Task-Eigenschaften"
 
 #: data/ui/task-list-properties-dialog.ui:44
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: data/ui/task-list-properties-dialog.ui:72
 msgid "Refresh every"
-msgstr ""
+msgstr "Aktualisiere alle"
 
 #: data/ui/task-list-row.ui:22
 msgid "Move Up"
-msgstr ""
+msgstr "Hoch bewegen"
 
 #: data/ui/task-list-row.ui:35
 msgid "Move Down"
-msgstr ""
+msgstr "Runter bewegen"
 
 #: data/ui/task-list-row.ui:48
 msgid "Refresh Tasks"
-msgstr ""
+msgstr "Aufgaben aktualisieren"
 
 #: data/ui/task-list-row.ui:61
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschaften"
 
 #: data/ui/task-list-row.ui:206
 msgid "Task list options"
-msgstr ""
+msgstr "Optionen der Aufgabenliste"
 
