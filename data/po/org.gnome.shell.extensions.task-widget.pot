@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 06:05+0200\n"
+"POT-Creation-Date: 2020-09-23 20:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,114 +18,122 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/extension.js:95
+#: src/extension.js:92
 msgid "Loading"
 msgstr ""
 
-#: src/extension.js:203
+#: src/extension.js:205
 msgid "Previous task list"
 msgstr ""
 
-#: src/extension.js:223
+#: src/extension.js:241
+msgid "Select task list"
+msgstr ""
+
+#: src/extension.js:256
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:544
+#: src/extension.js:642
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:546
+#: src/extension.js:644
 msgid "Today"
 msgstr ""
 
-#: src/extension.js:549
+#: src/extension.js:647
 msgid "Overdue"
 msgstr ""
 
-#: src/extension.js:557
+#: src/extension.js:655
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:559
+#: src/extension.js:657
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:772
+#: src/extension.js:845
+msgid "All Tasks"
+msgstr ""
+
+#: src/extension.js:879
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:778 src/prefs.js:84
+#: src/extension.js:885 src/prefs.js:82
 msgid "Error: Missing Dependencies"
 msgstr ""
 
-#: src/prefs.js:85
+#: src/prefs.js:83
 msgid "Please install Evolution Data Server to use this extension."
 msgstr ""
 
-#: src/prefs.js:224
+#: src/prefs.js:225
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:226
+#: src/prefs.js:227
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:227
+#: src/prefs.js:228
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:229
+#: src/prefs.js:230
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:299
+#: src/prefs.js:300
 msgid "No remote task lists found"
 msgstr ""
 
-#: src/prefs.js:306 data/ui/settings-window.ui:569
+#: src/prefs.js:307 data/ui/settings-window.ui:636
 msgid "Refresh the list of account task lists"
 msgstr ""
 
-#: src/prefs.js:369
+#: src/prefs.js:370
 msgid "Refresh in progress"
 msgstr ""
 
-#: src/prefs.js:854
+#: src/prefs.js:855
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:856
+#: src/prefs.js:857
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:858
+#: src/prefs.js:859
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:924
+#: src/prefs.js:925
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr ""
@@ -166,46 +174,50 @@ msgid "Settings"
 msgstr ""
 
 #: data/ui/settings-window.ui:91
+msgid "Merge task lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:156
 msgid "Group overdue tasks"
 msgstr ""
 
-#: data/ui/settings-window.ui:157
+#: data/ui/settings-window.ui:222
 msgid "Hide header for singular tasks lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:222
+#: data/ui/settings-window.ui:287
 msgid "Hide empty and completed task lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:287
+#: data/ui/settings-window.ui:352
 msgid "Hide completed tasks"
 msgstr ""
 
-#: data/ui/settings-window.ui:300
+#: data/ui/settings-window.ui:365
 msgid "Never"
 msgstr ""
 
-#: data/ui/settings-window.ui:301
+#: data/ui/settings-window.ui:366
 msgid "Immediately"
 msgstr ""
 
-#: data/ui/settings-window.ui:302
+#: data/ui/settings-window.ui:367
 msgid "After a period of time after completion"
 msgstr ""
 
-#: data/ui/settings-window.ui:303
+#: data/ui/settings-window.ui:368
 msgid "After a specific time of the day"
 msgstr ""
 
-#: data/ui/settings-window.ui:341 data/ui/settings-window.ui:390
+#: data/ui/settings-window.ui:406 data/ui/settings-window.ui:455
 msgid "After"
 msgstr ""
 
-#: data/ui/settings-window.ui:480
+#: data/ui/settings-window.ui:546
 msgid "Task Lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:496
+#: data/ui/settings-window.ui:563
 msgid ""
 "You can drag and drop rows to change the order of task lists in the widget."
 msgstr ""
@@ -238,6 +250,6 @@ msgstr ""
 msgid "Properties"
 msgstr ""
 
-#: data/ui/task-list-row.ui:206
+#: data/ui/task-list-row.ui:207
 msgid "Task list options"
 msgstr ""
