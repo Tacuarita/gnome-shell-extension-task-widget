@@ -361,7 +361,7 @@ class TaskWidget extends St.BoxLayout {
                 name: source.display_name,
             });
 
-            if (!this._taskBox || this._onSettingsChangedOnGoing)
+            if (!this._taskBox || this._onSettingsChangedOnGoing || !registry)
                 return;
 
             if (this._activeTaskList === undefined)
@@ -444,13 +444,14 @@ class TaskWidget extends St.BoxLayout {
                 // If we need to show a hidden task list which should not be
                 // hidden anymore (because it's no longer empty or no longer
                 // completed):
-                if (index === -1) {
+                if (this._settings.get_boolean('merge-task-lists')) {
+                    await this._storeTaskLists();
+                } else if (index === -1) {
                     this._taskLists.push({
                         uid: view.client.source.uid,
                         name: view.client.source.display_name,
                     });
                 }
-
                 this._showActiveTaskList(this._activeTaskList === undefined
                     ? 0 : this._activeTaskList);
             } else if (!updated && taskList &&
@@ -481,13 +482,11 @@ class TaskWidget extends St.BoxLayout {
      *
      * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/3100
      *
-     * @param {Object} taskList - Task list object.
-     * @param {string} taskList.uid - Unique task list identifier.
-     * @param {string} taskList.name  - Task list name.
+     * @param {string} uid - Unique task list identifier.
      * @param {boolean} merge - Task lists will be merged into one.
      * @return {Promise<boolean>} `true` if there's at least one task.
      */
-    async _listTasks(taskList, merge) {
+    async _listTasks(uid, merge) {
         try {
             let prev = false;
             const today = new Date();
@@ -501,24 +500,36 @@ class TaskWidget extends St.BoxLayout {
 
             let tasks;
 
-            // Clicking on a checkbox must carry information about the task
-            // list the task belongs to. Thus, here we will assign a
-            // corresponding task list uid to each task:
             if (merge) {
-                tasks = [].concat(...(await Promise.all(this._taskLists.map(
+                tasks = await Promise.all(this._taskLists.map(
                     tl => this._filterTasks(this._clientViews.get(tl.uid)
-                    .client)))).map((tl, index) => tl.map(task =>
+                    .client)));
+
+                if (!tasks.length)
+                    return;
+
+                if (this._settings.get_boolean(
+                    'hide-empty-completed-task-lists')) {
+                    if (tasks.map(tl => tl.map(task => task.get_status() ===
+                        ICalGLib.PropertyStatus.COMPLETED).every(
+                        completed => completed === true)).every(
+                        hide => hide === true)) {
+                        this._showPlaceholderWithStatus('no-tasks');
+                        return;
+                    }
+                }
+
+                tasks = [].concat(...tasks.map((tl, index) => tl.map(task =>
                     [this._taskLists[index].uid, task])));
             } else {
                 tasks = await this._filterTasks(this._clientViews.get(
-                    taskList.uid).client);
+                    uid).client);
 
-                if (tasks)
-                    tasks = tasks.map(task => [taskList.uid, task]);
+                if (!tasks || this._cancellable.is_cancelled())
+                    return;
+
+                tasks = tasks.map(task => [uid, task]);
             }
-
-            if (!tasks || this._cancellable.is_cancelled())
-                return;
 
             this._taskBox.destroy_all_children();
 
@@ -622,7 +633,8 @@ class TaskWidget extends St.BoxLayout {
                 : await Utils._getTasks(client, '#t', this._cancellable);
 
             // (User-defined) Hide empty and completed task lists:
-            if (this._settings.get_boolean('hide-empty-completed-task-lists')) {
+            if (this._settings.get_boolean('hide-empty-completed-task-lists') &&
+                !this._settings.get_boolean('merge-task-lists')) {
                 return tasks.map(task => task.get_status() ===
                     ICalGLib.PropertyStatus.COMPLETED).every(
                     status => status === true) ? null : tasks;
@@ -737,7 +749,7 @@ class TaskWidget extends St.BoxLayout {
         try {
             this._activeTaskList = index;
 
-            if (this._showActiveTaskListOnGoing) {
+            if (this._showActiveTaskListOnGoing && index !== undefined) {
                 this._cancellable.cancel();
                 return;
             }
@@ -749,7 +761,7 @@ class TaskWidget extends St.BoxLayout {
             if (index !== undefined && this._taskLists[index]) {
                 const adjustment = this._scrollView.vscroll.adjustment.value;
 
-                if (await this._listTasks(this._taskLists[index],
+                if (await this._listTasks(this._taskLists[index].uid,
                     merge) === undefined)
                     return;
 
@@ -786,6 +798,8 @@ class TaskWidget extends St.BoxLayout {
      * statuses of the placeholder.
      */
     _showPlaceholderWithStatus(status) {
+        this._taskLists = [];
+
         switch (status) {
             case 'no-tasks':
                 this._taskIcon.gicon = Gio.ThemedIcon.new(
