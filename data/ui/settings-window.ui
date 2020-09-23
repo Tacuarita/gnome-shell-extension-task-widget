@@ -535,6 +535,7 @@
           <object class="GtkBox" id="taskListTextBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="taskListLabel">
@@ -557,6 +558,7 @@
               <object class="GtkLabel" id="taskListDescription">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="margin_bottom">12</property>
                 <property name="label" translatable="yes">You can drag and drop rows to change the order of task lists in the widget.</property>
                 <style>
