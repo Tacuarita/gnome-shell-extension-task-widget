@@ -270,6 +270,8 @@ class TaskWidget extends St.BoxLayout {
         this._contentBox.add_child(this._headerBox);
 
         this._taskListNameButton.connect('clicked', () => {
+            this._taskListMenu.removeAll();
+
             for (let i = 0; i < this._taskLists.length; i++) {
                 const name =  this._taskLists[i].name.length > 25
                     ? this._taskLists[i].name.substring(0, 22) + '…'
@@ -293,12 +295,10 @@ class TaskWidget extends St.BoxLayout {
         });
 
         this._taskListMenu.connect('open-state-changed', (menu, isOpen) => {
-            if (isOpen) {
+            if (isOpen)
                 this._taskListNameButton.add_style_pseudo_class('active');
-            } else {
+            else
                 this._taskListNameButton.remove_style_pseudo_class('active');
-                this._taskListMenu.removeAll();
-            }
         });
 
         const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
