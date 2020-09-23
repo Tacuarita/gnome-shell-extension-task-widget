@@ -1,11 +1,13 @@
 'use strict';
 
-const { Clutter, Gio, GLib, GObject, Shell, St } = imports.gi;
+const { Atk, Clutter, Gio, GLib, GObject, Shell, St } = imports.gi;
 
 const CheckBox = imports.ui.checkBox;
-const DateMenu = imports.ui.main.panel.statusArea.dateMenu.menu;
 const Gettext = imports.gettext;
+const Main = imports.ui.main;
+const PopupMenu = imports.ui.popupMenu;
 
+const DateMenu = Main.panel.statusArea.dateMenu.menu;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
@@ -145,7 +147,7 @@ class TaskWidget extends St.BoxLayout {
                 this._onTaskListScrolled.bind(this));
 
             this._taskBox = new St.BoxLayout({
-                style_class: 'task-box',
+                style_class: 'spacing',
                 vertical: true,
             });
 
@@ -184,6 +186,8 @@ class TaskWidget extends St.BoxLayout {
      * Builds a header for task lists. The header consists of a task list name
      * and two buttons to switch to either previous or next task list.
      * Switching is also triggered by scrolling a mouse wheel on the header.
+     * If there's more than one task list, user can click on the task list name
+     * and activate another task list via the popup menu.
      *
      * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2661
      */
@@ -210,11 +214,42 @@ class TaskWidget extends St.BoxLayout {
             this._onTaskListSwitched.bind(this, false));
 
         this._taskListName = new St.Label({
-            style_class: 'calendar-month-label',
-            x_align: Clutter.ActorAlign.CENTER,
+            style_class: 'calendar-month-label task-list-name',
+        });
+
+        this._taskListNameArrow = new St.Icon({
+            style_class: 'popup-menu-arrow',
+            icon_name: 'pan-down-symbolic',
+            accessible_role: Atk.Role.ARROW,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+
+        const taskListNameBox = new St.BoxLayout({
+            style_class: 'spacing',
+        });
+
+        taskListNameBox.add_child(this._taskListName);
+        taskListNameBox.add_child(this._taskListNameArrow);
+
+        this._taskListNameButton = new St.Button({
+            style_class: 'button task-list-name-button',
+            reactive: true,
+            track_hover: true,
             can_focus: true,
             x_expand: true,
+            accessible_name: _('Select task list'),
+            accessible_role: Atk.Role.MENU,
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
+            child: taskListNameBox,
         });
+
+        this._taskListMenu = new PopupMenu.PopupMenu(this._taskListNameButton,
+            0.5, St.Side.BOTTOM);
+
+        Main.uiGroup.add_actor(this._taskListMenu.actor);
+        this._taskListMenu.actor.hide();
 
         this._forwardButton = new St.Button({
             style_class: 'calendar-change-month-forward pager-button',
@@ -230,9 +265,46 @@ class TaskWidget extends St.BoxLayout {
             this._onTaskListSwitched.bind(this, true));
 
         this._headerBox.add_child(this._backButton);
-        this._headerBox.add_child(this._taskListName);
+        this._headerBox.add_actor(this._taskListNameButton);
         this._headerBox.add_child(this._forwardButton);
         this._contentBox.add_child(this._headerBox);
+
+        this._taskListNameButton.connect('clicked', () => {
+            for (let i = 0; i < this._taskLists.length; i++) {
+                const name =  this._taskLists[i].name.length > 25
+                    ? this._taskLists[i].name.substring(0, 22) + '…'
+                    : this._taskLists[i].name;
+
+                let item = new PopupMenu.PopupMenuItem(name);
+
+                if (i === this._activeTaskList)
+                    item.setOrnament(PopupMenu.Ornament.DOT);
+                else
+                    item.setOrnament(PopupMenu.Ornament.NONE);
+
+                this._taskListMenu.addMenuItem(item);
+
+                item.connect('activate', () => {
+                    this._showActiveTaskList(i);
+                    return Clutter.EVENT_STOP;
+                });
+            }
+            this._taskListMenu.toggle();
+        });
+
+        this._taskListMenu.connect('open-state-changed', (menu, isOpen) => {
+            if (isOpen) {
+                this._taskListNameButton.add_style_pseudo_class('active');
+            } else {
+                this._taskListNameButton.remove_style_pseudo_class('active');
+                this._taskListMenu.removeAll();
+            }
+        });
+
+        const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
+            { actionMode: Shell.ActionMode.NONE });
+
+        manager.addMenu(this._taskListMenu);
     }
 
     /**
@@ -865,9 +937,7 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Sets task list header appearance: ensures that `back` and `forward`
-     * buttons are shown to switch between task lists and optionally hides
-     * task list header for singular task list:
+     * Sets task list header appearance.
      *
      * @param {boolean} merged - Task lists are merged into one.
      */
@@ -877,9 +947,15 @@ class TaskWidget extends St.BoxLayout {
         if (singular) {
             this._backButton.hide();
             this._forwardButton.hide();
+            this._taskListNameArrow.hide();
+            this._taskListNameButton.remove_style_class_name('button');
+            this._taskListNameButton.set_reactive(false);
         } else {
             this._backButton.show();
             this._forwardButton.show();
+            this._taskListNameArrow.show();
+            this._taskListNameButton.set_reactive(true);
+            this._taskListNameButton.add_style_class_name('button');
         }
 
         if (!singular || !this._settings.get_boolean(
@@ -1041,6 +1117,7 @@ class TaskWidget extends St.BoxLayout {
     _onDestroy() {
         this._cancellable.cancel();
         this._calendarWidget.remove_style_class_name('remove-margin');
+        Main.uiGroup.remove_child(this._taskListMenu.actor);
 
         if (this._themeChangedId) {
             St.ThemeContext.get_for_stage(global.stage).disconnect(
