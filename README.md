@@ -4,6 +4,7 @@
 
 Task Widget is an extension for GNOME that displays tasks next to the calendar widget. It integrates seamlessly with [GNOME Online Accounts](https://wiki.gnome.org/Projects/GnomeOnlineAccounts) and a number of GNOME applications, such as [Evolution](https://wiki.gnome.org/Apps/Evolution) and [To Do](https://wiki.gnome.org/Apps/Todo). With Task Widget you can:
 - Easily access your task lists in the top menu
+- Merge task lists
 - Group tasks by due date
 - Mark tasks as (un)completed
 - Hide completed and empty task lists
