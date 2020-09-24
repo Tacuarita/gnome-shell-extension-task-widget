@@ -221,6 +221,7 @@ class TaskWidget extends St.BoxLayout {
             style_class: 'popup-menu-arrow',
             icon_name: 'pan-down-symbolic',
             accessible_role: Atk.Role.ARROW,
+            y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
 
@@ -233,6 +234,8 @@ class TaskWidget extends St.BoxLayout {
 
         this._taskListNameButton = new St.Button({
             style_class: 'button task-list-name-button',
+            reactive: true,
+            track_hover: true,
             can_focus: true,
             x_expand: true,
             accessible_name: _('Select task list'),
