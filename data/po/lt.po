@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 06:05+0200\n"
-"PO-Revision-Date: 2020-09-19 04:08\n"
+"POT-Creation-Date: 2020-09-23 20:24+0200\n"
+"PO-Revision-Date: 2020-09-23 19:29\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
 "Language: lt_LT\n"
@@ -17,53 +17,61 @@ msgstr ""
 "X-Crowdin-File: /master/data/po/org.gnome.shell.extensions.task-widget.pot\n"
 "X-Crowdin-File-ID: 8\n"
 
-#: src/extension.js:95
+#: src/extension.js:92
 msgid "Loading"
 msgstr "Įkeliama"
 
-#: src/extension.js:203
+#: src/extension.js:205
 msgid "Previous task list"
 msgstr "Ankstesnis užduočių sąrašas"
 
-#: src/extension.js:223
+#: src/extension.js:241
+msgid "Select task list"
+msgstr "Pasirinkite užduočių sąrašą"
+
+#: src/extension.js:256
 msgid "Next task list"
 msgstr "Sekantis užduočių sąrašas"
 
-#: src/extension.js:544
+#: src/extension.js:642
 msgid "No due date"
 msgstr "Be termino"
 
-#: src/extension.js:546
+#: src/extension.js:644
 msgid "Today"
 msgstr "Šiandien"
 
-#: src/extension.js:549
+#: src/extension.js:647
 msgid "Overdue"
 msgstr "Vėluojančios"
 
-#: src/extension.js:557
+#: src/extension.js:655
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %B %-d d."
 
-#: src/extension.js:559
+#: src/extension.js:657
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %Y m. %B %-d d."
 
-#: src/extension.js:772
+#: src/extension.js:845
+msgid "All Tasks"
+msgstr "Visos užduotys"
+
+#: src/extension.js:879
 msgid "No Tasks"
 msgstr "Užduočių nėra"
 
-#: src/extension.js:778 src/prefs.js:84
+#: src/extension.js:885 src/prefs.js:82
 msgid "Error: Missing Dependencies"
 msgstr "Klaida: trūksta reikalingų modulių"
 
-#: src/prefs.js:85
+#: src/prefs.js:83
 msgid "Please install Evolution Data Server to use this extension."
 msgstr "Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
 
-#: src/prefs.js:224
+#: src/prefs.js:225
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
@@ -72,7 +80,7 @@ msgstr[1] "sekundžių"
 msgstr[2] "sekundės"
 msgstr[3] "sekundžių"
 
-#: src/prefs.js:226
+#: src/prefs.js:227
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
@@ -81,7 +89,7 @@ msgstr[1] "minučių"
 msgstr[2] "minutės"
 msgstr[3] "minučių"
 
-#: src/prefs.js:227
+#: src/prefs.js:228
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
@@ -90,7 +98,7 @@ msgstr[1] "valandų"
 msgstr[2] "valandos"
 msgstr[3] "valandų"
 
-#: src/prefs.js:229
+#: src/prefs.js:230
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -99,19 +107,19 @@ msgstr[1] "dienų"
 msgstr[2] "dienos"
 msgstr[3] "dienų"
 
-#: src/prefs.js:299
+#: src/prefs.js:300
 msgid "No remote task lists found"
 msgstr "Nuotolinių užduočių sąrašų nerasta"
 
-#: src/prefs.js:306 data/ui/settings-window.ui:569
+#: src/prefs.js:307 data/ui/settings-window.ui:636
 msgid "Refresh the list of account task lists"
 msgstr "Atnaujinti užduočių sąrašų sąrašą"
 
-#: src/prefs.js:369
+#: src/prefs.js:370
 msgid "Refresh in progress"
 msgstr "Vyksta atnaujinimas"
 
-#: src/prefs.js:854
+#: src/prefs.js:855
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
@@ -120,7 +128,7 @@ msgstr[1] "minutes"
 msgstr[2] "minutės"
 msgstr[3] "minučių"
 
-#: src/prefs.js:856
+#: src/prefs.js:857
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
@@ -129,7 +137,7 @@ msgstr[1] "valandas"
 msgstr[2] "valandos"
 msgstr[3] "valandų"
 
-#: src/prefs.js:858
+#: src/prefs.js:859
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -138,7 +146,7 @@ msgstr[1] "dienas"
 msgstr[2] "dienos"
 msgstr[3] "dienų"
 
-#: src/prefs.js:924
+#: src/prefs.js:925
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "Juozas Miškinis <juozas@joasis.lt>"
@@ -176,46 +184,50 @@ msgid "Settings"
 msgstr "Nustatymai"
 
 #: data/ui/settings-window.ui:91
+msgid "Merge task lists"
+msgstr "Sulieti užduočių sąrašus"
+
+#: data/ui/settings-window.ui:156
 msgid "Group overdue tasks"
 msgstr "Grupuoti vėluojančias užduotis"
 
-#: data/ui/settings-window.ui:157
+#: data/ui/settings-window.ui:222
 msgid "Hide header for singular tasks lists"
 msgstr "Slėpti vienintelių užduočių sąrašų pavadinimą"
 
-#: data/ui/settings-window.ui:222
+#: data/ui/settings-window.ui:287
 msgid "Hide empty and completed task lists"
 msgstr "Slėpti tuščius ir užbaigtus užduočių sąrašus"
 
-#: data/ui/settings-window.ui:287
+#: data/ui/settings-window.ui:352
 msgid "Hide completed tasks"
 msgstr "Slėpti užbaigtas užduotis"
 
-#: data/ui/settings-window.ui:300
+#: data/ui/settings-window.ui:365
 msgid "Never"
 msgstr "Niekada"
 
-#: data/ui/settings-window.ui:301
+#: data/ui/settings-window.ui:366
 msgid "Immediately"
 msgstr "Iš karto"
 
-#: data/ui/settings-window.ui:302
+#: data/ui/settings-window.ui:367
 msgid "After a period of time after completion"
 msgstr "Po tam tikro laiko po užbaigimo"
 
-#: data/ui/settings-window.ui:303
+#: data/ui/settings-window.ui:368
 msgid "After a specific time of the day"
 msgstr "Po tam tikro paros meto"
 
-#: data/ui/settings-window.ui:341 data/ui/settings-window.ui:390
+#: data/ui/settings-window.ui:406 data/ui/settings-window.ui:455
 msgid "After"
 msgstr "Po"
 
-#: data/ui/settings-window.ui:480
+#: data/ui/settings-window.ui:546
 msgid "Task Lists"
 msgstr "Užduočių sąrašai"
 
-#: data/ui/settings-window.ui:496
+#: data/ui/settings-window.ui:563
 msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą valdiklyje."
 
@@ -247,7 +259,7 @@ msgstr "Atnaujinti užduotis"
 msgid "Properties"
 msgstr "Savybės"
 
-#: data/ui/task-list-row.ui:206
+#: data/ui/task-list-row.ui:207
 msgid "Task list options"
 msgstr "Užduočių sąrašo parinktys"
 
