@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 07:30+0200\n"
+"POT-Creation-Date: 2020-09-24 08:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,37 +34,37 @@ msgstr ""
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:642
+#: src/extension.js:647
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:644
+#: src/extension.js:649
 msgid "Today"
 msgstr ""
 
-#: src/extension.js:647
+#: src/extension.js:652
 msgid "Overdue"
 msgstr ""
 
-#: src/extension.js:655
+#: src/extension.js:660
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:657
+#: src/extension.js:662
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:845
+#: src/extension.js:850
 msgid "All Tasks"
 msgstr ""
 
-#: src/extension.js:879
+#: src/extension.js:884
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:885 src/prefs.js:82
+#: src/extension.js:890 src/prefs.js:82
 msgid "Error: Missing Dependencies"
 msgstr ""
 
