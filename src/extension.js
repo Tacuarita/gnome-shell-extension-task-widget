@@ -508,6 +508,11 @@ class TaskWidget extends St.BoxLayout {
     async _onTaskEvent(view, tasks) {
         try {
             const uid = view.client.source.uid;
+            const disabled = this._settings.get_strv('disabled-task-lists');
+
+            if (disabled.indexOf(uid) !== -1)
+                return;
+
             const index = this._taskLists.map(i => i.uid).indexOf(uid);
             const taskList = this._taskLists[index];
             const updated = await this._filterTasks(view.client);
