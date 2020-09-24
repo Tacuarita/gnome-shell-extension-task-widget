@@ -69,7 +69,7 @@
               <object class="GtkLabel" id="taskListPropertiesDialogLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Refresh every</property>
+                <property name="label" translatable="yes" comments="e.g. Refresh every 10 minutes">Refresh every</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
