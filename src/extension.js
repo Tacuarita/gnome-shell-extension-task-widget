@@ -1116,8 +1116,12 @@ class TaskWidget extends St.BoxLayout {
      */
     _onDestroy() {
         this._cancellable.cancel();
-        this._calendarWidget.remove_style_class_name('remove-margin');
-        Main.uiGroup.remove_child(this._taskListMenu.actor);
+
+        if (this._calendarWidget.has_style_class_name('remove-margin'))
+            this._calendarWidget.remove_style_class_name('remove-margin');
+
+        if (this._taskListMenu.actor.get_parent() === Main.uiGroup)
+            Main.uiGroup.remove_child(this._taskListMenu.actor);
 
         if (this._themeChangedId) {
             St.ThemeContext.get_for_stage(global.stage).disconnect(
