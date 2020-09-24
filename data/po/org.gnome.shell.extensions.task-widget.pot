@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 08:47+0200\n"
+"POT-Creation-Date: 2020-09-24 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,7 +133,10 @@ msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:925
+#. Translators: put down your name/nickname and email (optional)
+#. according to the format below. This will credit you in the `About`
+#. window of the extension settings.
+#: src/prefs.js:928
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr ""
