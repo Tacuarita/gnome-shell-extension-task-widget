@@ -923,7 +923,7 @@ const SettingsMenuButton = GObject.registerClass({
         this._aboutDialog.comments = _(Me.metadata.description);
         this._aboutDialog.translator_credits =
             /* Translators: put down your name/nickname and email (optional)
-            according to the format below. This will credit you in the `About`
+            according to the format below. This will credit you in the "About"
             window of the extension settings. */
             Gettext.pgettext('translator name <email>', 'translator-credits');
 
