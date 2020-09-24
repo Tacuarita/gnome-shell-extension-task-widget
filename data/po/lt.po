@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-23 20:24+0200\n"
-"PO-Revision-Date: 2020-09-23 19:29\n"
+"POT-Creation-Date: 2020-09-24 10:13+0200\n"
+"PO-Revision-Date: 2020-09-24 09:10\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
 "Language: lt_LT\n"
@@ -33,37 +33,37 @@ msgstr "Pasirinkite užduočių sąrašą"
 msgid "Next task list"
 msgstr "Sekantis užduočių sąrašas"
 
-#: src/extension.js:642
+#: src/extension.js:647
 msgid "No due date"
 msgstr "Be termino"
 
-#: src/extension.js:644
+#: src/extension.js:649
 msgid "Today"
 msgstr "Šiandien"
 
-#: src/extension.js:647
+#: src/extension.js:652
 msgid "Overdue"
 msgstr "Vėluojančios"
 
-#: src/extension.js:655
+#: src/extension.js:660
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %B %-d d."
 
-#: src/extension.js:657
+#: src/extension.js:662
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %Y m. %B %-d d."
 
-#: src/extension.js:845
+#: src/extension.js:850
 msgid "All Tasks"
 msgstr "Visos užduotys"
 
-#: src/extension.js:879
+#: src/extension.js:884
 msgid "No Tasks"
 msgstr "Užduočių nėra"
 
-#: src/extension.js:885 src/prefs.js:82
+#: src/extension.js:890 src/prefs.js:82
 msgid "Error: Missing Dependencies"
 msgstr "Klaida: trūksta reikalingų modulių"
 
@@ -111,7 +111,7 @@ msgstr[3] "dienų"
 msgid "No remote task lists found"
 msgstr "Nuotolinių užduočių sąrašų nerasta"
 
-#: src/prefs.js:307 data/ui/settings-window.ui:636
+#: src/prefs.js:307 data/ui/settings-window.ui:639
 msgid "Refresh the list of account task lists"
 msgstr "Atnaujinti užduočių sąrašų sąrašą"
 
@@ -146,7 +146,10 @@ msgstr[1] "dienas"
 msgstr[2] "dienos"
 msgstr[3] "dienų"
 
-#: src/prefs.js:925
+#. Translators: put down your name/nickname and email (optional)
+#. according to the format below. This will credit you in the "About"
+#. window of the extension settings.
+#: src/prefs.js:928
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "Juozas Miškinis <juozas@joasis.lt>"
@@ -179,55 +182,55 @@ msgstr "Atšaukti"
 msgid "Review Log"
 msgstr "Peržiūrėti žurnalą"
 
-#: data/ui/settings-window.ui:50
+#: data/ui/settings-window.ui:53
 msgid "Settings"
 msgstr "Nustatymai"
 
-#: data/ui/settings-window.ui:91
+#: data/ui/settings-window.ui:94
 msgid "Merge task lists"
 msgstr "Sulieti užduočių sąrašus"
 
-#: data/ui/settings-window.ui:156
+#: data/ui/settings-window.ui:159
 msgid "Group overdue tasks"
 msgstr "Grupuoti vėluojančias užduotis"
 
-#: data/ui/settings-window.ui:222
+#: data/ui/settings-window.ui:225
 msgid "Hide header for singular tasks lists"
 msgstr "Slėpti vienintelių užduočių sąrašų pavadinimą"
 
-#: data/ui/settings-window.ui:287
+#: data/ui/settings-window.ui:290
 msgid "Hide empty and completed task lists"
 msgstr "Slėpti tuščius ir užbaigtus užduočių sąrašus"
 
-#: data/ui/settings-window.ui:352
+#: data/ui/settings-window.ui:355
 msgid "Hide completed tasks"
 msgstr "Slėpti užbaigtas užduotis"
 
-#: data/ui/settings-window.ui:365
+#: data/ui/settings-window.ui:368
 msgid "Never"
 msgstr "Niekada"
 
-#: data/ui/settings-window.ui:366
+#: data/ui/settings-window.ui:369
 msgid "Immediately"
 msgstr "Iš karto"
 
-#: data/ui/settings-window.ui:367
+#: data/ui/settings-window.ui:370
 msgid "After a period of time after completion"
 msgstr "Po tam tikro laiko po užbaigimo"
 
-#: data/ui/settings-window.ui:368
+#: data/ui/settings-window.ui:371
 msgid "After a specific time of the day"
 msgstr "Po tam tikro paros meto"
 
-#: data/ui/settings-window.ui:406 data/ui/settings-window.ui:455
+#: data/ui/settings-window.ui:409 data/ui/settings-window.ui:458
 msgid "After"
 msgstr "Po"
 
-#: data/ui/settings-window.ui:546
+#: data/ui/settings-window.ui:549
 msgid "Task Lists"
 msgstr "Užduočių sąrašai"
 
-#: data/ui/settings-window.ui:563
+#: data/ui/settings-window.ui:566
 msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą valdiklyje."
 
@@ -239,6 +242,7 @@ msgstr "Užduočių sąrašo savybės"
 msgid "OK"
 msgstr "Gerai"
 
+#. Translators: e.g. "Refresh every 10 minutes".
 #: data/ui/task-list-properties-dialog.ui:72
 msgid "Refresh every"
 msgstr "Atnaujinti kas"

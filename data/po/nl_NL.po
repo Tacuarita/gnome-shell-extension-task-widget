@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-23 20:24+0200\n"
-"PO-Revision-Date: 2020-09-23 18:31\n"
+"POT-Creation-Date: 2020-09-24 10:13+0200\n"
+"PO-Revision-Date: 2020-09-24 09:10\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -33,37 +33,37 @@ msgstr ""
 msgid "Next task list"
 msgstr "Volgende takenlijst"
 
-#: src/extension.js:642
+#: src/extension.js:647
 msgid "No due date"
 msgstr "Geen einddatum"
 
-#: src/extension.js:644
+#: src/extension.js:649
 msgid "Today"
 msgstr "Vandaag"
 
-#: src/extension.js:647
+#: src/extension.js:652
 msgid "Overdue"
 msgstr "Verstreken"
 
-#: src/extension.js:655
+#: src/extension.js:660
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %B %-d"
 
-#: src/extension.js:657
+#: src/extension.js:662
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %B %-d, %Y"
 
-#: src/extension.js:845
+#: src/extension.js:850
 msgid "All Tasks"
 msgstr ""
 
-#: src/extension.js:879
+#: src/extension.js:884
 msgid "No Tasks"
 msgstr "Geen taken"
 
-#: src/extension.js:885 src/prefs.js:82
+#: src/extension.js:890 src/prefs.js:82
 msgid "Error: Missing Dependencies"
 msgstr "Fout: ontbrekende afhankelijkheden"
 
@@ -103,7 +103,7 @@ msgstr[1] "dagen"
 msgid "No remote task lists found"
 msgstr "Geen externe takenlijst beschikbaar"
 
-#: src/prefs.js:307 data/ui/settings-window.ui:636
+#: src/prefs.js:307 data/ui/settings-window.ui:639
 msgid "Refresh the list of account task lists"
 msgstr "Ververs de lijst met accounts"
 
@@ -132,7 +132,10 @@ msgid_plural "days"
 msgstr[0] "dag"
 msgstr[1] "dagen"
 
-#: src/prefs.js:925
+#. Translators: put down your name/nickname and email (optional)
+#. according to the format below. This will credit you in the "About"
+#. window of the extension settings.
+#: src/prefs.js:928
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "Heimen Stoffels"
@@ -165,55 +168,55 @@ msgstr "Annuleren"
 msgid "Review Log"
 msgstr "Logboek nakijken"
 
-#: data/ui/settings-window.ui:50
+#: data/ui/settings-window.ui:53
 msgid "Settings"
 msgstr "Instellingen"
 
-#: data/ui/settings-window.ui:91
+#: data/ui/settings-window.ui:94
 msgid "Merge task lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:156
+#: data/ui/settings-window.ui:159
 msgid "Group overdue tasks"
 msgstr "Verstreken taken groeperen"
 
-#: data/ui/settings-window.ui:222
+#: data/ui/settings-window.ui:225
 msgid "Hide header for singular tasks lists"
 msgstr "Kop verbergen op losse takenlijsten"
 
-#: data/ui/settings-window.ui:287
+#: data/ui/settings-window.ui:290
 msgid "Hide empty and completed task lists"
 msgstr "Blanco en afgeronde takenlijsten verbergen"
 
-#: data/ui/settings-window.ui:352
+#: data/ui/settings-window.ui:355
 msgid "Hide completed tasks"
 msgstr "Afgeronde taken verbergen"
 
-#: data/ui/settings-window.ui:365
+#: data/ui/settings-window.ui:368
 msgid "Never"
 msgstr "Nooit"
 
-#: data/ui/settings-window.ui:366
+#: data/ui/settings-window.ui:369
 msgid "Immediately"
 msgstr "Onmiddellijk"
 
-#: data/ui/settings-window.ui:367
+#: data/ui/settings-window.ui:370
 msgid "After a period of time after completion"
 msgstr "Enige tijd na het afronden"
 
-#: data/ui/settings-window.ui:368
+#: data/ui/settings-window.ui:371
 msgid "After a specific time of the day"
 msgstr "Op een bepaald tijdstip"
 
-#: data/ui/settings-window.ui:406 data/ui/settings-window.ui:455
+#: data/ui/settings-window.ui:409 data/ui/settings-window.ui:458
 msgid "After"
 msgstr "Na"
 
-#: data/ui/settings-window.ui:546
+#: data/ui/settings-window.ui:549
 msgid "Task Lists"
 msgstr "Takenlijsten"
 
-#: data/ui/settings-window.ui:563
+#: data/ui/settings-window.ui:566
 msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Je kunt rijen op de widget verslepen om de volgorde aan te passen."
 
@@ -225,6 +228,7 @@ msgstr "Takenlijsteigenschappen"
 msgid "OK"
 msgstr "Oké"
 
+#. Translators: e.g. "Refresh every 10 minutes".
 #: data/ui/task-list-properties-dialog.ui:72
 msgid "Refresh every"
 msgstr "Ververs elke"
