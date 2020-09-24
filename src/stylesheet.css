@@ -22,6 +22,8 @@
 
 .task-list-name {
   padding: 0 !important;
+  margin: 0 !important;
+  height: auto !important;
 }
 
 .task-list-name-button {
