@@ -4,10 +4,10 @@ const { Gio, GLib } = imports.gi;
 
 var _debounceTimeoutId;
 var _HAS_EDS = true;
+var _ELLIPSIS_CHAR = '\u2026';
 var _MINUTES_PER_HOUR = 60;
 var _MINUTES_PER_DAY = _MINUTES_PER_HOUR * 24;
 var _MSECS_IN_DAY = _MINUTES_PER_DAY * 60 * 1000;
-
 let ECal, EDataServer, ICalGLib;
 
 try {
@@ -163,21 +163,21 @@ function _getTasks(client, query, cancellable = null) {
 }
 
 /**
- * Requests the calendar backend to modify an existing object. In the case of
- * task lists, this would modify a task.
+ * Requests the calendar backend to modify existing objects. In the case of
+ * task lists, this would modify given tasks.
  *
  * @param {ECal.Client} client - `ECal.Client` of a source.
- * @param {ICalGLib.Component} obj - Component to modify.
+ * @param {ICalGLib.Component[]} obj - Components to modify.
  * @param {ECal.ObjModType} mod - Type of modification.
  * @param {int} flag - bit-or of `ECal.OperationFlags`.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @return {Promise<boolean>} `true` if no errors occurred.
  */
-function _modifyObject(client, obj, mod, flag, cancellable = null) {
+function _modifyObjects(client, obj, mod, flag, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.modify_object(obj, mod, flag, cancellable, (client, res) => {
+        client.modify_objects(obj, mod, flag, cancellable, (client, res) => {
             try {
-                resolve(client.modify_object_finish(res));
+                resolve(client.modify_objects_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -197,46 +197,75 @@ function _modifyObject(client, obj, mod, flag, cancellable = null) {
 function _customSort(order, a, b) {
     if (order.indexOf(a.uid) === -1)
         return 1;
+
     if (order.indexOf(b.uid) === -1)
         return -1;
+
     return order.indexOf(a.uid) - order.indexOf(b.uid);
 }
 
 /**
  * Sorts tasks by their name.
- *
- * @param {[string, ECal.Component]} a - A list consisting of a task list uid
- * and task object.
- * @param {[string, ECal.Component]} b - A list consisting of a task list uid
- * and task object.
+ * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
+ * and task objects.
+ * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
+ * and task objects.
  * @return {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByName(a, b) {
     const lc = x => x[1].get_summary().get_value().toLowerCase();
+
     if (a[1].get_summary() === null)
         return 1;
+
     if (b[1].get_summary() === null)
         return -1;
-    return lc(b).localeCompare(lc(a));
+
+    return lc(a).localeCompare(lc(b));
 }
 
 /**
- * Sorts tasks by their due date. If task has no due date, move it to the
+ * Sorts tasks by their due date. If a task has no due date, move it to the
  * end of the list.
  *
- * @param {[string, ECal.Component]} a - A list consisting of a task list uid
- * and task object.
- * @param {[string, ECal.Component]} b - A list consisting of a task list uid
- * and task object.
+ * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
+ * and task objects.
+ * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
+ * and task objects.
  * @return {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByDueDate(a, b) {
     const time = x => x[1].get_due().get_value().as_timet();
-    if (a[1].get_due() === null)
-        return 1;
+
     if (b[1].get_due() === null)
         return -1;
+
+    if (a[1].get_due() === null)
+        return 1;
+
     return time(a) - time(b);
+}
+
+/**
+ * Sorts tasks by their priority. If a task has no priority, move it to the
+ * end of the list.
+ *
+ * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
+ * and task objects.
+ * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
+ * and task objects.
+ * @return {int} Negative, zero or positive value to facilitate sorting.
+ */
+function _sortByPriority(a, b) {
+    const priority = x => x[1].get_priority();
+
+    if (priority(b) < 1)
+        return -1;
+
+    if (priority(a) < 1)
+        return 1;
+
+    return priority(a) - priority(b);
 }
 
 /**
@@ -288,61 +317,6 @@ function _waitCheckAsync(process, cancellable = null) {
 }
 
 /**
- * Execute a command asynchronously and return the output from `stdout` on
- * success or throw an error with output from `stderr` on failure. If given,
- * `input` will be passed to `stdin`.
- *
- * Used solely in `Support Log` function to acquire versions of kernel, Shell
- * and gjs as well as themes of Shell, GTK and icons.
- *
- * @author Andy Holmes <andrew.g.r.holmes@gmail.com>
- *
- * @param {string[]} argv - A list of string arguments.
- * @param {string} [input] - Input to write to `stdin` or `null` to ignore.
- * @param {Gio.Cancellable} [cancellable] - Cancellable object,
- * @return {Promise<string>} Process output.
- */
-function _execCommunicate(argv, input = null, cancellable = null) {
-    let cancelId = 0;
-    let flags = Gio.SubprocessFlags.STDOUT_PIPE |
-                 Gio.SubprocessFlags.STDERR_PIPE;
-
-    if (input !== null)
-        flags |= Gio.SubprocessFlags.STDIN_PIPE;
-
-    const process = new Gio.Subprocess({ argv, flags });
-    process.init(cancellable);
-
-    if (cancellable instanceof Gio.Cancellable)
-        cancelId = cancellable.connect(() => process.force_exit());
-
-    return new Promise((resolve, reject) => {
-        process.communicate_utf8_async(input, null, (process, result) => {
-            try {
-                const [, stdout, stderr] =
-                    process.communicate_utf8_finish(result);
-
-                const status = process.get_exit_status();
-
-                if (status !== 0) {
-                    throw new Gio.IOErrorEnum({
-                        code: Gio.io_error_from_errno(status),
-                        message: stderr ? stderr.trim() : GLib.strerror(status),
-                    });
-                }
-
-                resolve(stdout.trim());
-            } catch (e) {
-                reject(e);
-            } finally {
-                if (cancelId > 0)
-                    cancellable.disconnect(cancelId);
-            }
-        });
-    });
-}
-
-/**
  * A simple debounce function. Returns a function, that, as long as it
  * continues to be invoked, will not be triggered. The function will be called
  * after it stops being called for `wait` milliseconds.
@@ -371,4 +345,15 @@ function _debounce(func, wait, immediate = false) {
         if (immediate && !_debounceTimeoutId)
             func(...args);
     };
+}
+
+/**
+ * Checks if running GNOME Shell version is at least `required`.
+ *
+ * @param {number} required - Lower bound for required GNOME Shell version.
+ * @return {boolean} `true` if GNOME Shell version is at least `required`.
+ */
+function _shellVersionAtLeast(required) {
+    let [major, minor] = imports.misc.config.PACKAGE_VERSION.split('.');
+    return parseInt(minor ? minor : major) >= required;
 }
