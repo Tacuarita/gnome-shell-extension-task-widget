@@ -1,0 +1,255 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: task-widget\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-24 10:13+0200\n"
+"PO-Revision-Date: 2020-10-06 09:49\n"
+"Last-Translator: \n"
+"Language-Team: French, Canada\n"
+"Language: fr_CA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: task-widget\n"
+"X-Crowdin-Project-ID: 418358\n"
+"X-Crowdin-Language: fr-CA\n"
+"X-Crowdin-File: /master/data/po/org.gnome.shell.extensions.task-widget.pot\n"
+"X-Crowdin-File-ID: 8\n"
+
+#: src/extension.js:92
+msgid "Loading"
+msgstr ""
+
+#: src/extension.js:205
+msgid "Previous task list"
+msgstr ""
+
+#: src/extension.js:241
+msgid "Select task list"
+msgstr ""
+
+#: src/extension.js:256
+msgid "Next task list"
+msgstr ""
+
+#: src/extension.js:647
+msgid "No due date"
+msgstr ""
+
+#: src/extension.js:649
+msgid "Today"
+msgstr ""
+
+#: src/extension.js:652
+msgid "Overdue"
+msgstr ""
+
+#: src/extension.js:660
+msgctxt "task due date"
+msgid "%A, %B %-d"
+msgstr ""
+
+#: src/extension.js:662
+msgctxt "task due date with a year"
+msgid "%A, %B %-d, %Y"
+msgstr ""
+
+#: src/extension.js:850
+msgid "All Tasks"
+msgstr ""
+
+#: src/extension.js:884
+msgid "No Tasks"
+msgstr ""
+
+#: src/extension.js:890 src/prefs.js:82
+msgid "Error: Missing Dependencies"
+msgstr ""
+
+#: src/prefs.js:83
+msgid "Please install Evolution Data Server to use this extension."
+msgstr ""
+
+#: src/prefs.js:225
+msgctxt "after X second(s)"
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:227
+msgctxt "after X minute(s)"
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:228
+msgctxt "after X hour(s)"
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:230
+msgctxt "after X day(s)"
+msgid "day"
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:300
+msgid "No remote task lists found"
+msgstr ""
+
+#: src/prefs.js:307 data/ui/settings-window.ui:639
+msgid "Refresh the list of account task lists"
+msgstr ""
+
+#: src/prefs.js:370
+msgid "Refresh in progress"
+msgstr ""
+
+#: src/prefs.js:855
+msgctxt "refresh every X minutes(s)"
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:857
+msgctxt "refresh every X hour(s)"
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:859
+msgctxt "refresh every X day(s)"
+msgid "day"
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: put down your name/nickname and email (optional)
+#. according to the format below. This will credit you in the "About"
+#. window of the extension settings.
+#: src/prefs.js:928
+msgctxt "translator name <email>"
+msgid "translator-credits"
+msgstr ""
+
+#: data/ui/settings-menu.ui:21 data/ui/settings-menu.ui:118
+msgid "Support Log"
+msgstr ""
+
+#: data/ui/settings-menu.ui:34
+msgid "Help"
+msgstr ""
+
+#: data/ui/settings-menu.ui:47
+msgid "About"
+msgstr ""
+
+#: data/ui/settings-menu.ui:80
+msgid "Copyright © 2020 Juozas Miškinis"
+msgstr ""
+
+#: data/ui/settings-menu.ui:119
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr ""
+
+#: data/ui/settings-menu.ui:131 data/ui/task-list-properties-dialog.ui:31
+msgid "Cancel"
+msgstr ""
+
+#: data/ui/settings-menu.ui:144
+msgid "Review Log"
+msgstr ""
+
+#: data/ui/settings-window.ui:53
+msgid "Settings"
+msgstr ""
+
+#: data/ui/settings-window.ui:94
+msgid "Merge task lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:159
+msgid "Group overdue tasks"
+msgstr ""
+
+#: data/ui/settings-window.ui:225
+msgid "Hide header for singular tasks lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:290
+msgid "Hide empty and completed task lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:355
+msgid "Hide completed tasks"
+msgstr ""
+
+#: data/ui/settings-window.ui:368
+msgid "Never"
+msgstr ""
+
+#: data/ui/settings-window.ui:369
+msgid "Immediately"
+msgstr ""
+
+#: data/ui/settings-window.ui:370
+msgid "After a period of time after completion"
+msgstr ""
+
+#: data/ui/settings-window.ui:371
+msgid "After a specific time of the day"
+msgstr ""
+
+#: data/ui/settings-window.ui:409 data/ui/settings-window.ui:458
+msgid "After"
+msgstr ""
+
+#: data/ui/settings-window.ui:549
+msgid "Task Lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:566
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+
+#: data/ui/task-list-properties-dialog.ui:13
+msgid "Task List Properties"
+msgstr ""
+
+#: data/ui/task-list-properties-dialog.ui:44
+msgid "OK"
+msgstr ""
+
+#. Translators: e.g. "Refresh every 10 minutes".
+#: data/ui/task-list-properties-dialog.ui:72
+msgid "Refresh every"
+msgstr ""
+
+#: data/ui/task-list-row.ui:22
+msgid "Move Up"
+msgstr ""
+
+#: data/ui/task-list-row.ui:35
+msgid "Move Down"
+msgstr ""
+
+#: data/ui/task-list-row.ui:48
+msgid "Refresh Tasks"
+msgstr ""
+
+#: data/ui/task-list-row.ui:61
+msgid "Properties"
+msgstr ""
+
+#: data/ui/task-list-row.ui:207
+msgid "Task list options"
+msgstr ""
+
