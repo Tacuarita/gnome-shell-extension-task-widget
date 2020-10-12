@@ -5,7 +5,7 @@
     <key name="merge-task-lists" type="b">
       <default>false</default>
     </key>
-    <key name="group-overdue-tasks" type="b">
+    <key name="group-past-tasks" type="b">
       <default>true</default>
     </key>
     <key name="hide-header-for-singular-task-lists" type="b">
@@ -15,7 +15,7 @@
       <default>false</default>
     </key>
     <key name="hide-completed-tasks" type="i">
-      <default>3</default>
+      <default>1</default>
     </key>
     <key name="hct-apotac-unit" type="i">
       <default>1</default>

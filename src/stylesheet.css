@@ -1,8 +1,8 @@
-.remove-margin:ltr {
+.task-widget-remove-calendar-margin:ltr {
   margin-right: 0;
 }
 
-.remove-margin:rtl {
+.task-widget-remove-calendar-margin:rtl {
   margin-left: 0;
 }
 
@@ -10,35 +10,37 @@
   margin: 0;
 }
 
-.spacing {
+.task-widget-column .spacing {
   spacing: 12px;
 }
 
-.task-icon  {
+.task-widget-column .task-icon  {
   color: #bebebe;
   icon-size: 52px;
   height: 52px;
 }
 
-.task-list-name {
-  padding: 0 !important;
-  margin: 0 !important;
-  height: auto !important;
-}
-
-.task-list-name-button {
-  padding: 5px 10px !important;
-  margin: 0 5px !important;
-  border: none !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-  min-height: auto !important;
-}
-
 /**
- * HACK: some custom Shell themes introduce huge gaps between checkboxes. This
- * will remove them.
+ * HACK: some of the overriden properties below are there to normalize looks in
+ * custom Shell themes.
 */
+
+.task-widget-column .task-list-name {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+.task-widget-column .task-list-name-button {
+  padding: 5px 10px;
+  margin: 0 10px;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  min-height: auto;
+  color: inherit;
+}
+
 .task-widget-column .check-box,
 .task-widget-column .check-box StBoxLayout {
   padding: 0;

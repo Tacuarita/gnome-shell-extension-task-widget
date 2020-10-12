@@ -1,6 +1,6 @@
 'use strict';
 
-const { Atk, Clutter, Gio, GLib, GObject, Shell, St } = imports.gi;
+const { Atk, Clutter, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
 
 const CheckBox = imports.ui.checkBox;
 const Gettext = imports.gettext;
@@ -8,7 +8,8 @@ const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
 const DateMenu = Main.panel.statusArea.dateMenu.menu;
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
 let ECal, EDataServer, ICalGLib;
@@ -19,7 +20,11 @@ if (Utils._HAS_EDS) {
     ICalGLib = imports.gi.ICalGLib;
 }
 
-const NC_ = (context, str) => `${context}\u0004${str}`;
+// eslint-disable-next-line no-redeclare
+const _ = Gettext.domain(Me.metadata.base).gettext;
+
+const NC_ = (context, str) => Gettext.domain(Me.metadata.base)
+    .pgettext(context, str);
 
 const TaskWidget = GObject.registerClass(
 class TaskWidget extends St.BoxLayout {
@@ -29,8 +34,8 @@ class TaskWidget extends St.BoxLayout {
     _init() {
         super._init({
             name: 'taskWidget',
-            // Re-use style classes. We'll do it wherever possible to
-            // better reflect changes in GNOME Shell styling:
+            // Re-use style classes. We'll do it in multiple places for
+            // better compatibility with custom Shell themes.
             style_class: 'datemenu-calendar-column task-widget-column \
                           message-list',
             vertical: true,
@@ -39,7 +44,9 @@ class TaskWidget extends St.BoxLayout {
         this._calendarArea = DateMenu.box.find_child_by_name('calendarArea');
         this._messageList = this._calendarArea.get_child_at_index(0);
         this._calendarWidget = this._calendarArea.get_child_at_index(1);
-        this._calendarWidget.add_style_class_name('remove-margin');
+
+        this._calendarWidget.add_style_class_name(
+            'task-widget-remove-calendar-margin');
 
         // Set the size of the widget to the size of the message list widget:
         this.add_constraint(new Clutter.BindConstraint({
@@ -47,7 +54,6 @@ class TaskWidget extends St.BoxLayout {
             coordinate: Clutter.BindCoordinate.SIZE,
         }));
 
-        // Place the widget next to GNOME's calendar widget:
         this._calendarArea.add_child(this);
 
         const dir = Me.metadata.schemas === 'user-specific'
@@ -62,7 +68,6 @@ class TaskWidget extends St.BoxLayout {
         });
 
         this.connect('destroy', this._onDestroy.bind(this));
-
         this._buildPlaceholder();
         this._initTaskLists();
     }
@@ -89,7 +94,8 @@ class TaskWidget extends St.BoxLayout {
         });
 
         this._statusLabel = new St.Label({
-            text: _('Loading') + '…',
+            text: _('Loading') + Utils._ELLIPSIS_CHAR,
+            reactive: true,
         });
 
         labeledIconBox.add_child(this._taskIcon);
@@ -105,11 +111,12 @@ class TaskWidget extends St.BoxLayout {
      */
     async _initTaskLists() {
         try {
+            // Controls cancellation of async events:
+            this._cancellable = new Gio.Cancellable();
+
             this._contentBox = new St.BoxLayout({
-                style_class: 'calendar world-clocks-button \
-                              message-list-sections',
+                style_class: 'calendar weather-button',
                 vertical: true,
-                visible: false,
             });
 
             this._contentBox.bind_property('visible', this._placeholder,
@@ -118,17 +125,15 @@ class TaskWidget extends St.BoxLayout {
             this.add_child(this._contentBox);
 
             if (!Utils._HAS_EDS) {
-                this._showPlaceholderWithStatus('no-eds');
+                this._showPlaceholderWithStatus('missing-dependencies');
                 return;
             }
 
-            // Holds references (ECal.ClientView) of all enabled task lists
+            // Holds references (`ECal.ClientView`) of all enabled task lists
             // so we can monitor changes in them:
             this._clientViews = new Map();
-            // Controls cancellation of async events:
-            this._cancellable = new Gio.Cancellable();
-            // Limits the upper adjustment of the vertical scrollbar during
-            // lazy loading of tasks:
+
+            // Facilitates lazy loading of tasks:
             this._upperLimit = 0;
 
             await this._initSourceRegistry();
@@ -141,6 +146,7 @@ class TaskWidget extends St.BoxLayout {
 
             this._scrollView = new St.ScrollView({
                 style_class: 'vfade',
+                clip_to_allocation: true,
             });
 
             this._scrollView.vscroll.adjustment.connect('notify::value',
@@ -164,12 +170,7 @@ class TaskWidget extends St.BoxLayout {
                 this._loadThemeHacks.bind(this));
 
             this._settingsChangedId = this._settings.connect('changed',
-                (...args) => {
-                    this._onSettingsChangedOnGoing = true;
-                    Utils._debounce(this._onSettingsChanged.bind(this), 250,
-                        false)(...args);
-                }
-            );
+                this._onSettingsChanged.bind(this));
 
             if (!this._taskLists.length) {
                 this._showPlaceholderWithStatus('no-tasks');
@@ -251,6 +252,61 @@ class TaskWidget extends St.BoxLayout {
         Main.uiGroup.add_actor(this._taskListMenu.actor);
         this._taskListMenu.actor.hide();
 
+        this._taskListNameButton.connect('clicked', () => {
+            this._taskListMenu.removeAll();
+
+            for (const [index, taskList] of this._taskLists.entries()) {
+                const name =  taskList.name.length > 25
+                    ? taskList.name.substring(0, 22) + Utils._ELLIPSIS_CHAR
+                    : taskList.name;
+
+                let item = new PopupMenu.PopupMenuItem(name);
+
+                if (index === this._activeTaskList && !this._mergeTaskLists)
+                    item.setOrnament(PopupMenu.Ornament.DOT);
+                else
+                    item.setOrnament(PopupMenu.Ornament.NONE);
+
+                item.connect('activate', () => {
+                    if (this._mergeTaskLists)
+                        delete this._mergeTaskLists;
+
+                    this._resetTaskBox(true);
+                    this._showActiveTaskList(index);
+                });
+
+                this._taskListMenu.addMenuItem(item);
+            }
+
+            const separator = new PopupMenu.PopupSeparatorMenuItem();
+            this._taskListMenu.addMenuItem(separator);
+            const allTasksItem = new PopupMenu.PopupMenuItem(_('All Tasks'));
+
+            if (this._mergeTaskLists)
+                allTasksItem.setOrnament(PopupMenu.Ornament.DOT);
+
+            allTasksItem.connect('activate', () => {
+                this._mergeTaskLists = true;
+                this._resetTaskBox(true);
+                this._showActiveTaskList(this._activeTaskList);
+            });
+
+            this._taskListMenu.addMenuItem(allTasksItem);
+            this._taskListMenu.toggle();
+        });
+
+        this._taskListMenu.connect('open-state-changed', (menu, isOpen) => {
+            if (isOpen)
+                this._taskListNameButton.add_style_pseudo_class('active');
+            else
+                this._taskListNameButton.remove_style_pseudo_class('active');
+        });
+
+        const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
+            { actionMode: Shell.ActionMode.NONE });
+
+        manager.addMenu(this._taskListMenu);
+
         this._forwardButton = new St.Button({
             style_class: 'calendar-change-month-forward pager-button',
             accessible_name: _('Next task list'),
@@ -268,43 +324,6 @@ class TaskWidget extends St.BoxLayout {
         this._headerBox.add_actor(this._taskListNameButton);
         this._headerBox.add_child(this._forwardButton);
         this._contentBox.add_child(this._headerBox);
-
-        this._taskListNameButton.connect('clicked', () => {
-            this._taskListMenu.removeAll();
-
-            for (let i = 0; i < this._taskLists.length; i++) {
-                const name =  this._taskLists[i].name.length > 25
-                    ? this._taskLists[i].name.substring(0, 22) + '…'
-                    : this._taskLists[i].name;
-
-                let item = new PopupMenu.PopupMenuItem(name);
-
-                if (i === this._activeTaskList)
-                    item.setOrnament(PopupMenu.Ornament.DOT);
-                else
-                    item.setOrnament(PopupMenu.Ornament.NONE);
-
-                this._taskListMenu.addMenuItem(item);
-
-                item.connect('activate', () => {
-                    this._showActiveTaskList(i);
-                    return Clutter.EVENT_STOP;
-                });
-            }
-            this._taskListMenu.toggle();
-        });
-
-        this._taskListMenu.connect('open-state-changed', (menu, isOpen) => {
-            if (isOpen)
-                this._taskListNameButton.add_style_pseudo_class('active');
-            else
-                this._taskListNameButton.remove_style_pseudo_class('active');
-        });
-
-        const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
-            { actionMode: Shell.ActionMode.NONE });
-
-        manager.addMenu(this._taskListMenu);
     }
 
     /**
@@ -315,6 +334,7 @@ class TaskWidget extends St.BoxLayout {
     async _initSourceRegistry() {
         try {
             this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
+
             this._sourceRegistry = await Utils._getSourceRegistry(
                 this._cancellable);
 
@@ -347,8 +367,8 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * This stores a list of task list data (its UID and name) for quick
-     * access. Data is sorted according to user-defined task list order.
+     * Stores a list of task list data (UIDs and names) for quick access.
+     * Task lists are sorted according to user-defined order.
      *
      * @param {boolean} [cleanup] - Cleanup the settings (remove obsolete task
      * list uids).
@@ -356,19 +376,22 @@ class TaskWidget extends St.BoxLayout {
     async _storeTaskLists(cleanup = false) {
         try {
             this._taskLists = [];
-            const sources = this._sourceRegistry.list_sources(this._sourceType);
             const customOrder = this._settings.get_strv('task-list-order');
+            const disabled = this._settings.get_strv('disabled-task-lists');
+            const sources = this._sourceRegistry.list_sources(this._sourceType);
+
             const customSort = customOrder.length ? Utils._customSort.bind(
                 this, customOrder) : undefined;
 
-            await Promise.all(sources.map(source =>
-                this._onTaskListAdded(null, source, customSort)));
+            await Promise.all(sources.filter(source => disabled.indexOf(
+                source.uid) === -1).map(source => this._onTaskListAdded(null,
+                source, customSort)));
 
             this._taskLists.sort(customSort);
 
             if (cleanup) {
-                this._cleanupSettings(sources.sort(customSort).map(source =>
-                    source.uid));
+                this._cleanupSettings(disabled, sources.sort(customSort).map(
+                    source => source.uid));
             }
         } catch (e) {
             if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
@@ -404,27 +427,23 @@ class TaskWidget extends St.BoxLayout {
 
                 view._taskAddedId = view.connect('objects-added',
                     this._onTaskEvent.bind(this));
+
                 view._taskRemovedId = view.connect('objects-removed',
                     this._onTaskEvent.bind(this));
+
                 view._taskChangedId = view.connect('objects-modified',
                     this._onTaskEvent.bind(this));
 
                 // Do not report existing tasks as new tasks:
                 view.set_flags(ECal.ClientViewFlags.NONE);
                 view.start();
-
                 this._clientViews.set(source.uid, view);
             } else {
                 client = this._clientViews.get(source.uid).client;
             }
 
-            if (this._settings.get_strv('disabled-task-lists')
-                .indexOf(source.uid) !== -1)
-                return;
-
             const tasks = await this._filterTasks(client);
 
-            // If we hide empty and completed task lists, stop here:
             if (tasks === null)
                 return;
 
@@ -433,10 +452,10 @@ class TaskWidget extends St.BoxLayout {
                 name: source.display_name,
             });
 
-            if (!this._taskBox || this._onSettingsChangedOnGoing || !registry)
+            if (!registry)
                 return;
 
-            if (this._activeTaskList === undefined)
+            if (this._activeTaskList === null)
                 this._showActiveTaskList(0);
             else
                 this._showActiveTaskList(this._activeTaskList);
@@ -456,19 +475,13 @@ class TaskWidget extends St.BoxLayout {
      */
     _onTaskListRemoved(registry, source) {
         const view = this._clientViews.get(source.uid);
-
         view.disconnect(view._taskAddedId);
         view.disconnect(view._taskRemovedId);
         view.disconnect(view._taskChangedId);
         view.stop();
-
         this._clientViews.delete(source.uid);
-
-        // Check if removed task list is in the list of visible task lists:
         const index = this._taskLists.map(i => i.uid).indexOf(source.uid);
 
-        // If not or if we're in extension disabling state (`registry` passed
-        // as `null`), stop here:
         if (index === -1 || !registry)
             return;
 
@@ -479,7 +492,8 @@ class TaskWidget extends St.BoxLayout {
             return;
         }
 
-        this._showActiveTaskList(Math.max(0, this._activeTaskList - 1));
+        this._showActiveTaskList(--this._activeTaskList < 0 ? 0
+            : this._activeTaskList);
     }
 
     /**
@@ -492,7 +506,7 @@ class TaskWidget extends St.BoxLayout {
         const index = this._taskLists.map(i => i.uid).indexOf(source.uid);
         const taskList = this._taskLists[index];
 
-        if (taskList !== undefined) {
+        if (taskList) {
             taskList.name = source.display_name;
             this._showActiveTaskList(this._activeTaskList);
         }
@@ -503,24 +517,19 @@ class TaskWidget extends St.BoxLayout {
      *
      * @param {ECal.ClientView} view - Task list which received the signal.
      * @param {ICalGLib.Component[]} tasks - List of tasks involved in
-     * the task event.
+     * the event.
      */
     async _onTaskEvent(view, tasks) {
         try {
             const uid = view.client.source.uid;
-            const disabled = this._settings.get_strv('disabled-task-lists');
-
-            if (disabled.indexOf(uid) !== -1)
-                return;
-
             const index = this._taskLists.map(i => i.uid).indexOf(uid);
             const taskList = this._taskLists[index];
             const updated = await this._filterTasks(view.client);
+            this._resetTaskBox();
 
-            if (updated && taskList === undefined) {
-                // If we need to show a hidden task list which should not be
-                // hidden anymore (because it's no longer empty or no longer
-                // completed):
+            if (updated && !taskList) {
+                // If we need to show a hidden task list (because it's no
+                // longer empty or no longer completed):
                 if (this._settings.get_boolean('merge-task-lists')) {
                     await this._storeTaskLists();
                 } else if (index === -1) {
@@ -529,12 +538,12 @@ class TaskWidget extends St.BoxLayout {
                         name: view.client.source.display_name,
                     });
                 }
-                this._showActiveTaskList(this._activeTaskList === undefined
+
+                this._showActiveTaskList(this._activeTaskList === null
                     ? 0 : this._activeTaskList);
-            } else if (!updated && taskList &&
-                !this._cancellable.is_cancelled()) {
-                // If we need to hide a visible task list (e.g. because it's
-                // now empty or completed):
+            } else if (!updated && taskList) {
+                // If we need to hide a visible task list (because it's now
+                // empty or completed):
                 this._taskLists.splice(index, 1);
 
                 if (!this._taskLists.length) {
@@ -542,14 +551,85 @@ class TaskWidget extends St.BoxLayout {
                     return;
                 }
 
-                this._showActiveTaskList(Math.max(0, this._activeTaskList - 1));
+                this._showActiveTaskList(--this._activeTaskList < 0 ? 0
+                    : this._activeTaskList);
             } else if (updated && taskList) {
-                // Task events (addition, removal and change) - simply refresh
-                // the widget:
-                this._showActiveTaskList(this._activeTaskList);
+                Utils._debounce(this._showActiveTaskList.bind(this), 100,
+                    false)(this._activeTaskList);
             }
         } catch (e) {
             logError(e);
+        }
+    }
+
+    /**
+     * Creates data structures required to resolve task hierarchy.
+     *
+     * @param {[string, ECal.Component]} tasks - A list consisting of task
+     * list UIDs and task objects.
+     */
+    _buildTaskMap(tasks) {
+        let pos = 0;
+        let index = 0;
+        this._rootTasks = [];
+        this._relatedTo = new Map();
+        this._orphanTasks = new Set();
+        this._taskUids =  new Set();
+
+        for (const [taskListUid, task] of tasks.sort(Utils._sortByName).sort(
+            Utils._sortByPriority).sort(Utils._sortByDueDate)) {
+
+            if (!task.get_summary())
+                continue;
+
+            task._uid = task.get_icalcomponent().get_uid();
+            task._tasklist = taskListUid;
+            this._taskUids.add(task._uid);
+
+            task._due = task.get_due() ? new Date(task.get_due().get_value()
+                .as_timet_with_zone(ECal.util_get_system_timezone()) * 1000)
+                : null;
+
+            const related = task.get_icalcomponent().get_first_property(
+                ICalGLib.PropertyKind.RELATEDTO_PROPERTY);
+
+            if (related) {
+                const parentUid = related.get_value().get_string();
+                const parent = this._relatedTo.get(parentUid);
+                task._index = index++;
+
+                if (!this._taskUids.has(parentUid))
+                    this._orphanTasks.add(parentUid);
+
+                if (parent)
+                    parent.push(task);
+                else
+                    this._relatedTo.set(parentUid, [task]);
+            } else {
+                task._index = index++;
+                this._rootTasks.push(task);
+            }
+
+            if (this._taskUids.has(task._uid))
+                this._orphanTasks.delete(task._uid);
+        }
+
+        // Orphan tasks are subtasks with inaccessible parents. We will add
+        // them as root tasks into correct positions:
+        for (const parentUid of this._orphanTasks) {
+            for (const task of this._relatedTo.get(parentUid)) {
+                task._orphan = true;
+
+                for (let i = pos; i < this._rootTasks.length; i++) {
+                    if (task._index < this._rootTasks[i]._index) {
+                        this._rootTasks.splice(i, 0, task);
+                        pos = i;
+                        break;
+                    }
+                }
+            }
+
+            this._relatedTo.delete(parentUid);
         }
     }
 
@@ -565,66 +645,18 @@ class TaskWidget extends St.BoxLayout {
      */
     async _listTasks(uid, merge) {
         try {
-            let prev = false;
+            let label, prev, tasks;
             const today = new Date();
 
-            // Dates have time-zone information, which can span regions with
+            // Dates have time zone information, which can span regions with
             // different day light savings adjustments. To accurately calculate
             // day differences between two dates, we'll use this to convert
             // the dates to UTC first:
-            const utc = x => Date.UTC(x.getFullYear(), x.getMonth(),
+            const toUTC = x => Date.UTC(x.getFullYear(), x.getMonth(),
                 x.getDate());
 
-            let tasks;
-
-            if (merge) {
-                tasks = await Promise.all(this._taskLists.map(
-                    tl => this._filterTasks(this._clientViews.get(tl.uid)
-                    .client)));
-
-                if (!tasks.length)
-                    return;
-
-                if (this._settings.get_boolean(
-                    'hide-empty-completed-task-lists')) {
-                    if (tasks.map(tl => tl.map(task => task.get_status() ===
-                        ICalGLib.PropertyStatus.COMPLETED).every(
-                        completed => completed === true)).every(
-                        hide => hide === true)) {
-                        this._showPlaceholderWithStatus('no-tasks');
-                        return;
-                    }
-                }
-
-                tasks = [].concat(...tasks.map((tl, index) => tl.map(task =>
-                    [this._taskLists[index].uid, task])));
-            } else {
-                tasks = await this._filterTasks(this._clientViews.get(
-                    uid).client);
-
-                if (!tasks || this._cancellable.is_cancelled())
-                    return;
-
-                tasks = tasks.map(task => [uid, task]);
-            }
-
-            this._taskBox.destroy_all_children();
-
-            // Initial sorting by name is necessary to ensure that tasks with no
-            // due date are ordered consistently:
-            for (const [uid, task] of tasks.sort(Utils._sortByName)
-                .sort(Utils._sortByDueDate)) {
-
-                if (task.get_summary() === null)
-                    continue;
-
-                const label = new St.Label({
-                    style_class: 'world-clocks-header',
-                });
-
-                const due = task.get_due() ? new Date(task.get_due().get_value()
-                    .as_timet() * 1000) : null;
-
+            // Builds task checkboxes:
+            const buildCheckbox = (task, root = false) => {
                 const checkbox = new CheckBox.CheckBox(task.get_summary()
                     .get_value());
 
@@ -633,62 +665,333 @@ class TaskWidget extends St.BoxLayout {
                     checkbox.getLabelActor().set_opacity(100);
                 }
 
+                if (root)
+                    checkbox._rootTask = true;
+
+                checkbox._task = task;
+                checkbox._uid = task._uid;
+
+                checkbox.getLabelActor().clutter_text.line_wrap_mode =
+                    Pango.WrapMode.WORD_CHAR;
+
                 checkbox.connect('clicked', () => this._taskClicked(checkbox,
-                    this._clientViews.get(uid).client, task));
+                    this._clientViews.get(task._tasklist).client));
+
+                if (task._orphan)
+                    return styleOrphanTaskCheckbox(checkbox);
+
+                return checkbox;
+            };
+
+            // Adds arrows and margins to denote subtasks:
+            const styleSubtaskCheckbox = (checkbox, level) => {
+                const arrow = new St.Label({
+                    accessible_name: _('Beginning of a subtask list'),
+                    accessible_role: Atk.Role.ARROW,
+                });
+
+                checkbox._arrow = arrow;
+                checkbox.child.insert_child_at_index(arrow, 0);
+
+                checkbox.connect('style-changed', widget => {
+                    const boxWidth = widget._box.get_theme_node()
+                        .get_length('width');
+
+                    const spacing = Math.floor(widget.child.get_theme_node()
+                        .get_length('spacing'));
+
+                    if (this.text_direction === Clutter.TextDirection.RTL) {
+                        widget._arrow.set_text('\u21B2');
+
+                        widget._arrow.set_style(`padding-left: ${boxWidth -
+                            widget._arrow.get_width()}px`);
+
+                        widget.set_style(`margin-right: ${--level *
+                            (boxWidth + spacing)}px`);
+                    } else {
+                        widget._arrow.set_text('\u21B3');
+
+                        widget._arrow.set_style(`padding-right: ${boxWidth -
+                            widget._arrow.get_width()}px`);
+
+                        widget.set_style(`margin-left: ${--level *
+                            (boxWidth + spacing)}px`);
+                    }
+                });
+
+                return checkbox;
+            };
+
+            // Adds an arrow indicator to denote orphan tasks:
+            const styleOrphanTaskCheckbox = checkbox => {
+                const indicator = new St.Label({
+                    text: '\u2930',
+                    y_align: Clutter.ActorAlign.CENTER,
+                    style: 'color: coral',
+                    accessible_name: _('Orphan task'),
+                    accessible_role: Atk.Role.ARROW,
+                });
+
+                checkbox.child.insert_child_at_index(indicator, 1);
+                return checkbox;
+            };
+
+            // Creates a due date label:
+            const buildDueDateLabel = (due, root = false, orphan = false) => {
+                const label = new St.Label({
+                    style_class: 'weather-header',
+                    x_align: Clutter.ActorAlign.START,
+                });
+
+                if (!root)
+                    label.add_style_class_name('location');
+
+                if (due === null && root) {
+                    label.text = _('No due date');
+                    label._due = 'no-due-date';
+                } else if (due.toDateString() === today.toDateString()) {
+                    label.text = _('Today');
+                    label._due = 'today';
+                } else if (due < today && this._settings.get_boolean(
+                    'group-past-tasks') && root) {
+                    label.text = _('Past');
+                    label._due = 'past';
+
+                    if (prev && !orphan)
+                        label._skip = true;
+
+                } else {
+                    let format = due.getYear() === today.getYear()
+                        ? NC_('task due date', '%A, %B %-d')
+                        : NC_('task due date with a year', '%A, %B %-d, %Y');
+
+                    format = Shell.util_translate_time_string(format);
+                    const diff = toUTC(due) - toUTC(today);
+                    const toLocale = due.toLocaleFormat(format);
+                    label._due = `${toLocale}`;
+
+                    label.text = `${toLocale} (${diff > 0 ? '+' : '-'} ${Math
+                        .floor(Math.abs(diff) / Utils._MSECS_IN_DAY)})`;
+                }
+
+                return label;
+            };
+
+            // Prepends due date to subtasks:
+            const prependDueDate = (checkbox, due) => {
+                if (!due || checkbox.checked)
+                    return checkbox;
+
+                const box = new St.BoxLayout({ vertical: true });
+                const label = checkbox.child.get_child_at_index(2);
+                checkbox.child.remove_child(label);
+                box.add_child(buildDueDateLabel(due));
+                box.add_child(label);
+                checkbox.child.insert_child_at_index(box, 2);
+                return checkbox;
+            };
+
+            // Adds subtasks:
+            const addSubtasks = (parentCheckbox, parentUid, level = 0,
+                position = null) => {
+                if (!this._idleAddId)
+                    return;
+
+                const subtasks = this._relatedTo.get(parentUid);
+
+                if (!subtasks)
+                    return;
+
+                for (const [index, subtask] of subtasks.entries()) {
+                    let subtaskCheckbox = buildCheckbox(subtask);
+
+                    subtaskCheckbox = styleSubtaskCheckbox(subtaskCheckbox,
+                        level + 1);
+
+                    if (parentCheckbox._subtasks)
+                        parentCheckbox._subtasks.push(subtaskCheckbox);
+                    else
+                        parentCheckbox._subtasks = [subtaskCheckbox];
+
+                    subtaskCheckbox._parentCheckbox = parentCheckbox;
+
+                    if (index !== 0)
+                        subtaskCheckbox._arrow.set_opacity(0);
+
+                    subtaskCheckbox = prependDueDate(subtaskCheckbox,
+                        subtask._due);
+
+                    if (position !== null)
+                        idleAddHelper(subtaskCheckbox, position++);
+                    else
+                        idleAddHelper(subtaskCheckbox);
+
+                    this._relatedTo.delete(parentUid);
+
+                    addSubtasks(subtaskCheckbox, subtask._uid, level + 1,
+                        position);
+                }
+
+                return position;
+            };
+
+            // Facilitates lazy loading of task checkboxes:
+            const idleAddHelper = item => {
+                if (!this._idleAddId)
+                    return;
+
+                const adjustment = this._scrollView.vscroll.adjustment;
+                const height = this._taskBox.get_allocation_box().get_height();
+                const limit = this._upperLimit + height;
+
+                if (this._currentChild) {
+                    const allocation = this._currentChild.allocation;
+
+                    // If task is not above the visible region:
+                    if (allocation.y2 >= adjustment.value) {
+                        // Quit when task is below the visible region:
+                        if (allocation.y1 > adjustment.value + height) {
+                            this._allTasksLoaded = false;
+                            return this._resetTaskBox();
+                        }
+
+                        // For tasks that are in the visible region:
+                        this._taskBox.replace_child(this._currentChild, item);
+                        this._currentChild = item.get_next_sibling();
+                    } else {
+                        this._currentChild = this._currentChild
+                            .get_next_sibling();
+                    }
+
+                    if (this._currentChild) {
+                        if (this._currentChild.allocation.y1 <= limit) {
+                            this._replaceTasksOnGoing = true;
+                        } else {
+                            this._replaceTasksOnGoing = false;
+
+                            // Clean tasks below the visible region. These are
+                            // leftover tasks from previous longer task lists:
+                            while (this._currentChild.get_next_sibling()) {
+                                const next = this._currentChild
+                                    .get_next_sibling();
+
+                                next.destroy();
+                            }
+                        }
+                    }
+
+                } else {
+                    this._taskBox.add_child(item);
+                    this._replaceTasksOnGoing = false;
+                }
+
+                // Load tasks in small portions;
+                if (adjustment.upper > limit && !this._replaceTasksOnGoing) {
+                    this._allTasksLoaded = false;
+                    return this._resetTaskBox();
+                }
+
+                this._allTasksLoaded = true;
+            };
+
+            // Adds task checkboxes:
+            const idleAdd = () => {
+                const rootTask = this._rootTaskIterator.next();
+
+                if (!rootTask.value) {
+                    // Clean leftover tasks from previous task lists:
+                    while (this._currentChild) {
+                        const next = this._currentChild.get_next_sibling();
+                        this._currentChild.destroy();
+                        this._currentChild = next;
+                    }
+
+                    return this._resetTaskBox();
+                }
+
+                const task = rootTask.value;
+                const checkbox = buildCheckbox(task, true);
+                const due = task._due;
 
                 // If a task belongs to an already created group:
                 if ((due === null && due === prev) || (prev && due &&
                     due.toDateString() === prev.toDateString())) {
                     // Simply add the task:
-                    this._taskBox.add_child(checkbox);
+                    checkbox._due = label._due;
+                    idleAddHelper(checkbox);
                 } else {
                     // Otherwise, we need a new group label:
-                    if (due === null) {
-                        label.text = _('No due date');
-                    } else if (due.toDateString() === today.toDateString()) {
-                        label.text = _('Today');
-                    } else if (due < today && this._settings.get_boolean(
-                        'group-overdue-tasks')) {
-                        label.text = _('Overdue');
+                    label = buildDueDateLabel(due, true);
+                    checkbox._due = label._due;
 
-                        if (prev) {
-                            this._taskBox.add_child(checkbox);
-                            continue;
-                        }
+                    if (label._skip) {
+                        idleAddHelper(checkbox);
+                        addSubtasks(checkbox, task._uid);
+                        return GLib.SOURCE_CONTINUE;
                     } else {
-                        let format = due.getYear() === today.getYear()
-                            ? NC_('task due date', '%A, %B %-d')
-                            : NC_('task due date with a year',
-                                '%A, %B %-d, %Y');
-
-                        format = Shell.util_translate_time_string(format);
-
-                        const diff = utc(due) - utc(today);
-                        const sign = Math.sign(diff) === 1 ? '+' : '-';
-
-                        // Display translated and formatted due date label with
-                        // number of days past/to due date:
-                        label.text = due.toLocaleFormat(format) + ` (${sign}` +
-                            `${Math.floor(Math.abs(diff) /
-                            Utils._MSECS_IN_DAY)})`;
+                        idleAddHelper(label);
+                        idleAddHelper(checkbox);
+                        prev = due;
                     }
-                    this._taskBox.add_child(label);
-                    this._taskBox.add_child(checkbox);
-                    prev = due;
                 }
 
-                // Lazy loading of tasks:
-                const limit = this._upperLimit +
-                    this.get_allocation_box().get_height();
-                const upper = this._scrollView.vscroll.adjustment.upper;
+                addSubtasks(checkbox, task._uid);
+                return GLib.SOURCE_CONTINUE;
+            };
 
-                if (upper > limit) {
-                    this._allTasksLoaded = false;
-                    break;
-                } else {
-                    this._allTasksLoaded = true;
+            // (User-defined) Merge task lists:
+            if (merge) {
+                const taskLists = await Promise.all(this._taskLists.map(tl =>
+                    this._filterTasks(this._clientViews.get(tl.uid).client)));
+
+                if (!taskLists.length)
+                    return;
+
+                if (this._settings.get_boolean(
+                    'hide-empty-completed-task-lists')) {
+                    let allCompleted = true;
+
+                    for (const taskList of taskLists) {
+                        for (let i = 0; i < taskList.length; i++) {
+                            if (taskList[i].get_status() !==
+                                ICalGLib.PropertyStatus.COMPLETED) {
+                                allCompleted = false;
+                                break;
+                            }
+                        }
+
+                        if (!allCompleted)
+                            break;
+                    }
+
+                    if (allCompleted) {
+                        this._showPlaceholderWithStatus('no-tasks');
+                        return;
+                    }
                 }
+
+                if (taskLists.some(taskList => !taskList))
+                    return;
+
+                tasks = [].concat(...taskLists.map((taskList, index) =>
+                    taskList.map(task => [this._taskLists[index].uid, task])));
+            } else {
+                tasks = await this._filterTasks(this._clientViews.get(
+                    uid).client);
+
+                if (!tasks || this._idleAddId)
+                    return;
+
+                tasks = tasks.map(task => [uid, task]);
             }
+
+            this._buildTaskMap(tasks);
+            this._rootTaskIterator = this._rootTasks.values();
+            this._currentChild = this._taskBox.first_child;
+
+            this._idleAddId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE,
+                idleAdd);
+
             return true;
         } catch (e) {
             logError(e);
@@ -712,12 +1015,18 @@ class TaskWidget extends St.BoxLayout {
             // (User-defined) Hide empty and completed task lists:
             if (this._settings.get_boolean('hide-empty-completed-task-lists') &&
                 !this._settings.get_boolean('merge-task-lists')) {
-                return tasks.map(task => task.get_status() ===
-                    ICalGLib.PropertyStatus.COMPLETED).every(
-                    status => status === true) ? null : tasks;
-            } else {
-                return tasks;
+                if (!tasks.length)
+                    return null;
+
+                for (const task of tasks) {
+                    if (task.get_status() !== ICalGLib.PropertyStatus.COMPLETED)
+                        return tasks;
+                }
+
+                return null;
             }
+
+            return tasks;
         } catch (e) {
             if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                 return;
@@ -760,14 +1069,18 @@ class TaskWidget extends St.BoxLayout {
             case Utils._HIDE_COMPLETED_TASKS['after-specified-time']: {
                 const start = ICalGLib.Time.new_current_with_zone(
                     ECal.util_get_system_timezone());
+
                 start.set_time(0, 0, 0);
+
                 start.convert_timezone(ECal.util_get_system_timezone(),
                     ICalGLib.Timezone.get_utc_timezone());
 
                 const spec = ICalGLib.Time.new_current_with_zone(
                     ECal.util_get_system_timezone());
+
                 spec.set_time(this._settings.get_int('hct-astod-hour'),
                     this._settings.get_int('hct-astod-minute'), 0);
+
                 spec.convert_timezone(ECal.util_get_system_timezone(),
                     ICalGLib.Timezone.get_utc_timezone());
 
@@ -788,28 +1101,74 @@ class TaskWidget extends St.BoxLayout {
      *
      * @param {Checkbox} checkbox - Task's checkbox that got clicked.
      * @param {ECal.Client} client - Task list that the task belongs to.
-     * @param {ECal.Component} task - The task.
      */
-    async _taskClicked(checkbox, client, task) {
+    async _taskClicked(checkbox, client) {
         try {
-            const label = checkbox.getLabelActor();
+            const objects = [];
 
-            if (checkbox.checked) {
-                label.set_opacity(100);
-                task.set_status(ICalGLib.PropertyStatus.COMPLETED);
-                task.set_percent_complete(100);
-                task.set_completed(ICalGLib.Time.new_current_with_zone(
-                    ICalGLib.Timezone.get_utc_timezone()));
-            } else {
-                label.set_opacity(255);
-                task.set_status(ICalGLib.PropertyStatus.NEEDSACTION);
-                task.set_percent_complete(0);
-                task.set_completed(null);
-            }
+            const processTask = (checkbox, init = false) => {
+                const label = checkbox.getLabelActor();
+                const task = checkbox._task;
 
-            await Utils._modifyObject(client, task.get_icalcomponent(),
-                ECal.ObjModType.THIS, ECal.OperationFlags.NONE,
-                null);
+                if (checkbox.checked) {
+                    label.set_opacity(100);
+
+                    if (Utils._shellVersionAtLeast(38)) {
+                        ECal.util_mark_task_complete_sync(
+                            task.get_icalcomponent(), -1, client, null);
+                    } else {
+                        task.set_status(ICalGLib.PropertyStatus.COMPLETED);
+                        task.set_percent_complete(100);
+
+                        task.set_completed(ICalGLib.Time.new_current_with_zone(
+                            ICalGLib.Timezone.get_utc_timezone()));
+                    }
+                } else {
+                    label.set_opacity(255);
+                    task.set_status(ICalGLib.PropertyStatus.NEEDSACTION);
+                    task.set_percent_complete(0);
+                    task.set_completed(null);
+                }
+
+                objects.push(task.get_icalcomponent());
+
+                if (init)
+                    resolveHierarchy(checkbox);
+            };
+
+            const resolveHierarchy = checkbox => {
+                if (checkbox.checked) {
+                    if (!checkbox._subtasks)
+                        return;
+
+                    for (const subtaskCheckbox of checkbox._subtasks) {
+                        subtaskCheckbox.set_checked(true);
+                        processTask(subtaskCheckbox);
+                        resolveHierarchy(subtaskCheckbox);
+                    }
+                } else {
+                    if (!checkbox._parentCheckbox)
+                        return;
+
+                    checkbox._parentCheckbox.set_checked(false);
+                    processTask(checkbox._parentCheckbox);
+                    resolveHierarchy(checkbox._parentCheckbox);
+                }
+            };
+
+            processTask(checkbox, true);
+
+            const backend = client.source.get_extension(this._sourceType)
+                .get_backend_name();
+
+            // Google Tasks API prohibits from unchecking a subtask if parent
+            // task is completed. We can circumvent this by handling the
+            // parent task first:
+            if (backend === 'gtasks')
+                objects.sort(task => task._subtasks ? -1 : 1);
+
+            await Utils._modifyObjects(client, objects, ECal.ObjModType.THIS,
+                ECal.OperationFlags.NONE, null);
         } catch (e) {
             logError(e);
         }
@@ -818,53 +1177,39 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Either sets and shows the active task list or shows the placeholder.
      *
-     * @param {number|undefined} index - Index of the task list to activate or
-     * `undefined` to show the placeholder instead.
-     * @param {string} [text] - Text for the placeholder.
+     * @param {number|null} index - Index of the task list to activate or
+     * `null` to show the placeholder instead.
      */
-    async _showActiveTaskList(index, text = null) {
+    async _showActiveTaskList(index) {
         try {
             this._activeTaskList = index;
 
-            if (this._showActiveTaskListOnGoing && index !== undefined) {
-                this._cancellable.cancel();
+            if (!DateMenu.isOpen && index !== null)
                 return;
-            }
 
-            this._showActiveTaskListOnGoing = true;
-            this._cancellable = new Gio.Cancellable();
-            const merge = this._settings.get_boolean('merge-task-lists');
+            let taskList = this._taskLists[index];
 
-            if (index !== undefined && this._taskLists[index]) {
-                const adjustment = this._scrollView.vscroll.adjustment.value;
-
-                if (await this._listTasks(this._taskLists[index].uid,
-                    merge) === undefined)
-                    return;
-
-                // In the events that refresh the active task list (e.g.
-                // clicking on a checkbox), we want to maintain the position of
-                // the vertical scrollbar:
-                this._scrollView.vscroll.adjustment.set_value(adjustment);
-
-                const name = merge ? _('All Tasks')
-                    : this._taskLists[index].name;
-
-                this._taskListName.set_text(name);
-                this._setHeader(merge);
-
+            if (taskList) {
                 if (!this._contentBox.visible)
                     this._contentBox.show();
+
+                const merge = this._settings.get_boolean('merge-task-lists') ||
+                    this._mergeTaskLists;
+
+                this._taskListName.set_text(merge ? _('All Tasks')
+                    : taskList.name);
+
+                this._setHeader(merge);
+
+                if (!await this._listTasks(taskList.uid, merge)) {
+                    Utils._debounce(this._showActiveTaskList.bind(this),
+                        100, false)(this._activeTaskList);
+                }
             } else {
                 this._contentBox.hide();
-
-                if (text)
-                    this._statusLabel.set_text(text);
             }
         } catch (e) {
             logError(e);
-        } finally {
-            delete this._showActiveTaskListOnGoing;
         }
     }
 
@@ -876,18 +1221,49 @@ class TaskWidget extends St.BoxLayout {
      */
     _showPlaceholderWithStatus(status) {
         this._taskLists = [];
+        this._showActiveTaskList(null);
 
         switch (status) {
             case 'no-tasks':
-                this._taskIcon.gicon = Gio.ThemedIcon.new(
-                    'checkbox-checked-symbolic');
-                this._showActiveTaskList(undefined, _('No Tasks'));
+                this._taskIcon.set_gicon(Gio.ThemedIcon.new(
+                    'checkbox-checked-symbolic'));
+
+                this._statusLabel.set_text(_('No Tasks'));
                 break;
-            case 'no-eds':
-                this._taskIcon.gicon = Gio.ThemedIcon.new(
-                    'dialog-error-symbolic');
-                this._showActiveTaskList(undefined,
-                    _('Error: Missing Dependencies'));
+            case 'missing-dependencies': {
+                this._taskIcon.set_gicon(Gio.ThemedIcon.new(
+                    'dialog-error-symbolic'));
+
+                this._statusLabel.set_text(_('Error: Missing Dependencies'));
+                this._statusLabel.add_style_class_name('url-highlighter');
+
+                this._statusLabel.connect('style-changed', () => {
+                    let [hasColor, color] = this._statusLabel.get_theme_node()
+                        .lookup_color('link-color', false);
+
+                    this._statusLabel.set_style(`color: ${hasColor
+                        ? color.to_string().substr(0, 7) : '#629fea'}`);
+                });
+
+                this._statusLabel.connect('motion-event', () => {
+                    global.display.set_cursor(Meta.Cursor.POINTING_HAND);
+                    return Clutter.EVENT_PROPAGATE;
+                });
+
+                this._statusLabel.connect('leave-event', () => {
+                    global.display.set_cursor(Meta.Cursor.DEFAULT);
+                    return Clutter.EVENT_PROPAGATE;
+                });
+
+                this._statusLabel.connect('button-release-event', () => {
+                    Gio.app_info_launch_default_for_uri(
+                        Me.metadata.wiki,
+                        global.create_app_launch_context(0, -1));
+
+                    DateMenu.close();
+                    return Clutter.EVENT_STOP;
+                });
+            }
         }
     }
 
@@ -907,12 +1283,12 @@ class TaskWidget extends St.BoxLayout {
         else
             i = --i;
 
-        if (this._upperLimit) {
-            this._upperLimit = 0;
-            this._scrollView.vscroll.adjustment.set_values(0, 0, 0, 0, 0, 0);
-        }
+        if (this._mergeTaskLists)
+            delete this._mergeTaskLists;
 
+        this._taskListMenu.close();
         button.grab_key_focus();
+        this._resetTaskBox(true);
         this._showActiveTaskList(i);
     }
 
@@ -930,12 +1306,12 @@ class TaskWidget extends St.BoxLayout {
      * properties.
      */
     _onTaskListScrolled(adjustment, spec) {
-        if (this._allTasksLoaded || this._showActiveTaskListOnGoing)
+        if (this._allTasksLoaded || this._idleAddId || adjustment.value === 0)
             return;
 
         const height = this._taskBox.allocation.get_height();
 
-        if (adjustment.upper - adjustment.value - height < 50) {
+        if (adjustment.upper - adjustment.value - height < 100) {
             this._upperLimit += height;
             this._showActiveTaskList(this._activeTaskList);
         }
@@ -947,7 +1323,8 @@ class TaskWidget extends St.BoxLayout {
      * @param {boolean} merged - Task lists are merged into one.
      */
     _setHeader(merged) {
-        const singular = this._taskLists.length === 1 || merged;
+        const singular = !this._mergeTaskLists &&
+            (this._taskLists.length === 1 || merged);
 
         if (singular) {
             this._backButton.hide();
@@ -959,8 +1336,8 @@ class TaskWidget extends St.BoxLayout {
             this._backButton.show();
             this._forwardButton.show();
             this._taskListNameArrow.show();
-            this._taskListNameButton.set_reactive(true);
             this._taskListNameButton.add_style_class_name('button');
+            this._taskListNameButton.set_reactive(true);
         }
 
         if (!singular || !this._settings.get_boolean(
@@ -971,11 +1348,31 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
+     * Resets adjjustments of the vertical scrollbar.
+     *
+     * @param {boolean} fullReset - Reset vertical scrollbar adjustment.
+     */
+    _resetTaskBox(fullReset = false) {
+        if (this._idleAddId) {
+            GLib.source_remove(this._idleAddId);
+            delete this._idleAddId;
+        }
+
+        if (!fullReset)
+            return;
+
+        if (this._upperLimit)
+            this._scrollView.vscroll.adjustment.set_values(0, 0, 0, 0, 0, 0);
+
+        this._upperLimit = 0;
+    }
+
+    /**
      * Handles scroll events on the task list header.
      *
      * @param {Clutter.Actor} actor - Actor the event is associated to.
      * @param {Clutter.Event} event - Holds information about the event.
-     * @return {boolean} False to continue the propagation of the event.
+     * @return {boolean} `false` to continue the propagation of the event.
      */
     _onHeaderScrolled(actor, event) {
         if (this._taskLists.length !== 1 &&
@@ -1016,12 +1413,11 @@ class TaskWidget extends St.BoxLayout {
      * extension settings. This method runs every time the extension loads and
      * removes such obsolete uids.
      *
+     * @param {string[]} disabled - List of disabled task lists.
      * @param {string[]} uids - List of task list uids ordered according to
      * custom user-defined order.
      */
-    _cleanupSettings(uids) {
-        const disabled = this._settings.get_strv('disabled-task-lists');
-
+    _cleanupSettings(disabled, uids) {
         if (disabled.length) {
             this._settings.set_strv('disabled-task-lists', disabled.filter(
                 list => uids.indexOf(list) !== -1));
@@ -1044,19 +1440,18 @@ class TaskWidget extends St.BoxLayout {
      * @param {boolean} isOpen - Menu is in its opened state.
      */
     _onMenuOpen(menu, isOpen) {
-        if (isOpen && this._activeTaskList !== undefined &&
-            !this._onSettingsChangedOnGoing) {
-            this._showActiveTaskList(this._activeTaskList);
-
+        if (isOpen && this._activeTaskList !== null) {
             let i = 0;
+            this._showActiveTaskList(this._activeTaskList);
             const hct = this._settings.get_int('hide-completed-tasks');
 
             if (Utils._HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT(hct)) {
                 this._refreshTimeoutId = GLib.timeout_add_seconds(
                     GLib.PRIORITY_DEFAULT, 2, () => {
-                        this._showActiveTaskList(this._activeTaskList);
+                        if (!this._idleAddId)
+                            this._showActiveTaskList(this._activeTaskList);
 
-                        if (i++ < 60 && this._activeTaskList !== undefined)
+                        if (i++ < 60 && this._activeTaskList !== null)
                             return GLib.SOURCE_CONTINUE;
                         else
                             this._onMenuOpen(null, false);
@@ -1069,12 +1464,10 @@ class TaskWidget extends St.BoxLayout {
                 delete this._refreshTimeoutId;
             }
 
-            if (this._upperLimit) {
-                this._upperLimit = 0;
-                this._scrollView.vscroll.adjustment.set_values(
-                    0, 0, 0, 0, 0, 0);
-            }
-
+            delete this._rootTasks;
+            delete this._orphanTasks;
+            delete this._taskUids;
+            this._resetTaskBox(true);
             this._taskBox.destroy_all_children();
         }
     }
@@ -1088,9 +1481,8 @@ class TaskWidget extends St.BoxLayout {
      */
     async _onSettingsChanged(settings, key) {
         try {
-            const active = this._activeTaskList !== undefined &&
-                this._taskLists[this._activeTaskList] !== undefined
-                ? this._taskLists[this._activeTaskList].uid : undefined;
+            const active = this._taskLists[this._activeTaskList]
+                ? this._taskLists[this._activeTaskList].uid : null;
 
             await this._storeTaskLists();
 
@@ -1111,8 +1503,6 @@ class TaskWidget extends St.BoxLayout {
             }
         } catch (e) {
             logError(e);
-        } finally {
-            delete this._onSettingsChangedOnGoing;
         }
     }
 
@@ -1122,10 +1512,14 @@ class TaskWidget extends St.BoxLayout {
     _onDestroy() {
         this._cancellable.cancel();
 
-        if (this._calendarWidget.has_style_class_name('remove-margin'))
-            this._calendarWidget.remove_style_class_name('remove-margin');
+        if (this._calendarWidget.has_style_class_name(
+            'task-widget-remove-calendar-margin')) {
+            this._calendarWidget.remove_style_class_name(
+                'task-widget-remove-calendar-margin');
+        }
 
-        if (this._taskListMenu.actor.get_parent() === Main.uiGroup)
+        if (this._taskListMenu && this._taskListMenu.actor.get_parent() ===
+            Main.uiGroup)
             Main.uiGroup.remove_child(this._taskListMenu.actor);
 
         if (this._themeChangedId) {
@@ -1138,6 +1532,9 @@ class TaskWidget extends St.BoxLayout {
 
         if (this._refreshTimeoutId)
             GLib.source_remove(this._refreshTimeoutId);
+
+        if (this._idleAddId)
+            GLib.source_remove(this._idleAddId);
 
         if (this._onMenuOpenId)
             DateMenu.disconnect(this._onMenuOpenId);
@@ -1171,6 +1568,5 @@ function init() {
     const dir = Me.metadata.locale === 'user-specific'
         ? Me.dir.get_child('locale').get_path() : Me.metadata.locale;
 
-    Gettext.textdomain(Me.metadata.base);
     Gettext.bindtextdomain(Me.metadata.base, dir);
 }

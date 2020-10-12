@@ -39,9 +39,9 @@ function init() {
 }
 
 /**
- * Returns the settings widget if Evolution Data Server is installed and
- * if there are no prior instances of the settings window. Otherwise,
- * an instance of `BeGoneWidget` is returned.
+ * Returns the settings widget if Evolution Data Server (and required
+ * dependencies) are installed and if there are no prior instances of the
+ * settings window. Otherwise, an instance of `BeGoneWidget` is returned.
  *
  * @return {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
@@ -97,7 +97,7 @@ const TaskWidgetSettings = GObject.registerClass({
     Template: `resource://${Me.metadata.epath}/settings-window.ui`,
     InternalChildren: [
         'mtlSwitch',
-        'gotSwitch',
+        'gptSwitch',
         'hhfstlSwitch',
         'heactlSwitch',
         'hctSettingsRevealer',
@@ -161,30 +161,40 @@ const TaskWidgetSettings = GObject.registerClass({
 
         this._settings.bind('merge-task-lists', this._mtlSwitch, 'active',
             Gio.SettingsBindFlags.DEFAULT);
-        this._settings.bind('group-overdue-tasks', this._gotSwitch, 'active',
+
+        this._settings.bind('group-past-tasks', this._gptSwitch, 'active',
             Gio.SettingsBindFlags.DEFAULT);
+
         this._settings.bind('hide-header-for-singular-task-lists',
             this._hhfstlSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
+
         this._settings.bind('hide-empty-completed-task-lists',
             this._heactlSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
+
         this._settings.bind('hide-completed-tasks', this._hctComboBox,
             'active', Gio.SettingsBindFlags.DEFAULT);
+
         this._settings.bind('hct-apotac-value', this._hctApotacSpinButton,
             'value', Gio.SettingsBindFlags.DEFAULT);
+
         this._settings.bind('hct-astod-hour', this._hctAstodSpinButtonHour,
             'value', Gio.SettingsBindFlags.DEFAULT);
+
         this._settings.bind('hct-astod-minute', this._hctAstodSpinButtonMinute,
             'value', Gio.SettingsBindFlags.DEFAULT);
 
         this._fillApotacComboBox(this._hctApotacSpinButton.value);
+
         this._settings.bind('hct-apotac-unit', this._hctApotacComboBox,
             'active', Gio.SettingsBindFlags.DEFAULT);
+
         this._hctApotacSpinButton.connect('value-changed', button =>
             this._fillApotacComboBox(button.get_value(),
                 this._hctApotacComboBox.active_id));
 
         this._hctAstodSpinButtonHour.connect('output', this._timeOutput
             .bind(this));
+
         this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
             .bind(this));
 
@@ -206,6 +216,7 @@ const TaskWidgetSettings = GObject.registerClass({
         // Connect signal handlers for drag and drop operations:
         this._taskListBox.connect('drag-motion', this._dragMotion.bind(this));
         this._taskListBox.connect('drag-leave', this._dragLeave.bind(this));
+
         this._taskListBox.connect('drag-data-received',
             this._dragDataReceived.bind(this));
 
@@ -250,11 +261,11 @@ const TaskWidgetSettings = GObject.registerClass({
         try {
             if (init) {
                 this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
+                this._sourceRegistry = await Utils._getSourceRegistry(null);
                 const customOrder = this._settings.get_strv('task-list-order');
+
                 const customSort = customOrder.length ? Utils._customSort.bind(
                     this, customOrder) : undefined;
-
-                this._sourceRegistry = await Utils._getSourceRegistry(null);
 
                 const sources = this._sourceRegistry.list_sources(
                     this._sourceType).sort(customSort);
@@ -296,6 +307,7 @@ const TaskWidgetSettings = GObject.registerClass({
 
             if (!Array.from(accounts.keys()).length) {
                 this._backendRefreshButton.set_sensitive(false);
+
                 this._backendRefreshButton.set_tooltip_text(
                     _('No remote task lists found'));
 
@@ -303,6 +315,7 @@ const TaskWidgetSettings = GObject.registerClass({
                     return;
             } else {
                 this._backendRefreshButton.set_sensitive(true);
+
                 this._backendRefreshButton.set_tooltip_text(
                     _('Refresh the list of account task lists'));
             }
@@ -311,6 +324,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 const accountButton = Gtk.ModelButton.new();
                 accountButton.text = account;
                 this._refreshTaskListsBox.add(accountButton);
+
                 accountButton.connect('clicked',
                     this._onAccountButtonClicked.bind(this, source, account));
             }
@@ -367,7 +381,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 throw new Error(`${account} could not be refreshed`);
 
             this._backendRefreshButton.set_tooltip_text(
-                _('Refresh in progress') + '…');
+                _('Refresh in progress') + '\u2026');
 
             this._backendRefreshButtonImage.set_visible(false);
             this._backendRefreshButtonSpinner.set_visible(true);
@@ -417,6 +431,7 @@ const TaskWidgetSettings = GObject.registerClass({
                         if (row._uid === source.uid)
                             row.destroy();
                     });
+
                     break;
                 case 'changed':
                     this._taskListBox.foreach(row => {
@@ -455,8 +470,10 @@ const TaskWidgetSettings = GObject.registerClass({
 
         // Remove the row and insert it into new position:
         source.get_parent().remove(source);
+
         index = widget.rowBelow ? widget.rowBelow.get_index()
             : widget.rowAbove.get_index() + 1;
+
         widget.insert(source, index);
 
         // Update the order of task lists:
@@ -504,6 +521,7 @@ const TaskWidgetSettings = GObject.registerClass({
 
             widget.rowBelow = topHalf ? row : widget.get_row_at_index(
                 row.get_index() + 1);
+
             widget.rowAbove = topHalf
                 ? widget.get_row_at_index(row.get_index() - 1) : row;
         }
@@ -633,6 +651,7 @@ const TaskListRow = GObject.registerClass({
             'disabled-task-lists').indexOf(source.uid) === -1;
 
         this._rowMenuMoveUp.connect('clicked', this._moveRow.bind(this, true));
+
         this._rowMenuMoveDown.connect('clicked', this._moveRow.bind(this,
             false));
 
@@ -728,6 +747,7 @@ const TaskListRow = GObject.registerClass({
     _dragBegin(widget, context) {
         const taskListRow = widget.get_ancestor(Gtk.ListBoxRow.$gtype);
         const rowSize = taskListRow.get_allocation();
+
         const imageSurface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
             rowSize.width, rowSize.height);
 
@@ -794,6 +814,7 @@ const TaskListRow = GObject.registerClass({
         } else {
             disabled.push(source.uid);
         }
+
         this._settings.set_strv('disabled-task-lists', disabled);
     }
 });
@@ -839,6 +860,7 @@ const TaskListPropertiesDialog = GObject.registerClass({
 
         this._fillTimeUnitComboBox(interval, `${units}`);
         this._taskListPropertiesDialogSpinButton.set_value(interval);
+
         this._taskListPropertiesDialogSpinButton.connect('value-changed',
             button => this._fillTimeUnitComboBox(button.value));
     }
@@ -966,50 +988,54 @@ const SettingsMenuButton = GObject.registerClass({
      * Generates the support log. User is notified to remove or censor any
      * information he/she considers to be private.
      *
-     * @author Andy Holmes <andrew.g.r.holmes@gmail.com>
+     * @author Andy Holmes <andrew.g.r.holmes@gmail.com> (the original code was
+     * extended to include more data)
      *
      * @param {GLib.DateTime} time - Restricts log entries displayed to those
      * after this time.
      */
     async _generateSupportLog(time) {
         try {
+            const gschema = id => new Gio.Settings({
+                settings_schema: Gio.SettingsSchemaSource.get_default()
+                    .lookup(id, true),
+            });
+
             const [file, stream] = Gio.File.new_tmp('taskwidget.XXXXXX');
             const logFile = stream.get_output_stream();
             const widgetName = `${Me.metadata.name} v${Me.metadata.version}`;
-            const kernelVersion = await Utils._execCommunicate(['uname', '-r'],
-                null, null);
-            const shellVersion = await Utils._execCommunicate(['gnome-shell',
-                '--version'], null, null);
-            const gjsVersion = await Utils._execCommunicate(['gjs',
-                '--version'], null, null);
-            const gtkTheme = await Utils._execCommunicate(['gsettings', 'get',
-                'org.gnome.desktop.interface', 'gtk-theme'], null, null);
-            const iconTheme = await Utils._execCommunicate(['gsettings', 'get',
-                'org.gnome.desktop.interface', 'icon-theme'], null, null);
+
+            const iconTheme = gschema('org.gnome.desktop.interface')
+                .get_string('icon-theme');
+
+            const gtkTheme = gschema('org.gnome.desktop.interface')
+                .get_string('gtk-theme');
+
+            const userType = Me.metadata.locale === 'user-specific' ? 'user'
+                : 'system';
 
             let shellTheme;
 
             try {
-                shellTheme = await Utils._execCommunicate(['gsettings', 'get',
-                    'org.gnome.shell.extensions.user-theme', 'name'], null,
-                null);
+                shellTheme = gschema('org.gnome.shell.extensions.user-theme')
+                    .get_string('name');
 
-                if (shellTheme === '\'\'')
+                if (!shellTheme)
                     throw new Error();
             } catch (e) {
-                shellTheme = '\'Adwaita (default)\'';
+                shellTheme = 'Adwaita (default)';
             }
 
-            const logHeader = widgetName + '\n' +
-                kernelVersion + '\n' +
-                shellVersion + '\n' +
-                gjsVersion + '\n' +
+            const logHeader = widgetName + ' (' + userType + ')\n' +
+                GLib.get_os_info('PRETTY_NAME') + '\n' +
+                'GNOME Shell ' + imports.misc.config.PACKAGE_VERSION + '\n' +
+                'gjs ' + imports.system.version + '\n' +
                 'Language: ' + GLib.getenv('LANG') + '\n' +
                 'XDG Session Type: ' + GLib.getenv('XDG_SESSION_TYPE') + '\n' +
                 'GDM Session Type: ' + GLib.getenv('GDMSESSION') + '\n' +
-                'Icon Theme: ' + iconTheme.slice(1, -1) + '\n' +
-                'Shell Theme: ' + shellTheme.slice(1, -1) + '\n' +
-                'GTK Theme: ' + gtkTheme.slice(1, -1) + '\n\n';
+                'Shell Theme: ' + shellTheme + '\n' +
+                'Icon Theme: ' + iconTheme + '\n' +
+                'GTK Theme: ' + gtkTheme + '\n\n';
 
             await Utils._writeBytesAsync(logFile, new GLib.Bytes(logHeader), 0,
                 null);
