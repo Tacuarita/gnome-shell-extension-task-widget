@@ -6,6 +6,7 @@ files:
     translation: /data/po/%locale%.po
     languages_mapping:
       locale:
-        lt: lt
         de: de
-        nl: nl_NL
+        fr: fr
+        lt: lt
+        nl: nl

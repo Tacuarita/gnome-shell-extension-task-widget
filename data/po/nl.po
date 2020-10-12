@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 10:13+0200\n"
+"POT-Creation-Date: 2020-10-13 01:39+0200\n"
 "PO-Revision-Date: 2020-09-24 09:10\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
@@ -17,115 +17,128 @@ msgstr ""
 "X-Crowdin-File: /master/data/po/org.gnome.shell.extensions.task-widget.pot\n"
 "X-Crowdin-File-ID: 8\n"
 
-#: src/extension.js:92
+#: src/extension.js:97
 msgid "Loading"
 msgstr "Bezig met laden"
 
-#: src/extension.js:205
+#: src/extension.js:206
 msgid "Previous task list"
 msgstr "Vorige takenlijst"
 
-#: src/extension.js:241
+#: src/extension.js:242
 msgid "Select task list"
 msgstr ""
 
-#: src/extension.js:256
+#: src/extension.js:283 src/extension.js:1203
+msgid "All Tasks"
+msgstr ""
+
+#: src/extension.js:312
 msgid "Next task list"
 msgstr "Volgende takenlijst"
 
-#: src/extension.js:647
+#: src/extension.js:689
+msgid "Beginning of a subtask list"
+msgstr ""
+
+#. Translators: this denotes a subtask with an inaccessible
+#. parent task.
+#: src/extension.js:733
+msgid "Orphan task"
+msgstr ""
+
+#: src/extension.js:752
 msgid "No due date"
 msgstr "Geen einddatum"
 
-#: src/extension.js:649
+#: src/extension.js:755
 msgid "Today"
 msgstr "Vandaag"
 
-#: src/extension.js:652
-msgid "Overdue"
-msgstr "Verstreken"
+#. Translators: this is a category name for tasks with
+#. due date in the past.
+#: src/extension.js:761
+msgid "Past"
+msgstr ""
 
-#: src/extension.js:660
+#: src/extension.js:769
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %B %-d"
 
-#: src/extension.js:662
+#: src/extension.js:770
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %B %-d, %Y"
 
-#: src/extension.js:850
-msgid "All Tasks"
-msgstr ""
-
-#: src/extension.js:884
+#: src/extension.js:1235
 msgid "No Tasks"
 msgstr "Geen taken"
 
-#: src/extension.js:890 src/prefs.js:82
+#: src/extension.js:1241 src/prefs.js:82
 msgid "Error: Missing Dependencies"
 msgstr "Fout: ontbrekende afhankelijkheden"
 
 #: src/prefs.js:83
 msgid "Please install Evolution Data Server to use this extension."
-msgstr "Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
+msgstr ""
+"Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
 
-#: src/prefs.js:225
+#: src/prefs.js:236
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "seconde"
 msgstr[1] "seconden"
 
-#: src/prefs.js:227
+#: src/prefs.js:238
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuut"
 msgstr[1] "minuten"
 
-#: src/prefs.js:228
+#: src/prefs.js:239
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "uur"
 msgstr[1] "uur"
 
-#: src/prefs.js:230
+#: src/prefs.js:241
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] "dag"
 msgstr[1] "dagen"
 
-#: src/prefs.js:300
+#: src/prefs.js:312
 msgid "No remote task lists found"
 msgstr "Geen externe takenlijst beschikbaar"
 
-#: src/prefs.js:307 data/ui/settings-window.ui:639
+#: src/prefs.js:320 data/ui/settings-window.ui:649
 msgid "Refresh the list of account task lists"
 msgstr "Ververs de lijst met accounts"
 
-#: src/prefs.js:370
+#: src/prefs.js:384
 msgid "Refresh in progress"
 msgstr "Bezig met verversen"
 
-#: src/prefs.js:855
+#: src/prefs.js:877
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuut"
 msgstr[1] "minuten"
 
-#: src/prefs.js:857
+#: src/prefs.js:879
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "uur"
 msgstr[1] "uur"
 
-#: src/prefs.js:859
+#: src/prefs.js:881
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -135,12 +148,12 @@ msgstr[1] "dagen"
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:928
+#: src/prefs.js:950
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "Heimen Stoffels"
 
-#: data/ui/settings-menu.ui:21 data/ui/settings-menu.ui:118
+#: data/ui/settings-menu.ui:21 data/ui/settings-menu.ui:115
 msgid "Support Log"
 msgstr "Logboek"
 
@@ -156,15 +169,21 @@ msgstr "Over"
 msgid "Copyright © 2020 Juozas Miškinis"
 msgstr "Auteursrecht © 2020 Juozas Miškinis"
 
-#: data/ui/settings-menu.ui:119
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-informatie."
+#: data/ui/settings-menu.ui:116
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het "
+"probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-"
+"informatie."
 
-#: data/ui/settings-menu.ui:131 data/ui/task-list-properties-dialog.ui:31
+#: data/ui/settings-menu.ui:128 data/ui/task-list-properties-dialog.ui:31
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: data/ui/settings-menu.ui:144
+#: data/ui/settings-menu.ui:141
 msgid "Review Log"
 msgstr "Logboek nakijken"
 
@@ -172,53 +191,59 @@ msgstr "Logboek nakijken"
 msgid "Settings"
 msgstr "Instellingen"
 
-#: data/ui/settings-window.ui:94
+#: data/ui/settings-window.ui:95
 msgid "Merge task lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:159
-msgid "Group overdue tasks"
+#: data/ui/settings-window.ui:161
+#, fuzzy
+msgid "Group past tasks"
 msgstr "Verstreken taken groeperen"
 
-#: data/ui/settings-window.ui:225
+#: data/ui/settings-window.ui:228
 msgid "Hide header for singular tasks lists"
 msgstr "Kop verbergen op losse takenlijsten"
 
-#: data/ui/settings-window.ui:290
+#: data/ui/settings-window.ui:294
 msgid "Hide empty and completed task lists"
 msgstr "Blanco en afgeronde takenlijsten verbergen"
 
-#: data/ui/settings-window.ui:355
+#: data/ui/settings-window.ui:360
 msgid "Hide completed tasks"
 msgstr "Afgeronde taken verbergen"
 
-#: data/ui/settings-window.ui:368
+#: data/ui/settings-window.ui:373
 msgid "Never"
 msgstr "Nooit"
 
-#: data/ui/settings-window.ui:369
+#: data/ui/settings-window.ui:374
 msgid "Immediately"
 msgstr "Onmiddellijk"
 
-#: data/ui/settings-window.ui:370
+#: data/ui/settings-window.ui:375
 msgid "After a period of time after completion"
 msgstr "Enige tijd na het afronden"
 
-#: data/ui/settings-window.ui:371
+#: data/ui/settings-window.ui:376
 msgid "After a specific time of the day"
 msgstr "Op een bepaald tijdstip"
 
-#: data/ui/settings-window.ui:409 data/ui/settings-window.ui:458
+#: data/ui/settings-window.ui:415 data/ui/settings-window.ui:465
 msgid "After"
 msgstr "Na"
 
-#: data/ui/settings-window.ui:549
+#: data/ui/settings-window.ui:557
 msgid "Task Lists"
 msgstr "Takenlijsten"
 
-#: data/ui/settings-window.ui:566
-msgid "You can drag and drop rows to change the order of task lists in the widget."
+#: data/ui/settings-window.ui:574
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Je kunt rijen op de widget verslepen om de volgorde aan te passen."
+
+#: data/ui/settings-window.ui:650
+msgid "menu"
+msgstr ""
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
@@ -229,7 +254,7 @@ msgid "OK"
 msgstr "Oké"
 
 #. Translators: e.g. "Refresh every 10 minutes".
-#: data/ui/task-list-properties-dialog.ui:72
+#: data/ui/task-list-properties-dialog.ui:73
 msgid "Refresh every"
 msgstr "Ververs elke"
 
@@ -249,7 +274,9 @@ msgstr "Taken verversen"
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: data/ui/task-list-row.ui:207
+#: data/ui/task-list-row.ui:208
 msgid "Task list options"
 msgstr "Takenlijstopties"
 
+#~ msgid "Overdue"
+#~ msgstr "Verstreken"
