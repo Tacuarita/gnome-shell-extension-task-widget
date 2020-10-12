@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-24 10:13+0200\n"
-"PO-Revision-Date: 2020-09-24 09:10\n"
+"PO-Revision-Date: 2020-10-12 13:22\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -27,7 +27,7 @@ msgstr "Vorige Aufgabenliste"
 
 #: src/extension.js:241
 msgid "Select task list"
-msgstr ""
+msgstr "Aufgabenliste auswählen"
 
 #: src/extension.js:256
 msgid "Next task list"
@@ -57,7 +57,7 @@ msgstr "%A, %B %-d, %Y"
 
 #: src/extension.js:850
 msgid "All Tasks"
-msgstr ""
+msgstr "Alle Aufgaben"
 
 #: src/extension.js:884
 msgid "No Tasks"
@@ -174,7 +174,7 @@ msgstr "Einstellungen"
 
 #: data/ui/settings-window.ui:94
 msgid "Merge task lists"
-msgstr ""
+msgstr "Aufgabenlisten zusammenführen"
 
 #: data/ui/settings-window.ui:159
 msgid "Group overdue tasks"
@@ -222,7 +222,7 @@ msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der A
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
-msgstr "Task-Eigenschaften"
+msgstr "Eigenschaften der Aufgabenliste"
 
 #: data/ui/task-list-properties-dialog.ui:44
 msgid "OK"
