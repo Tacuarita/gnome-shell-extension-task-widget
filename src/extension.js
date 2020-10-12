@@ -728,6 +728,8 @@ class TaskWidget extends St.BoxLayout {
                     text: '\u2930',
                     y_align: Clutter.ActorAlign.CENTER,
                     style: 'color: coral',
+                    /* Translators: this denotes a subtask with an inaccessible
+                    parent task. */
                     accessible_name: _('Orphan task'),
                     accessible_role: Atk.Role.ARROW,
                 });
@@ -754,6 +756,8 @@ class TaskWidget extends St.BoxLayout {
                     label._due = 'today';
                 } else if (due < today && this._settings.get_boolean(
                     'group-past-tasks') && root) {
+                    /* Translators: this is a category name for tasks with
+                    due date in the past. */
                     label.text = _('Past');
                     label._due = 'past';
 
