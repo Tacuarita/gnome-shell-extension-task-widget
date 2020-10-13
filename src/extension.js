@@ -569,7 +569,7 @@ class TaskWidget extends St.BoxLayout {
      * list UIDs and task objects.
      */
     _buildTaskMap(tasks) {
-        let pos = 0;
+        let position = 0;
         let index = 0;
         this._rootTasks = [];
         this._relatedTo = new Map();
@@ -620,10 +620,10 @@ class TaskWidget extends St.BoxLayout {
             for (const task of this._relatedTo.get(parentUid)) {
                 task._orphan = true;
 
-                for (let i = pos; i < this._rootTasks.length; i++) {
+                for (let i = position; i < this._rootTasks.length; i++) {
                     if (task._index < this._rootTasks[i]._index) {
                         this._rootTasks.splice(i, 0, task);
-                        pos = i;
+                        position = i;
                         break;
                     }
                 }
