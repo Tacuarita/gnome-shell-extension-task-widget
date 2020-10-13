@@ -8,8 +8,7 @@ const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
 const DateMenu = Main.panel.statusArea.dateMenu.menu;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
 let ECal, EDataServer, ICalGLib;
@@ -36,8 +35,7 @@ class TaskWidget extends St.BoxLayout {
             name: 'taskWidget',
             // Re-use style classes. We'll do it in multiple places for
             // better compatibility with custom Shell themes.
-            style_class: 'datemenu-calendar-column task-widget-column \
-                          message-list',
+            style_class: 'datemenu-calendar-column task-widget-column',
             vertical: true,
         });
 
@@ -85,7 +83,7 @@ class TaskWidget extends St.BoxLayout {
 
         const labeledIconBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'message-list-placeholder',
+            style_class: 'spacing',
         });
 
         this._taskIcon = new St.Icon({
