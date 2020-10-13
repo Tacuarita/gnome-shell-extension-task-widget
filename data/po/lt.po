@@ -3,15 +3,14 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-13 01:39+0200\n"
-"PO-Revision-Date: 2020-09-24 09:10\n"
+"PO-Revision-Date: 2020-10-12 23:52\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
 "Language: lt_LT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n"
-"%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
 "X-Crowdin-Project: task-widget\n"
 "X-Crowdin-Project-ID: 418358\n"
 "X-Crowdin-Language: lt\n"
@@ -40,13 +39,13 @@ msgstr "Sekantis užduočių sąrašas"
 
 #: src/extension.js:689
 msgid "Beginning of a subtask list"
-msgstr ""
+msgstr "Užduočių pogrupio pradžia"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
 #: src/extension.js:733
 msgid "Orphan task"
-msgstr ""
+msgstr "Pogrupio užduotis be tėvinės užduoties"
 
 #: src/extension.js:752
 msgid "No due date"
@@ -60,7 +59,7 @@ msgstr "Šiandien"
 #. due date in the past.
 #: src/extension.js:761
 msgid "Past"
-msgstr ""
+msgstr "Praeities"
 
 #: src/extension.js:769
 msgctxt "task due date"
@@ -82,8 +81,7 @@ msgstr "Klaida: trūksta reikalingų modulių"
 
 #: src/prefs.js:83
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
+msgstr "Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
 
 #: src/prefs.js:236
 msgctxt "after X second(s)"
@@ -185,14 +183,8 @@ msgid "Copyright © 2020 Juozas Miškinis"
 msgstr "Visos teisės saugomos © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:116
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Derinimo pranešimai yra registruojami. Atlikite reikiamus veiksmus, kad "
-"pakartotumėte problemą, o tuomet peržiūrėkite žurnalą. Prašome pašalinti ar "
-"cenzūruoti informaciją, kurią laikote privačia."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Derinimo pranešimai yra registruojami. Atlikite reikiamus veiksmus, kad pakartotumėte problemą, o tuomet peržiūrėkite žurnalą. Prašome pašalinti ar cenzūruoti informaciją, kurią laikote privačia."
 
 #: data/ui/settings-menu.ui:128 data/ui/task-list-properties-dialog.ui:31
 msgid "Cancel"
@@ -211,9 +203,8 @@ msgid "Merge task lists"
 msgstr "Sulieti užduočių sąrašus"
 
 #: data/ui/settings-window.ui:161
-#, fuzzy
 msgid "Group past tasks"
-msgstr "Grupuoti vėluojančias užduotis"
+msgstr "Grupuoti praeities užduotis"
 
 #: data/ui/settings-window.ui:228
 msgid "Hide header for singular tasks lists"
@@ -252,15 +243,12 @@ msgid "Task Lists"
 msgstr "Užduočių sąrašai"
 
 #: data/ui/settings-window.ui:574
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą "
-"valdiklyje."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą valdiklyje."
 
 #: data/ui/settings-window.ui:650
 msgid "menu"
-msgstr ""
+msgstr "meniu"
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
@@ -295,5 +283,3 @@ msgstr "Savybės"
 msgid "Task list options"
 msgstr "Užduočių sąrašo parinktys"
 
-#~ msgid "Overdue"
-#~ msgstr "Vėluojančios"
