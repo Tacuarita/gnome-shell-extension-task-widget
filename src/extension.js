@@ -645,6 +645,7 @@ class TaskWidget extends St.BoxLayout {
         try {
             let label, prev, tasks;
             const today = new Date();
+            this._allTasksLoaded = false;
 
             // Dates have time zone information, which can span regions with
             // different day light savings adjustments. To accurately calculate
@@ -852,10 +853,8 @@ class TaskWidget extends St.BoxLayout {
                     // If task is not above the visible region:
                     if (allocation.y2 >= adjustment.value) {
                         // Quit when task is below the visible region:
-                        if (allocation.y1 > adjustment.value + height) {
-                            this._allTasksLoaded = false;
+                        if (allocation.y1 > adjustment.value + height)
                             return this._resetTaskBox();
-                        }
 
                         // For tasks that are in the visible region:
                         this._taskBox.replace_child(this._currentChild, item);
@@ -888,12 +887,8 @@ class TaskWidget extends St.BoxLayout {
                 }
 
                 // Load tasks in small portions;
-                if (adjustment.upper > limit && !this._replaceTasksOnGoing) {
-                    this._allTasksLoaded = false;
+                if (adjustment.upper > limit && !this._replaceTasksOnGoing)
                     return this._resetTaskBox();
-                }
-
-                this._allTasksLoaded = true;
             };
 
             // Adds task checkboxes:
@@ -908,6 +903,7 @@ class TaskWidget extends St.BoxLayout {
                         this._currentChild = next;
                     }
 
+                    this._allTasksLoaded = true;
                     return this._resetTaskBox();
                 }
 
@@ -981,11 +977,14 @@ class TaskWidget extends St.BoxLayout {
                 tasks = await this._filterTasks(this._clientViews.get(
                     uid).client);
 
-                if (!tasks || this._idleAddId)
+                if (!tasks)
                     return;
 
                 tasks = tasks.map(task => [uid, task]);
             }
+
+            if (this._idleAddId)
+                return;
 
             this._buildTaskMap(tasks);
             this._rootTaskIterator = this._rootTasks.values();
