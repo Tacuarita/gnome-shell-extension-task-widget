@@ -692,7 +692,7 @@ class TaskWidget extends St.BoxLayout {
                 checkbox._arrow = arrow;
                 checkbox.child.insert_child_at_index(arrow, 0);
 
-                checkbox.connect('style-changed', widget => {
+                checkbox.connect('show', widget => {
                     const boxWidth = widget._box.get_theme_node()
                         .get_length('width');
 
@@ -1469,7 +1469,6 @@ class TaskWidget extends St.BoxLayout {
             delete this._orphanTasks;
             delete this._taskUids;
             this._resetTaskBox(true);
-            this._taskBox.destroy_all_children();
         }
     }
 
