@@ -441,9 +441,7 @@ class TaskWidget extends St.BoxLayout {
                 client = this._clientViews.get(source.uid).client;
             }
 
-            const tasks = await this._filterTasks(client);
-
-            if (tasks === null)
+            if (!await this._filterTasks(client))
                 return;
 
             this._taskLists.push({
@@ -1003,7 +1001,7 @@ class TaskWidget extends St.BoxLayout {
      * Filters tasks and task lists based on user-defined settings.
      *
      * @param {ECal.Client} client - Task list to perform filtering on.
-     * @return {Promise<ECal.Component[]|null>} List of tasks or `null`.
+     * @return {Promise<ECal.Component[]>} List of tasks.
      */
     async _filterTasks(client) {
         try {
@@ -1017,14 +1015,14 @@ class TaskWidget extends St.BoxLayout {
             if (this._settings.get_boolean('hide-empty-completed-task-lists') &&
                 !this._settings.get_boolean('merge-task-lists')) {
                 if (!tasks.length)
-                    return null;
+                    return;
 
                 for (const task of tasks) {
                     if (task.get_status() !== ICalGLib.PropertyStatus.COMPLETED)
                         return tasks;
                 }
 
-                return null;
+                return;
             }
 
             return tasks;
