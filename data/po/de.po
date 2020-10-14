@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-13 01:39+0200\n"
-"PO-Revision-Date: 2020-10-12 23:45\n"
+"PO-Revision-Date: 2020-10-13 20:28\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -39,13 +39,13 @@ msgstr "Nächste Aufgabenliste"
 
 #: src/extension.js:689
 msgid "Beginning of a subtask list"
-msgstr ""
+msgstr "Beginn einer Unteraufgabenliste"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
 #: src/extension.js:733
 msgid "Orphan task"
-msgstr ""
+msgstr "Verwaiste Aufgabe"
 
 #: src/extension.js:752
 msgid "No due date"
@@ -59,7 +59,7 @@ msgstr "Heute"
 #. due date in the past.
 #: src/extension.js:761
 msgid "Past"
-msgstr ""
+msgstr "Vergangenheit"
 
 #: src/extension.js:769
 msgctxt "task due date"
@@ -190,7 +190,7 @@ msgstr "Aufgabenlisten zusammenführen"
 
 #: data/ui/settings-window.ui:161
 msgid "Group past tasks"
-msgstr ""
+msgstr "Vergangene Aufgaben gruppieren"
 
 #: data/ui/settings-window.ui:228
 msgid "Hide header for singular tasks lists"
@@ -234,7 +234,7 @@ msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der A
 
 #: data/ui/settings-window.ui:650
 msgid "menu"
-msgstr ""
+msgstr "Menü"
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
