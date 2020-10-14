@@ -148,7 +148,8 @@ class TaskWidget extends St.BoxLayout {
             });
 
             this._scrollView.vscroll.adjustment.connect('notify::value',
-                this._onTaskListScrolled.bind(this));
+                Utils._debounce(this._onTaskListScrolled.bind(this),
+                    100, false));
 
             this._taskBox = new St.BoxLayout({
                 style_class: 'spacing',
@@ -647,6 +648,52 @@ class TaskWidget extends St.BoxLayout {
             const today = new Date();
             this._allTasksLoaded = false;
 
+            // (User-defined) Merge task lists:
+            if (merge) {
+                const taskLists = await Promise.all(this._taskLists.map(tl =>
+                    this._filterTasks(this._clientViews.get(tl.uid).client)));
+
+                if (!taskLists.length || this._idleAddId)
+                    return;
+
+                if (this._settings.get_boolean(
+                    'hide-empty-completed-task-lists')) {
+                    let allCompleted = true;
+
+                    for (const taskList of taskLists) {
+                        for (let i = 0; i < taskList.length; i++) {
+                            if (taskList[i].get_status() !==
+                                ICalGLib.PropertyStatus.COMPLETED) {
+                                allCompleted = false;
+                                break;
+                            }
+                        }
+
+                        if (!allCompleted)
+                            break;
+                    }
+
+                    if (allCompleted) {
+                        this._showPlaceholderWithStatus('no-tasks');
+                        return;
+                    }
+                }
+
+                if (taskLists.some(taskList => !taskList))
+                    return;
+
+                tasks = [].concat(...taskLists.map((taskList, index) =>
+                    taskList.map(task => [this._taskLists[index].uid, task])));
+            } else {
+                tasks = await this._filterTasks(this._clientViews.get(
+                    uid).client);
+
+                if (!tasks || this._idleAddId)
+                    return;
+
+                tasks = tasks.map(task => [uid, task]);
+            }
+
             // Dates have time zone information, which can span regions with
             // different day light savings adjustments. To accurately calculate
             // day differences between two dates, we'll use this to convert
@@ -936,55 +983,6 @@ class TaskWidget extends St.BoxLayout {
                 addSubtasks(checkbox, task._uid);
                 return GLib.SOURCE_CONTINUE;
             };
-
-            // (User-defined) Merge task lists:
-            if (merge) {
-                const taskLists = await Promise.all(this._taskLists.map(tl =>
-                    this._filterTasks(this._clientViews.get(tl.uid).client)));
-
-                if (!taskLists.length)
-                    return;
-
-                if (this._settings.get_boolean(
-                    'hide-empty-completed-task-lists')) {
-                    let allCompleted = true;
-
-                    for (const taskList of taskLists) {
-                        for (let i = 0; i < taskList.length; i++) {
-                            if (taskList[i].get_status() !==
-                                ICalGLib.PropertyStatus.COMPLETED) {
-                                allCompleted = false;
-                                break;
-                            }
-                        }
-
-                        if (!allCompleted)
-                            break;
-                    }
-
-                    if (allCompleted) {
-                        this._showPlaceholderWithStatus('no-tasks');
-                        return;
-                    }
-                }
-
-                if (taskLists.some(taskList => !taskList))
-                    return;
-
-                tasks = [].concat(...taskLists.map((taskList, index) =>
-                    taskList.map(task => [this._taskLists[index].uid, task])));
-            } else {
-                tasks = await this._filterTasks(this._clientViews.get(
-                    uid).client);
-
-                if (!tasks)
-                    return;
-
-                tasks = tasks.map(task => [uid, task]);
-            }
-
-            if (this._idleAddId)
-                return;
 
             this._buildTaskMap(tasks);
             this._rootTaskIterator = this._rootTasks.values();
