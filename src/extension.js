@@ -885,7 +885,7 @@ class TaskWidget extends St.BoxLayout {
                 return position;
             };
 
-            // Facilitates lazy loading of task checkboxes:
+            // Facilitates lazy loading of task box items:
             const idleAddHelper = item => {
                 if (!this._idleAddId)
                     return;
@@ -909,6 +909,8 @@ class TaskWidget extends St.BoxLayout {
                     } else {
                         this._currentChild = this._currentChild
                             .get_next_sibling();
+
+                        return;
                     }
 
                     if (this._currentChild) {
