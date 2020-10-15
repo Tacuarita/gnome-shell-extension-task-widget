@@ -529,7 +529,7 @@ class TaskWidget extends St.BoxLayout {
                 // longer empty or no longer completed):
                 if (this._settings.get_boolean('merge-task-lists')) {
                     await this._storeTaskLists();
-                } else if (index === -1) {
+                } else {
                     this._taskLists.push({
                         uid: view.client.source.uid,
                         name: view.client.source.display_name,
@@ -566,12 +566,12 @@ class TaskWidget extends St.BoxLayout {
      * list UIDs and task objects.
      */
     _buildTaskMap(tasks) {
-        let position = 0;
         let index = 0;
+        let position = 0;
         this._rootTasks = [];
+        this._taskUids = new Set();
         this._relatedTo = new Map();
         this._orphanTasks = new Set();
-        this._taskUids =  new Set();
 
         for (const [taskListUid, task] of tasks.sort(Utils._sortByName).sort(
             Utils._sortByPriority).sort(Utils._sortByDueDate)) {
@@ -830,7 +830,10 @@ class TaskWidget extends St.BoxLayout {
                 if (!due || checkbox.checked)
                     return checkbox;
 
-                const box = new St.BoxLayout({ vertical: true });
+                const box = new St.BoxLayout({
+                    vertical: true,
+                });
+
                 const label = checkbox.child.get_child_at_index(2);
                 checkbox.child.remove_child(label);
                 box.add_child(buildDueDateLabel(due));

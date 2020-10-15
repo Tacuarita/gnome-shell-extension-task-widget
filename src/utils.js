@@ -8,6 +8,7 @@ var _ELLIPSIS_CHAR = '\u2026';
 var _MINUTES_PER_HOUR = 60;
 var _MINUTES_PER_DAY = _MINUTES_PER_HOUR * 24;
 var _MSECS_IN_DAY = _MINUTES_PER_DAY * 60 * 1000;
+
 let ECal, EDataServer, ICalGLib;
 
 try {

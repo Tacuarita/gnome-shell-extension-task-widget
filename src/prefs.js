@@ -134,8 +134,7 @@ const TaskWidgetSettings = GObject.registerClass({
             ? Me.dir.get_child('schemas').get_path() : Me.metadata.schemas;
 
         const gschema = Gio.SettingsSchemaSource.new_from_directory(
-            dir, Gio.SettingsSchemaSource.get_default(),
-            false);
+            dir, Gio.SettingsSchemaSource.get_default(), false);
 
         this._settings = new Gio.Settings({
             settings_schema: gschema.lookup(Me.metadata.base, true),
@@ -149,11 +148,13 @@ const TaskWidgetSettings = GObject.registerClass({
                     break;
                 case Utils._HIDE_COMPLETED_TASKS['after-time-period']:
                     this._hctSettingsRevealer.reveal_child = true;
+
                     this._hctSettingsStack.set_visible_child_name(
                         'hctApotacPage');
                     break;
                 case Utils._HIDE_COMPLETED_TASKS['after-specified-time']:
                     this._hctSettingsRevealer.reveal_child = true;
+
                     this._hctSettingsStack.set_visible_child_name(
                         'hctAstodPage');
             }
@@ -668,6 +669,7 @@ const TaskListRow = GObject.registerClass({
 
                 dialog.run();
             });
+
             this._rowMenuRefresh.connect('clicked',
                 this._onRefreshButtonClicked.bind(this, client));
         }
@@ -910,6 +912,7 @@ const TaskListPropertiesDialog = GObject.registerClass({
             this._extension.set_interval_minutes(interval);
             this._source.write_sync(null);
         }
+
         this.destroy();
     }
 });
