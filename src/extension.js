@@ -549,7 +549,7 @@ class TaskWidget extends St.BoxLayout {
      */
     _buildTaskMap(tasks) {
         let index = 0;
-        let position = 0;
+        let start = 0;
         this._rootTasks = [];
         this._taskUids = new Set();
         this._relatedTo = new Map();
@@ -599,10 +599,10 @@ class TaskWidget extends St.BoxLayout {
             for (const task of this._relatedTo.get(parentUid)) {
                 task._orphan = true;
 
-                for (let i = position; i < this._rootTasks.length; i++) {
+                for (let i = start; i < this._rootTasks.length; i++) {
                     if (task._index < this._rootTasks[i]._index) {
                         this._rootTasks.splice(i, 0, task);
-                        position = i;
+                        start = i;
                         break;
                     }
                 }
@@ -776,16 +776,13 @@ class TaskWidget extends St.BoxLayout {
 
                 if (due === null && root) {
                     label.text = _('No due date');
-                    label._due = 'no-due-date';
                 } else if (due.toDateString() === today.toDateString()) {
                     label.text = _('Today');
-                    label._due = 'today';
                 } else if (due < today && this._settings.get_boolean(
                     'group-past-tasks') && root) {
                     /* Translators: this is a category name for tasks with
                     due date in the past. */
                     label.text = _('Past');
-                    label._due = 'past';
 
                     if (prev && !orphan)
                         label._skip = true;
@@ -797,11 +794,10 @@ class TaskWidget extends St.BoxLayout {
 
                     format = Shell.util_translate_time_string(format);
                     const diff = toUTC(due) - toUTC(today);
-                    const toLocale = due.toLocaleFormat(format);
-                    label._due = `${toLocale}`;
 
-                    label.text = `${toLocale} (${diff > 0 ? '+' : '-'} ${Math
-                        .floor(Math.abs(diff) / Utils._MSECS_IN_DAY)})`;
+                    label.text = `${due.toLocaleFormat(format)} (${diff > 0
+                        ? '+' : '-'} ${Math.floor(Math.abs(diff) /
+                            Utils._MSECS_IN_DAY)})`;
                 }
 
                 return label;
@@ -947,12 +943,10 @@ class TaskWidget extends St.BoxLayout {
                 if ((due === null && due === prev) || (prev && due &&
                     due.toDateString() === prev.toDateString())) {
                     // Simply add the task:
-                    checkbox._due = label._due;
                     idleAddHelper(checkbox);
                 } else {
                     // Otherwise, we need a new group label:
                     label = buildDueDateLabel(due, true);
-                    checkbox._due = label._due;
 
                     if (label._skip) {
                         idleAddHelper(checkbox);
