@@ -109,9 +109,6 @@ class TaskWidget extends St.BoxLayout {
      */
     async _initTaskLists() {
         try {
-            // Controls cancellation of async events:
-            this._cancellable = new Gio.Cancellable();
-
             this._contentBox = new St.BoxLayout({
                 style_class: 'calendar weather-button',
                 vertical: true,
@@ -136,9 +133,6 @@ class TaskWidget extends St.BoxLayout {
 
             await this._initSourceRegistry();
             await this._storeTaskLists(true);
-
-            if (this._cancellable.is_cancelled())
-                return;
 
             this._buildHeader();
 
@@ -333,9 +327,7 @@ class TaskWidget extends St.BoxLayout {
     async _initSourceRegistry() {
         try {
             this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
-
-            this._sourceRegistry = await Utils._getSourceRegistry(
-                this._cancellable);
+            this._sourceRegistry = await Utils._getSourceRegistry();
 
             this._taskListAddedId = this._sourceRegistry.connect(
                 'source-added', (registry, source) => {
@@ -358,9 +350,6 @@ class TaskWidget extends St.BoxLayout {
                 }
             );
         } catch (e) {
-            if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                return;
-
             logError(e);
         }
     }
@@ -393,9 +382,6 @@ class TaskWidget extends St.BoxLayout {
                     source => source.uid));
             }
         } catch (e) {
-            if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                return;
-
             logError(e);
         }
     }
@@ -415,14 +401,13 @@ class TaskWidget extends St.BoxLayout {
                 // Since `source` is only a descriptor of a data source, we
                 // need an `ECal.Client` - interface to access the data itself:
                 client = await Utils._getECalClient(source,
-                    ECal.ClientSourceType.TASKS, 1, this._cancellable);
+                    ECal.ClientSourceType.TASKS, 1);
 
                 // `ECal.ClientView` allows to receive change notifications on
                 // task lists, specifically task additions, removals and
                 // changes. Tasks can be matched using a specified query - we
                 // use `#t` here which matches all tasks:
-                const view = await Utils._getECalClientView(client, '#t',
-                    this._cancellable);
+                const view = await Utils._getECalClientView(client, '#t');
 
                 view._taskAddedId = view.connect('objects-added',
                     this._onTaskEvent.bind(this));
@@ -457,9 +442,6 @@ class TaskWidget extends St.BoxLayout {
             else
                 this._showActiveTaskList(this._activeTaskList);
         } catch (e) {
-            if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                return;
-
             logError(e);
         }
     }
@@ -1010,9 +992,8 @@ class TaskWidget extends St.BoxLayout {
         try {
             // (User-defined) Hide completed tasks:
             const tasks = this._settings.get_int('hide-completed-tasks')
-                ? await Utils._getTasks(client, this._hideCompletedTasks(),
-                    this._cancellable)
-                : await Utils._getTasks(client, '#t', this._cancellable);
+                ? await Utils._getTasks(client, this._hideCompletedTasks())
+                : await Utils._getTasks(client, '#t');
 
             // (User-defined) Hide empty and completed task lists:
             if (this._settings.get_boolean('hide-empty-completed-task-lists') &&
@@ -1030,9 +1011,6 @@ class TaskWidget extends St.BoxLayout {
 
             return tasks;
         } catch (e) {
-            if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                return;
-
             logError(e);
         }
     }
@@ -1325,8 +1303,9 @@ class TaskWidget extends St.BoxLayout {
      * @param {boolean} merged - Task lists are merged into one.
      */
     _setHeader(merged) {
-        const singular = !this._mergeTaskLists &&
-            (this._taskLists.length === 1 || merged);
+        const singular = (!this._mergeTaskLists &&
+            this._taskLists.length === 1) || this._settings.get_boolean(
+            'merge-task-lists');
 
         if (singular) {
             this._backButton.hide();
@@ -1511,8 +1490,6 @@ class TaskWidget extends St.BoxLayout {
      * Cleanup. `ifs` prevent race conditions.
      */
     _onDestroy() {
-        this._cancellable.cancel();
-
         if (this._calendarWidget.has_style_class_name(
             'task-widget-remove-calendar-margin')) {
             this._calendarWidget.remove_style_class_name(
