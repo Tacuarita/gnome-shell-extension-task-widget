@@ -151,6 +151,7 @@ const TaskWidgetSettings = GObject.registerClass({
 
                     this._hctSettingsStack.set_visible_child_name(
                         'hctApotacPage');
+
                     break;
                 case Utils._HIDE_COMPLETED_TASKS['after-specified-time']:
                     this._hctSettingsRevealer.reveal_child = true;
@@ -306,7 +307,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 taskListRow.show_all();
             }
 
-            if (!Array.from(accounts.keys()).length) {
+            if (!accounts.size) {
                 this._backendRefreshButton.set_sensitive(false);
 
                 this._backendRefreshButton.set_tooltip_text(
@@ -382,7 +383,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 throw new Error(`${account} could not be refreshed`);
 
             this._backendRefreshButton.set_tooltip_text(
-                _('Refresh in progress') + '\u2026');
+                _('Refresh in progress') + Utils._ELLIPSIS_CHAR);
 
             this._backendRefreshButtonImage.set_visible(false);
             this._backendRefreshButtonSpinner.set_visible(true);
@@ -481,8 +482,8 @@ const TaskWidgetSettings = GObject.registerClass({
         this._settings.set_strv('task-list-order',
             widget.get_children().map(row => row._uid));
 
-        widget.rowAbove = null;
-        widget.rowBelow = null;
+        delete widget.rowAbove;
+        delete widget.rowBelow;
     }
 
     /**
@@ -946,6 +947,7 @@ const SettingsMenuButton = GObject.registerClass({
         this._aboutDialog.version = Me.metadata.version.toString();
         this._aboutDialog.website = Me.metadata.url;
         this._aboutDialog.comments = _(Me.metadata.description);
+
         this._aboutDialog.translator_credits =
             /* Translators: put down your name/nickname and email (optional)
             according to the format below. This will credit you in the "About"
