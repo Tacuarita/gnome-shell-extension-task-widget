@@ -804,12 +804,12 @@ const TaskListRow = GObject.registerClass({
      *
      * @param {EDataServer.Source} source - Source of the task list.
      * @param {Gtk.Switch} widget - Switch whose state is handled.
-     * @param {boolean} state - New state of the switch.
+     * @param {boolean} enabled - Switch is in its enabled state.
      */
-    _setTaskListState(source, widget, state) {
+    _setTaskListState(source, widget, enabled) {
         const disabled = this._settings.get_strv('disabled-task-lists');
 
-        if (state) {
+        if (enabled) {
             const index = disabled.indexOf(source.uid);
 
             if (index !== -1)
