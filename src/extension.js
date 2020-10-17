@@ -900,12 +900,8 @@ class TaskWidget extends St.BoxLayout {
 
                             // Clean tasks below the visible region. These are
                             // leftover tasks from previous longer task lists:
-                            while (this._currentChild.get_next_sibling()) {
-                                const next = this._currentChild
-                                    .get_next_sibling();
-
-                                next.destroy();
-                            }
+                            while (this._currentChild.get_next_sibling())
+                                this._currentChild.get_next_sibling().destroy();
                         }
                     }
 
@@ -967,8 +963,12 @@ class TaskWidget extends St.BoxLayout {
             this._rootTaskIterator = this._rootTasks.values();
             this._currentChild = this._taskBox.first_child;
 
-            this._idleAddId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE,
-                idleAdd);
+            if (this._currentChild) {
+                this._idleAddId = GLib.idle_add(GLib.PRIORITY_LOW, idleAdd);
+            } else {
+                this._idleAddId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE,
+                    idleAdd);
+            }
 
             return true;
         } catch (e) {
@@ -1179,7 +1179,7 @@ class TaskWidget extends St.BoxLayout {
                     Utils._debounce(this._showActiveTaskList.bind(this),
                         100, false)(this._activeTaskList);
                 }
-            } else {
+            } else if (this._contentBox.visible) {
                 this._contentBox.hide();
             }
         } catch (e) {
