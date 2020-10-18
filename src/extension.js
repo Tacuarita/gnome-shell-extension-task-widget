@@ -1336,7 +1336,7 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Resets adjjustments of the vertical scrollbar.
+     * Resets adjustments of the vertical scrollbar.
      *
      * @param {boolean} fullReset - Reset vertical scrollbar adjustment.
      */
@@ -1375,6 +1375,7 @@ class TaskWidget extends St.BoxLayout {
                     this._onTaskListSwitched(false, this._backButton);
                     break;
             }
+
             return Clutter.EVENT_PROPAGATE;
         }
     }
