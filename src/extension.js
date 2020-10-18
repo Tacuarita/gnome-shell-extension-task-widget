@@ -1336,7 +1336,8 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Resets adjustments of the vertical scrollbar.
+     * Stops on-going `GLib.idle_add` operations and resets vertical scrollbar
+     * adjustment.
      *
      * @param {boolean} fullReset - Reset vertical scrollbar adjustment.
      */
