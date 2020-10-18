@@ -799,7 +799,7 @@ class TaskWidget extends St.BoxLayout {
                     const diff = toUTC(due) - toUTC(today);
 
                     label.text = `${due.toLocaleFormat(format)} (${diff > 0
-                        ? '+' : '-'} ${Math.floor(Math.abs(diff) /
+                        ? '+' : '-'}${Math.floor(Math.abs(diff) /
                             Utils._MSECS_IN_DAY)})`;
                 }
 
