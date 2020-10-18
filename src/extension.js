@@ -599,15 +599,20 @@ class TaskWidget extends St.BoxLayout {
             for (const task of this._relatedTo.get(parentUid)) {
                 task._orphan = true;
 
-                if (task._index >= this._rootTasks.length) {
+                if (!this._rootTasks.length) {
                     this._rootTasks.push(task);
-                    break;
+                    continue;
                 }
 
                 for (let i = start; i < this._rootTasks.length; i++) {
                     if (task._index < this._rootTasks[i]._index) {
                         this._rootTasks.splice(i, 0, task);
                         start = i;
+                        break;
+                    }
+
+                    if (i === this._rootTasks.length - 1) {
+                        this._rootTasks.push(task);
                         break;
                     }
                 }
