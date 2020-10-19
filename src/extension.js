@@ -720,17 +720,20 @@ class TaskWidget extends St.BoxLayout {
                 checkbox.child.insert_child_at_index(arrow, 0);
 
                 checkbox.connect('show', widget => {
+                    const scaleFactor = St.ThemeContext
+                        .get_for_stage(global.stage).scale_factor;
+
                     const boxWidth = widget._box.get_theme_node()
-                        .get_length('width');
+                        .get_length('width') / scaleFactor;
 
                     const spacing = Math.floor(widget.child.get_theme_node()
-                        .get_length('spacing'));
+                        .get_length('spacing')  / scaleFactor);
 
                     if (this.text_direction === Clutter.TextDirection.RTL) {
                         widget._arrow.set_text('\u21B2');
 
                         widget._arrow.set_style(`padding-left: ${boxWidth -
-                            widget._arrow.get_width()}px`);
+                            widget._arrow.get_width() / scaleFactor}px`);
 
                         widget.set_style(`margin-right: ${--level *
                             (boxWidth + spacing)}px`);
@@ -738,7 +741,7 @@ class TaskWidget extends St.BoxLayout {
                         widget._arrow.set_text('\u21B3');
 
                         widget._arrow.set_style(`padding-right: ${boxWidth -
-                            widget._arrow.get_width()}px`);
+                            widget._arrow.get_width()  / scaleFactor}px`);
 
                         widget.set_style(`margin-left: ${--level *
                             (boxWidth + spacing)}px`);
