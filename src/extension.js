@@ -253,7 +253,7 @@ class TaskWidget extends St.BoxLayout {
                     ? taskList.name.substring(0, 22) + Utils._ELLIPSIS_CHAR
                     : taskList.name;
 
-                let item = new PopupMenu.PopupMenuItem(name);
+                const item = new PopupMenu.PopupMenuItem(name);
 
                 if (index === this._activeTaskList && !this._mergeTaskLists)
                     item.setOrnament(PopupMenu.Ornament.DOT);
@@ -1164,7 +1164,7 @@ class TaskWidget extends St.BoxLayout {
             if (!DateMenu.isOpen && index !== null)
                 return;
 
-            let taskList = this._taskLists[index];
+            const taskList = this._taskLists[index];
 
             if (taskList) {
                 if (!this._contentBox.visible)
@@ -1215,7 +1215,7 @@ class TaskWidget extends St.BoxLayout {
                 this._statusLabel.add_style_class_name('url-highlighter');
 
                 this._statusLabel.connect('style-changed', () => {
-                    let [hasColor, color] = this._statusLabel.get_theme_node()
+                    const [hasColor, color] = this._statusLabel.get_theme_node()
                         .lookup_color('link-color', false);
 
                     this._statusLabel.set_style(`color: ${hasColor
