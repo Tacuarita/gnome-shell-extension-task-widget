@@ -834,8 +834,7 @@ class TaskWidget extends St.BoxLayout {
             };
 
             // Adds subtasks:
-            const addSubtasks = (parentCheckbox, parentUid, level = 0,
-                position = null) => {
+            const addSubtasks = (parentCheckbox, parentUid, level = 0) => {
                 if (!this._idleAddId)
                     return;
 
@@ -863,18 +862,10 @@ class TaskWidget extends St.BoxLayout {
                     subtaskCheckbox = prependDueDate(subtaskCheckbox,
                         subtask._due);
 
-                    if (position !== null)
-                        idleAddHelper(subtaskCheckbox, position++);
-                    else
-                        idleAddHelper(subtaskCheckbox);
-
+                    idleAddHelper(subtaskCheckbox);
                     this._relatedTo.delete(parentUid);
-
-                    addSubtasks(subtaskCheckbox, subtask._uid, level + 1,
-                        position);
+                    addSubtasks(subtaskCheckbox, subtask._uid, level + 1);
                 }
-
-                return position;
             };
 
             // Facilitates lazy loading of task box items:
