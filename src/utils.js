@@ -309,6 +309,7 @@ function _waitCheckAsync(process, cancellable = null) {
                         message: GLib.strerror(status),
                     });
                 }
+
                 resolve();
             } catch (e) {
                 reject(e);
