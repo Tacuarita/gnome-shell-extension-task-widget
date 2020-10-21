@@ -921,9 +921,9 @@ class TaskWidget extends St.BoxLayout {
 
             // Adds task checkboxes:
             const idleAdd = () => {
-                const rootTask = this._rootTaskIterator.next();
+                const task = this._rootTasks[this._currentRootTask++];
 
-                if (!rootTask.value) {
+                if (!task) {
                     // Clean leftover tasks from previous task lists:
                     while (this._currentChild) {
                         const next = this._currentChild.get_next_sibling();
@@ -935,7 +935,6 @@ class TaskWidget extends St.BoxLayout {
                     return this._resetTaskBox();
                 }
 
-                const task = rootTask.value;
                 const checkbox = buildCheckbox(task, true);
                 const due = task._due;
 
@@ -964,7 +963,7 @@ class TaskWidget extends St.BoxLayout {
             };
 
             this._buildTaskMap(tasks);
-            this._rootTaskIterator = this._rootTasks.values();
+            this._currentRootTask = 0;
             this._currentChild = this._taskBox.first_child;
 
             if (this._currentChild) {
