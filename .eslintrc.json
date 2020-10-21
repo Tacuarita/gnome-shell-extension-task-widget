@@ -277,7 +277,7 @@
         ],
         "yield-star-spacing": "error",
         "yoda": "error",
-        "prefer-const": ["error"]
+        "prefer-const": "error"
     },
     "globals": {
         "ARGV": "readonly",
