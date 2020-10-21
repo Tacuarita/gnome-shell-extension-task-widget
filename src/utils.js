@@ -355,6 +355,6 @@ function _debounce(func, wait, immediate = false) {
  * @return {boolean} `true` if GNOME Shell version is at least `required`.
  */
 function _shellVersionAtLeast(required) {
-    let [major, minor] = imports.misc.config.PACKAGE_VERSION.split('.');
+    const [major, minor] = imports.misc.config.PACKAGE_VERSION.split('.');
     return parseInt(minor ? minor : major) >= required;
 }
