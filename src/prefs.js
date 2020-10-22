@@ -78,16 +78,25 @@ class BeGoneWidget extends Gtk.Box {
                 return;
 
             dialog = new Gtk.MessageDialog({
-                buttons: Gtk.ButtonsType.OK,
+                buttons: Gtk.ButtonsType.CLOSE,
                 text: _('Error: Missing Dependencies'),
                 secondary_text: _('Please install Evolution Data' +
                     ' Server to use this extension.'),
             });
 
+            dialog.add_button(_('Help'), 0);
             dialog.set_keep_above(true);
             dialog.set_name('task-widget-error');
-            dialog.connect('response', dialog => dialog.destroy());
             dialog.present();
+
+            dialog.connect('response', (dialog, responseId) =>  {
+                if (responseId === 0) {
+                    Gio.AppInfo.launch_default_for_uri_async(Me.metadata.wiki,
+                        null, null, null);
+                }
+
+                dialog.destroy();
+            });
         });
     }
 });
