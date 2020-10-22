@@ -732,8 +732,7 @@ class TaskWidget extends St.BoxLayout {
                     const scaleFactor = St.ThemeContext
                         .get_for_stage(global.stage).scale_factor;
 
-                    const boxWidth = widget._box.get_theme_node()
-                        .get_length('width') / scaleFactor;
+                    const boxWidth = widget._box.get_width() / scaleFactor;
 
                     const spacing = Math.floor(widget.child.get_theme_node()
                         .get_length('spacing') / scaleFactor);
@@ -1524,8 +1523,10 @@ class TaskWidget extends St.BoxLayout {
         if (this._taskListChangedId)
             this._sourceRegistry.disconnect(this._taskListChangedId);
 
-        for (const [, view] of this._clientViews)
-            this._onTaskListRemoved(null, view.client.source);
+        if (this._clientViews) {
+            for (const [, view] of this._clientViews)
+                this._onTaskListRemoved(null, view.client.source);
+        }
     }
 });
 
