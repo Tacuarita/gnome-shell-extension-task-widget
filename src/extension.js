@@ -249,7 +249,7 @@ class TaskWidget extends St.BoxLayout {
             this._taskListMenu.removeAll();
 
             for (const [index, taskList] of this._taskLists.entries()) {
-                const name =  taskList.name.length > 25
+                const name = taskList.name.length > 25
                     ? taskList.name.substring(0, 22) + Utils._ELLIPSIS_CHAR
                     : taskList.name;
 
@@ -373,7 +373,7 @@ class TaskWidget extends St.BoxLayout {
 
             await Promise.all(sources.filter(source => disabled.indexOf(
                 source.uid) === -1).map(source => this._onTaskListAdded(null,
-                source, customSort)));
+                source)));
 
             this._taskLists.sort(customSort);
 
@@ -557,7 +557,6 @@ class TaskWidget extends St.BoxLayout {
 
         for (const [taskListUid, task] of tasks.sort(Utils._sortByName).sort(
             Utils._sortByPriority).sort(Utils._sortByDueDate)) {
-
             if (!task.get_summary())
                 continue;
 
@@ -737,7 +736,7 @@ class TaskWidget extends St.BoxLayout {
                         .get_length('width') / scaleFactor;
 
                     const spacing = Math.floor(widget.child.get_theme_node()
-                        .get_length('spacing')  / scaleFactor);
+                        .get_length('spacing') / scaleFactor);
 
                     if (this.text_direction === Clutter.TextDirection.RTL) {
                         widget._arrow.set_text('\u21B2');
@@ -751,7 +750,7 @@ class TaskWidget extends St.BoxLayout {
                         widget._arrow.set_text('\u21B3');
 
                         widget._arrow.set_style(`padding-right: ${boxWidth -
-                            widget._arrow.get_width()  / scaleFactor}px`);
+                            widget._arrow.get_width() / scaleFactor}px`);
 
                         widget.set_style(`margin-left: ${--level *
                             (boxWidth + spacing)}px`);
