@@ -1072,8 +1072,6 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles task click events. Adds/removes styling and stores changes.
      *
-     * @todo https://gitlab.gnome.org/GNOME/evolution-data-server/-/issues/246
-     *
      * @param {Checkbox} checkbox - Task's checkbox that got clicked.
      * @param {ECal.Client} client - Task list that the task belongs to.
      */
@@ -1159,7 +1157,7 @@ class TaskWidget extends St.BoxLayout {
         try {
             this._activeTaskList = index;
 
-            if (!DateMenu.isOpen && index !== null)
+            if (!DateMenu.isOpen && index !== null || this._idleAddId)
                 return;
 
             const taskList = this._taskLists[index];
@@ -1217,7 +1215,8 @@ class TaskWidget extends St.BoxLayout {
                         .lookup_color('link-color', false);
 
                     this._statusLabel.set_style(`color: ${hasColor
-                        ? color.to_string().substr(0, 7) : '#629fea'}`);
+                        ? color.to_string().substr(0, 7) : '#629fea'};
+                        text-decoration: underline`);
                 });
 
                 this._statusLabel.connect('motion-event', () => {
