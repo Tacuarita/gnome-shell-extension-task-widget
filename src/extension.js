@@ -1112,16 +1112,12 @@ class TaskWidget extends St.BoxLayout {
                         return;
 
                     for (const subtaskCheckbox of checkbox._subtasks) {
-                        if (!subtaskCheckbox.checked) {
-                            subtaskCheckbox.set_checked(true);
-                            processTask(subtaskCheckbox);
-                            resolveHierarchy(subtaskCheckbox);
-                        }
+                        subtaskCheckbox.set_checked(true);
+                        processTask(subtaskCheckbox);
+                        resolveHierarchy(subtaskCheckbox);
                     }
                 } else {
-                    const parent = checkbox._parentCheckbox;
-
-                    if (!parent || !parent.checked)
+                    if (!checkbox._parentCheckbox)
                         return;
 
                     checkbox._parentCheckbox.set_checked(false);
