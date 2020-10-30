@@ -6,9 +6,9 @@
     "gresource": "@EXTENSION_BASE@.gresource",
     "epath": "/org/gnome/shell/extensions/task-widget",
     "name": "Task Widget",
-    "description": "Display tasks next to the calendar widget.",
+    "description": "Display tasks next to the calendar widget.\n\nVisit our Wiki page for more information and troubleshooting.",
     "version": @EXTENSION_VERSION@,
     "shell-version": [ "3.36", "3.38" ],
     "url": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget",
-    "wiki": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Home"
+    "wiki": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Installation"
 }
