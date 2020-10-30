@@ -346,21 +346,21 @@ const TaskWidgetSettings = GObject.registerClass({
                 return;
 
             this._taskListAddedId = this._sourceRegistry.connect(
-                'source-added', (registry, source) => {
+                'source-added', (_registry, source) => {
                     if (source.has_extension(this._sourceType))
                         this._onTaskListEvent('added', source);
                 }
             );
 
             this._taskListRemovedId = this._sourceRegistry.connect(
-                'source-removed', (registry, source) => {
+                'source-removed', (_registry, source) => {
                     if (source.has_extension(this._sourceType))
                         this._onTaskListEvent('removed', source);
                 }
             );
 
             this._taskListChangedId = this._sourceRegistry.connect(
-                'source-changed', (registry, source) => {
+                'source-changed', (_registry, source) => {
                     if (source.has_extension(this._sourceType))
                         this._onTaskListEvent('changed', source);
                 }
@@ -375,9 +375,8 @@ const TaskWidgetSettings = GObject.registerClass({
      *
      * @param {EDataServer.SourceCollection} source - Account data source.
      * @param {string} account - Account name.
-     * @param {Gtk.Button} button - Button that got clicked.
      */
-    async _onAccountButtonClicked(source, account, button) {
+    async _onAccountButtonClicked(source, account) {
         try {
             const extension = EDataServer.SOURCE_EXTENSION_COLLECTION;
 
@@ -463,15 +462,12 @@ const TaskWidgetSettings = GObject.registerClass({
      * Processes data received from the drag and drop operation.
      *
      * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} context - Drag context.
-     * @param {number} x - x coordinate of where the drop happened.
-     * @param {number} y - y coordinate of where the drop happened.
+     * @param {Gdk.DragContext} _context - Drag context.
+     * @param {number} _x - x coordinate of where the drop happened.
+     * @param {number} _y - y coordinate of where the drop happened.
      * @param {Gtk.SelectionData} data - Received data.
-     * @param {number} info - Info that has been registered with the
-     * target in the Gtk.TargetList.
-     * @param {number} time - Timestamp at which the data was received.
      */
-    _dragDataReceived(widget, context, x, y, data, info, time) {
+    _dragDataReceived(widget, _context, _x, _y, data) {
         let index = parseInt(imports.byteArray.toString(data.get_data()));
         const source = widget.get_row_at_index(index);
 
@@ -499,12 +495,11 @@ const TaskWidgetSettings = GObject.registerClass({
      * Handles events taking place during the drag and drop operation.
      *
      * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} context - Drag context.
-     * @param {number} x - x coordinate of the current cursor position.
+     * @param {Gdk.DragContext} _context - Drag context.
+     * @param {number} _x - x coordinate of the current cursor position.
      * @param {number} y - y coordinate of the current cursor position.
-     * @param {number} time - Timestamp of the motion event.
      */
-    _dragMotion(widget, context, x, y, time) {
+    _dragMotion(widget, _context, _x, y) {
         widget.dragRow.get_style_context().remove_class('drag-hover');
 
         if (widget.rowAbove) {
@@ -561,10 +556,8 @@ const TaskWidgetSettings = GObject.registerClass({
      * Finalizes drag and drop operations.
      *
      * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} context - Drag context.
-     * @param {number} time - Timestamp of the motion event.
      */
-    _dragLeave(widget, context, time) {
+    _dragLeave(widget) {
         if (widget.rowAbove) {
             widget.rowAbove.get_style_context()
                 .remove_class('drag-hover-bottom');
@@ -594,10 +587,8 @@ const TaskWidgetSettings = GObject.registerClass({
 
     /**
      * Disconnects signal handlers when settings window gets closed.
-     *
-     * @param {TaskWidgetSettings} widget - Widget that has been unrealized.
      */
-    _onUnrealized(widget) {
+    _onUnrealized() {
         if (this._taskListAddedId)
             this._sourceRegistry.disconnect(this._taskListAddedId);
 
@@ -782,9 +773,8 @@ const TaskListRow = GObject.registerClass({
      * Finalizes the drag and drop operation.
 
      * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} context - Drag context.
      */
-    _dragEnd(widget, context) {
+    _dragEnd(widget) {
         const taskListRow = widget.get_ancestor(Gtk.ListBoxRow.$gtype);
         taskListRow.get_parent().dragRow = null;
         taskListRow.get_style_context().remove_class('drag-row');
@@ -796,14 +786,11 @@ const TaskListRow = GObject.registerClass({
      * drop operation.
      *
      * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} context - Drag context.
+     * @param {Gdk.DragContext} _context - Drag context.
      * @param {Gtk.SelectionData} data - Gtk.SelectionData to be filled with
      * the dragged data.
-     * @param {number} info - Info that has been registered with the
-     * target in the Gtk.TargetList.
-     * @param {number} time - Timestamp at which the data was requested.
      */
-    _dragDataGet(widget, context, data, info, time) {
+    _dragDataGet(widget, _context, data) {
         data.set(Gdk.Atom.intern_static_string('Gtk.ListBoxRow'), 8,
             `${widget.get_ancestor(Gtk.ListBoxRow.$gtype).get_index()}`);
     }
@@ -812,10 +799,10 @@ const TaskListRow = GObject.registerClass({
      * Adds or removes the task list from the list of disabled task lists.
      *
      * @param {EDataServer.Source} source - Source of the task list.
-     * @param {Gtk.Switch} widget - Switch whose state is handled.
+     * @param {Gtk.Switch} _widget - Switch whose state is handled.
      * @param {boolean} enabled - Switch is in its enabled state.
      */
-    _setTaskListState(source, widget, enabled) {
+    _setTaskListState(source, _widget, enabled) {
         const disabled = this._settings.get_strv('disabled-task-lists');
 
         if (enabled) {
@@ -991,7 +978,7 @@ const SettingsMenuButton = GObject.registerClass({
             dialog.hide();
         });
 
-        this._supportLogDialog.connect('delete-event', dialog => true);
+        this._supportLogDialog.connect('delete-event', () => true);
         window.connect('destroy', () => this._supportLogDialog.destroy());
 
         this._settingsMenuHelp.connect('clicked', () => Gio.AppInfo

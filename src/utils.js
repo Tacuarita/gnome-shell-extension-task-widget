@@ -46,7 +46,7 @@ var _HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT = value => {
  */
 function _getSourceRegistry(cancellable = null) {
     return new Promise((resolve, reject) => {
-        EDataServer.SourceRegistry.new(cancellable, (registry, res) => {
+        EDataServer.SourceRegistry.new(cancellable, (_registry, res) => {
             try {
                 resolve(EDataServer.SourceRegistry.new_finish(res));
             } catch (e) {
@@ -69,7 +69,7 @@ function _getSourceRegistry(cancellable = null) {
  */
 function _getECalClient(source, type, wait, cancellable = null) {
     return new Promise((resolve, reject) => {
-        ECal.Client.connect(source, type, wait, cancellable, (source, res) => {
+        ECal.Client.connect(source, type, wait, cancellable, (_source, res) => {
             try {
                 resolve(ECal.Client.connect_finish(res));
             } catch (e) {

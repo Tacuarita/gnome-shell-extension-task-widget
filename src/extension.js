@@ -287,7 +287,7 @@ class TaskWidget extends St.BoxLayout {
             this._taskListMenu.toggle();
         });
 
-        this._taskListMenu.connect('open-state-changed', (menu, isOpen) => {
+        this._taskListMenu.connect('open-state-changed', (_menu, isOpen) => {
             if (isOpen)
                 this._taskListNameButton.add_style_pseudo_class('active');
             else
@@ -477,10 +477,10 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles task list change events.
      *
-     * @param {EDataServer.SourceRegistry} registry - Source registry.
+     * @param {EDataServer.SourceRegistry} _registry - Source registry.
      * @param {EDataServer.Source} source - Task list that got changed.
      */
-    _onTaskListChanged(registry, source) {
+    _onTaskListChanged(_registry, source) {
         const index = this._taskLists.map(i => i.uid).indexOf(source.uid);
         const taskList = this._taskLists[index];
 
@@ -494,10 +494,8 @@ class TaskWidget extends St.BoxLayout {
      * Handles task events: additions, removals and changes.
      *
      * @param {ECal.ClientView} view - Task list which received the signal.
-     * @param {ICalGLib.Component[]} tasks - List of tasks involved in
-     * the event.
      */
-    async _onTaskEvent(view, tasks) {
+    async _onTaskEvent(view) {
         try {
             this._resetTaskBox();
             const uid = view.client.source.uid;
@@ -1175,7 +1173,7 @@ class TaskWidget extends St.BoxLayout {
                 this._taskListName.set_text(merge ? _('All Tasks')
                     : taskList.name);
 
-                this._setHeader(merge);
+                this._setHeader();
 
                 if (!await this._listTasks(taskList.uid, merge)) {
                     Utils._debounce(this._showActiveTaskList.bind(this),
@@ -1279,10 +1277,8 @@ class TaskWidget extends St.BoxLayout {
      * That in turn will allow to load more tasks.
      *
      * @param {St.Adjustment} adjustment - Vertical scrollbar adjustment.
-     * @param {GObject.ParamSpec} spec - Encapsulates metadata of object
-     * properties.
      */
-    _onTaskListScrolled(adjustment, spec) {
+    _onTaskListScrolled(adjustment) {
         if (this._allTasksLoaded || this._idleAddId || adjustment.value === 0)
             return;
 
@@ -1296,13 +1292,10 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * Sets task list header appearance.
-     *
-     * @param {boolean} merged - Task lists are merged into one.
      */
-    _setHeader(merged) {
-        const singular = (!this._mergeTaskLists &&
-            this._taskLists.length === 1) || this._settings.get_boolean(
-            'merge-task-lists');
+    _setHeader() {
+        const singular = this._taskLists.length === 1 || this._settings
+            .get_boolean('merge-task-lists');
 
         if (singular) {
             this._backButton.hide();
@@ -1349,11 +1342,11 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles scroll events on the task list header.
      *
-     * @param {Clutter.Actor} actor - Actor the event is associated to.
+     * @param {Clutter.Actor} _actor - Actor the event is associated to.
      * @param {Clutter.Event} event - Holds information about the event.
      * @return {boolean} `false` to continue the propagation of the event.
      */
-    _onHeaderScrolled(actor, event) {
+    _onHeaderScrolled(_actor, event) {
         if (this._taskLists.length !== 1 &&
             !this._settings.get_boolean('merge-task-lists')) {
             switch (event.get_scroll_direction()) {
@@ -1416,10 +1409,10 @@ class TaskWidget extends St.BoxLayout {
      * open, hiding of completed tasks is time dependent and the number of
      * occurred refreshes is <= 60.
      *
-     * @param {Object|null} menu - Menu of a `dateMenu` button.
+     * @param {Object|null} _menu - Menu of a `dateMenu` button.
      * @param {boolean} isOpen - Menu is in its opened state.
      */
-    _onMenuOpen(menu, isOpen) {
+    _onMenuOpen(_menu, isOpen) {
         if (isOpen && this._activeTaskList !== null) {
             let i = 0;
             this._showActiveTaskList(this._activeTaskList);
@@ -1453,12 +1446,8 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * Updates the widget when extension settings change.
-     *
-     * @param {Gio.Settings} settings - API for storing and retrieving
-     * extension settings.
-     * @param {string} key - Name of the settings key that got changed.
      */
-    async _onSettingsChanged(settings, key) {
+    async _onSettingsChanged() {
         try {
             const active = this._taskLists[this._activeTaskList]
                 ? this._taskLists[this._activeTaskList].uid : null;
@@ -1486,7 +1475,7 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Cleanup. `ifs` prevent race conditions.
+     * Cleanup.
      */
     _onDestroy() {
         if (this._calendarWidget.has_style_class_name(
