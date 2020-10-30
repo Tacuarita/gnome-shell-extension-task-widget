@@ -34,7 +34,7 @@ class TaskWidget extends St.BoxLayout {
         super._init({
             name: 'taskWidget',
             // Re-use style classes. We'll do it in multiple places for
-            // better compatibility with custom Shell themes.
+            // better compatibility with custom Shell themes:
             style_class: 'datemenu-calendar-column task-widget-column',
             vertical: true,
         });
@@ -215,7 +215,6 @@ class TaskWidget extends St.BoxLayout {
             style_class: 'popup-menu-arrow',
             icon_name: 'pan-down-symbolic',
             accessible_role: Atk.Role.ARROW,
-            y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
 
@@ -500,11 +499,11 @@ class TaskWidget extends St.BoxLayout {
      */
     async _onTaskEvent(view, tasks) {
         try {
+            this._resetTaskBox();
             const uid = view.client.source.uid;
             const index = this._taskLists.map(i => i.uid).indexOf(uid);
             const taskList = this._taskLists[index];
             const updated = await this._filterTasks(view.client);
-            this._resetTaskBox();
 
             if (updated && !taskList) {
                 // If we need to show a hidden task list (because it's no
@@ -533,15 +532,14 @@ class TaskWidget extends St.BoxLayout {
                 this._showActiveTaskList(--this._activeTaskList < 0 ? 0
                     : this._activeTaskList);
             } else if (updated && taskList) {
-                Utils._debounce(this._showActiveTaskList.bind(this), 100,
-                    false)(this._activeTaskList);
+                this._showActiveTaskList(this._activeTaskList);
             }
         } catch (e) {
             logError(e);
         }
     }
 
-    /**
+    /*
      * Creates data structures required to resolve task hierarchy.
      *
      * @param {[string, ECal.Component]} tasks - A list consisting of task
@@ -1038,6 +1036,7 @@ class TaskWidget extends St.BoxLayout {
                     case Utils._TIME_UNITS['days']:
                         current.adjust(-adjust, 0, 0, 0);
                 }
+
                 return `(not (completed-before? (make-time "${
                     ECal.isodate_from_time_t(current.as_timet())}")))`;
             }
@@ -1115,12 +1114,16 @@ class TaskWidget extends St.BoxLayout {
                         return;
 
                     for (const subtaskCheckbox of checkbox._subtasks) {
-                        subtaskCheckbox.set_checked(true);
-                        processTask(subtaskCheckbox);
-                        resolveHierarchy(subtaskCheckbox);
+                        if (!subtaskCheckbox.checked) {
+                            subtaskCheckbox.set_checked(true);
+                            processTask(subtaskCheckbox);
+                            resolveHierarchy(subtaskCheckbox);
+                        }
                     }
                 } else {
-                    if (!checkbox._parentCheckbox)
+                    const parent = checkbox._parentCheckbox;
+
+                    if (!parent || !parent.checked)
                         return;
 
                     checkbox._parentCheckbox.set_checked(false);
