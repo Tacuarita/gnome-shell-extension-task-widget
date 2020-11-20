@@ -10,10 +10,6 @@
   margin: 0;
 }
 
-.task-widget-column .spacing {
-  spacing: 12px;
-}
-
 .task-widget-column .task-icon  {
   color: #bebebe;
   icon-size: 52px;

@@ -35,7 +35,8 @@ class TaskWidget extends St.BoxLayout {
             name: 'taskWidget',
             // Re-use style classes. We'll do it in multiple places for
             // better compatibility with custom Shell themes:
-            style_class: 'datemenu-calendar-column task-widget-column',
+            style_class: 'datemenu-calendar-column task-widget-column \
+                          message-list',
             vertical: true,
         });
 
@@ -48,8 +49,8 @@ class TaskWidget extends St.BoxLayout {
 
         // Set the size of the widget to the size of the message list widget:
         this.add_constraint(new Clutter.BindConstraint({
-            source: this._messageList,
-            coordinate: Clutter.BindCoordinate.SIZE,
+            source: this._calendarWidget,
+            coordinate: Clutter.BindCoordinate.HEIGHT,
         }));
 
         this._calendarArea.add_child(this);
@@ -83,7 +84,7 @@ class TaskWidget extends St.BoxLayout {
 
         const labeledIconBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'spacing',
+            style_class: 'message-list-placeholder',
         });
 
         this._taskIcon = new St.Icon({
@@ -146,7 +147,7 @@ class TaskWidget extends St.BoxLayout {
                     100, false));
 
             this._taskBox = new St.BoxLayout({
-                style_class: 'spacing',
+                style_class: 'message-list-placeholder',
                 vertical: true,
             });
 
@@ -219,7 +220,7 @@ class TaskWidget extends St.BoxLayout {
         });
 
         const taskListNameBox = new St.BoxLayout({
-            style_class: 'spacing',
+            style_class: 'message-list-placeholder',
         });
 
         taskListNameBox.add_child(this._taskListName);
@@ -1038,6 +1039,7 @@ class TaskWidget extends St.BoxLayout {
                 return `(not (completed-before? (make-time "${
                     ECal.isodate_from_time_t(current.as_timet())}")))`;
             }
+
             case Utils._HIDE_COMPLETED_TASKS['after-specified-time']: {
                 const start = ICalGLib.Time.new_current_with_zone(
                     ECal.util_get_system_timezone());
@@ -1361,8 +1363,8 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Performs some styling tricks to improve compatibility with custom
-     * Shell themes.
+     * Performs some styling tricks to improve appearance and compatibility
+     * with custom Shell themes.
      *
      * @param {St.ThemeContext} context - Holds styling information.
      */

@@ -742,7 +742,7 @@ const TaskListRow = GObject.registerClass({
     /**
      * Initializes the drag and drop operation.
      *
-     * @todo Use set_device_offsef() if/when gjs supports it.
+     * @todo Use set_device_offset() if/when gjs supports it.
      *
      * @param {*} widget - Widget involved in the operation.
      * @param {Gdk.DragContext} context - Drag context.
@@ -761,7 +761,7 @@ const TaskListRow = GObject.registerClass({
         /*
          * // Adjust the position of a floating row image:
          * const [x, y] = widget.translate_coordinates(row, 0, 0);
-         * surface.set_device_offset(-x, -y);
+         * imageSurface.set_device_offset(-x, -y);
         */
         Gtk.drag_set_icon_surface(context, imageSurface);
         taskListRow.get_parent().dragRow = taskListRow;
