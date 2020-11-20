@@ -1370,12 +1370,12 @@ class TaskWidget extends St.BoxLayout {
      */
     _loadThemeHacks(context) {
         // Swap left and right margins for `contentBox` (because task
-        // widget layout is a mirorr image of the message list layout):
-        const [t, r, b, l] = [St.Side.TOP, St.Side.RIGHT, St.Side.BOTTOM,
+        // widget layout is a mirror image of the message list layout):
+        const [, r, , l] = [St.Side.TOP, St.Side.RIGHT, St.Side.BOTTOM,
             St.Side.LEFT].map(side => this._messageList._sectionList
             .get_theme_node().get_margin(side) / context.scale_factor);
 
-        this._contentBox.set_style(`margin: ${t}px ${l}px ${b}px ${r}px`);
+        this._contentBox.set_style(`margin-right: ${l}px; margin-left: ${r}px`);
     }
 
     /**
