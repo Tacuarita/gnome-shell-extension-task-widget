@@ -47,7 +47,7 @@ class TaskWidget extends St.BoxLayout {
         this._calendarWidget.add_style_class_name(
             'task-widget-remove-calendar-margin');
 
-        // Set the size of the widget to the size of the message list widget:
+        // Set the height of the widget to the height of the calendar widget:
         this.add_constraint(new Clutter.BindConstraint({
             source: this._calendarWidget,
             coordinate: Clutter.BindCoordinate.HEIGHT,
@@ -1371,9 +1371,9 @@ class TaskWidget extends St.BoxLayout {
     _loadThemeHacks(context) {
         // Swap left and right margins for `contentBox` (because task
         // widget layout is a mirror image of the message list layout):
-        const [, r, , l] = [St.Side.TOP, St.Side.RIGHT, St.Side.BOTTOM,
-            St.Side.LEFT].map(side => this._messageList._sectionList
-            .get_theme_node().get_margin(side) / context.scale_factor);
+        const [r, l] = [St.Side.RIGHT, St.Side.LEFT].map(side =>
+            this._messageList._sectionList.get_theme_node().get_margin(side) /
+            context.scale_factor);
 
         this._contentBox.set_style(`margin-right: ${l}px; margin-left: ${r}px`);
     }
