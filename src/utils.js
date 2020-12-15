@@ -207,6 +207,7 @@ function _customSort(order, a, b) {
 
 /**
  * Sorts tasks by their name.
+ *
  * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
  * and task objects.
  * @param {[string, ECal.Component]} b - A list consisting of task list UIDs

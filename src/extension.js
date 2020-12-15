@@ -538,7 +538,7 @@ class TaskWidget extends St.BoxLayout {
         }
     }
 
-    /*
+    /**
      * Creates data structures required to resolve task hierarchy.
      *
      * @param {[string, ECal.Component]} tasks - A list consisting of task
@@ -1130,13 +1130,10 @@ class TaskWidget extends St.BoxLayout {
 
             processTask(checkbox, true);
 
-            const backend = client.source.get_extension(this._sourceType)
-                .get_backend_name();
-
-            // Google Tasks API prohibits from unchecking a subtask if parent
-            // task is completed. We can circumvent this by handling the
-            // parent task first:
-            if (backend === 'gtasks')
+            // Some online providers (e.g. Google Tasks) prohibits from
+            // unchecking a subtask if parent task is completed. We can
+            // circumvent this by handling the parent task first:
+            if (client.check_refresh_supported())
                 objects.sort(task => task._subtasks ? -1 : 1);
 
             await Utils._modifyObjects(client, objects, ECal.ObjModType.THIS,
@@ -1230,7 +1227,7 @@ class TaskWidget extends St.BoxLayout {
 
                 this._statusLabel.connect('button-release-event', () => {
                     Gio.app_info_launch_default_for_uri(
-                        Me.metadata.wiki,
+                        Me.metadata.dependencies,
                         global.create_app_launch_context(0, -1));
 
                     DateMenu.close();

@@ -10,5 +10,6 @@
     "version": @EXTENSION_VERSION@,
     "shell-version": [ "3.36", "3.38" ],
     "url": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget",
-    "wiki": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Installation"
+    "wiki": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis",
+    "dependencies": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Installation" 
 }

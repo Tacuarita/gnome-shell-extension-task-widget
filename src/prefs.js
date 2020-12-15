@@ -91,8 +91,8 @@ class BeGoneWidget extends Gtk.Box {
 
             dialog.connect('response', (dialog, responseId) =>  {
                 if (responseId === 0) {
-                    Gio.AppInfo.launch_default_for_uri_async(Me.metadata.wiki,
-                        null, null, null);
+                    Gio.AppInfo.launch_default_for_uri_async(
+                        Me.metadata.dependencies, null, null, null);
                 }
 
                 dialog.destroy();
