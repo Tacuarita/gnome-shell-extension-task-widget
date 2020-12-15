@@ -1,6 +1,6 @@
 'use strict';
 
-const { Gdk, Gio, GLib, GObject, Gtk } = imports.gi;
+const {Gdk, Gio, GLib, GObject, Gtk} = imports.gi;
 
 const Cairo = imports.cairo;
 const Gettext = imports.gettext;
@@ -10,11 +10,8 @@ const Utils = Me.imports.utils;
 
 let ECal, EDataServer, ICalGLib;
 
-if (Utils._HAS_EDS) {
-    ECal = imports.gi.ECal;
-    EDataServer = imports.gi.EDataServer;
-    ICalGLib = imports.gi.ICalGLib;
-}
+if (Utils._HAS_EDS)
+    ({ECal, EDataServer, ICalGLib} = imports.gi);
 
 // eslint-disable-next-line no-redeclare
 const _ = Gettext.gettext;
@@ -89,13 +86,13 @@ class BeGoneWidget extends Gtk.Box {
             dialog.set_name('task-widget-error');
             dialog.present();
 
-            dialog.connect('response', (dialog, responseId) =>  {
+            dialog.connect('response', (widget, responseId) =>  {
                 if (responseId === 0) {
                     Gio.AppInfo.launch_default_for_uri_async(
                         Me.metadata.dependencies, null, null, null);
                 }
 
-                dialog.destroy();
+                widget.destroy();
             });
         });
     }
@@ -213,8 +210,8 @@ const TaskWidgetSettings = GObject.registerClass({
             if (!before || row.get_header())
                 return;
 
-            row.set_header(new Gtk.Separator({ orientation:
-                Gtk.Orientation.HORIZONTAL }));
+            row.set_header(new Gtk.Separator({orientation:
+                Gtk.Orientation.HORIZONTAL}));
         });
 
         this._taskListBox.set_selection_mode(Gtk.SelectionMode.NONE);
@@ -266,11 +263,11 @@ const TaskWidgetSettings = GObject.registerClass({
      * Lists task lists and accounts of remote task lists.
      *
      * @param {boolean} accountsOnly - Only refresh the account list.
-     * @param {boolean} [init] - Marks initialization of the settings window.
+     * @param {boolean} [initRegistry] - Initialize the source registry.
      */
-    async _listTaskListsAndAccounts(accountsOnly, init = false) {
+    async _listTaskListsAndAccounts(accountsOnly, initRegistry = false) {
         try {
-            if (init) {
+            if (initRegistry) {
                 this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
                 this._sourceRegistry = await Utils._getSourceRegistry(null);
                 const customOrder = this._settings.get_strv('task-list-order');
@@ -641,7 +638,7 @@ const TaskListRow = GObject.registerClass({
     _init(client, registry, remote, settings) {
         super._init();
 
-        const source = client.source;
+        const {source} = client;
         this._settings = settings;
         this._uid = source.uid;
         this._taskListName.set_text(source.display_name);
@@ -937,7 +934,7 @@ const SettingsMenuButton = GObject.registerClass({
     _init(window) {
         super._init();
 
-        const modal = window.modal;
+        const {modal} = window;
         this._aboutDialog.transient_for = window;
         this._aboutDialog.program_name = _(Me.metadata.name);
         this._aboutDialog.version = Me.metadata.version.toString();

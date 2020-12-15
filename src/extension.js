@@ -1,6 +1,6 @@
 'use strict';
 
-const { Atk, Clutter, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
+const {Atk, Clutter, Gio, GLib, GObject, Meta, Pango, Shell, St} = imports.gi;
 
 const CheckBox = imports.ui.checkBox;
 const Gettext = imports.gettext;
@@ -13,11 +13,8 @@ const Utils = Me.imports.utils;
 
 let ECal, EDataServer, ICalGLib;
 
-if (Utils._HAS_EDS) {
-    ECal = imports.gi.ECal;
-    EDataServer = imports.gi.EDataServer;
-    ICalGLib = imports.gi.ICalGLib;
-}
+if (Utils._HAS_EDS)
+    ({ECal, EDataServer, ICalGLib} = imports.gi);
 
 // eslint-disable-next-line no-redeclare
 const _ = Gettext.domain(Me.metadata.base).gettext;
@@ -296,7 +293,7 @@ class TaskWidget extends St.BoxLayout {
         });
 
         const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
-            { actionMode: Shell.ActionMode.NONE });
+            {actionMode: Shell.ActionMode.NONE});
 
         manager.addMenu(this._taskListMenu);
 
@@ -423,7 +420,7 @@ class TaskWidget extends St.BoxLayout {
                 view.start();
                 this._clientViews.set(source.uid, view);
             } else {
-                client = this._clientViews.get(source.uid).client;
+                ({client} = this._clientViews.get(source.uid));
             }
 
             if (!await this._filterTasks(client))
@@ -499,7 +496,7 @@ class TaskWidget extends St.BoxLayout {
     async _onTaskEvent(view) {
         try {
             this._resetTaskBox();
-            const uid = view.client.source.uid;
+            const {uid} = view.client.source;
             const index = this._taskLists.map(i => i.uid).indexOf(uid);
             const taskList = this._taskLists[index];
             const updated = await this._filterTasks(view.client);
@@ -774,7 +771,7 @@ class TaskWidget extends St.BoxLayout {
 
             // Creates a due date label:
             const buildDueDateLabel = (due, root = false, orphan = false) => {
-                const label = new St.Label({
+                label = new St.Label({
                     style_class: 'weather-header',
                     x_align: Clutter.ActorAlign.START,
                 });
@@ -794,7 +791,6 @@ class TaskWidget extends St.BoxLayout {
 
                     if (prev && !orphan)
                         label._skip = true;
-
                 } else {
                     let format = due.getYear() === today.getYear()
                         ? NC_('task due date', '%A, %B %-d')
@@ -820,10 +816,10 @@ class TaskWidget extends St.BoxLayout {
                     vertical: true,
                 });
 
-                const label = checkbox.child.get_child_at_index(2);
-                checkbox.child.remove_child(label);
+                const subTaskSummary = checkbox.child.get_child_at_index(2);
+                checkbox.child.remove_child(subTaskSummary);
                 box.add_child(buildDueDateLabel(due));
-                box.add_child(label);
+                box.add_child(subTaskSummary);
                 checkbox.child.insert_child_at_index(box, 2);
                 return checkbox;
             };
@@ -868,12 +864,12 @@ class TaskWidget extends St.BoxLayout {
                 if (!this._idleAddId)
                     return;
 
-                const adjustment = this._scrollView.vscroll.adjustment;
+                const {adjustment} = this._scrollView.vscroll;
                 const height = this._taskBox.get_allocation_box().get_height();
                 const limit = this._upperLimit + height;
 
                 if (this._currentChild) {
-                    const allocation = this._currentChild.allocation;
+                    const {allocation} = this._currentChild;
 
                     // If task is not above the visible region:
                     if (allocation.y2 >= adjustment.value) {
@@ -903,7 +899,6 @@ class TaskWidget extends St.BoxLayout {
                                 this._currentChild.get_next_sibling().destroy();
                         }
                     }
-
                 } else {
                     this._taskBox.add_child(item);
                     this._replaceTasksOnGoing = false;
@@ -1078,11 +1073,11 @@ class TaskWidget extends St.BoxLayout {
         try {
             const objects = [];
 
-            const processTask = (checkbox, init = false) => {
-                const label = checkbox.getLabelActor();
-                const task = checkbox._task;
+            const processTask = (cb, root = false) => {
+                const label = cb.getLabelActor();
+                const task = cb._task;
 
-                if (checkbox.checked) {
+                if (cb.checked) {
                     label.set_opacity(100);
 
                     if (Utils._shellVersionAtLeast(38)) {
@@ -1104,27 +1099,27 @@ class TaskWidget extends St.BoxLayout {
 
                 objects.push(task.get_icalcomponent());
 
-                if (init)
-                    resolveHierarchy(checkbox);
+                if (root)
+                    resolveHierarchy(cb);
             };
 
-            const resolveHierarchy = checkbox => {
-                if (checkbox.checked) {
-                    if (!checkbox._subtasks)
+            const resolveHierarchy = cb => {
+                if (cb.checked) {
+                    if (!cb._subtasks)
                         return;
 
-                    for (const subtaskCheckbox of checkbox._subtasks) {
+                    for (const subtaskCheckbox of cb._subtasks) {
                         subtaskCheckbox.set_checked(true);
                         processTask(subtaskCheckbox);
                         resolveHierarchy(subtaskCheckbox);
                     }
                 } else {
-                    if (!checkbox._parentCheckbox)
+                    if (!cb._parentCheckbox)
                         return;
 
-                    checkbox._parentCheckbox.set_checked(false);
-                    processTask(checkbox._parentCheckbox);
-                    resolveHierarchy(checkbox._parentCheckbox);
+                    cb._parentCheckbox.set_checked(false);
+                    processTask(cb._parentCheckbox);
+                    resolveHierarchy(cb._parentCheckbox);
                 }
             };
 

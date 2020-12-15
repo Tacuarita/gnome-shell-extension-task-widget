@@ -1,6 +1,6 @@
 'use strict';
 
-const { Gio, GLib } = imports.gi;
+const {Gio, GLib} = imports.gi;
 
 var _debounceTimeoutId;
 var _HAS_EDS = true;
@@ -12,9 +12,7 @@ var _MSECS_IN_DAY = _MINUTES_PER_DAY * 60 * 1000;
 let ECal, EDataServer, ICalGLib;
 
 try {
-    ECal = imports.gi.ECal;
-    EDataServer = imports.gi.EDataServer;
-    ICalGLib = imports.gi.ICalGLib;
+    ({ECal, EDataServer, ICalGLib} = imports.gi);
 } catch (e) {
     _HAS_EDS = false;
 }
@@ -90,9 +88,9 @@ function _getECalClient(source, type, wait, cancellable = null) {
  */
 function _getECalClientView(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.get_view(query, cancellable, (client, res) => {
+        client.get_view(query, cancellable, (cl, res) => {
             try {
-                resolve(client.get_view_finish(res)[1]);
+                resolve(cl.get_view_finish(res)[1]);
             } catch (e) {
                 reject(e);
             }
@@ -112,9 +110,9 @@ function _getECalClientView(client, query, cancellable = null) {
  */
 function _refreshBackend(registry, uid, cancellable = null) {
     return new Promise((resolve, reject) => {
-        registry.refresh_backend(uid, cancellable, (registry, res) => {
+        registry.refresh_backend(uid, cancellable, (reg, res) => {
             try {
-                resolve(registry.refresh_backend_finish(res));
+                resolve(reg.refresh_backend_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -132,9 +130,9 @@ function _refreshBackend(registry, uid, cancellable = null) {
  */
 function _refreshClient(client, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.refresh(cancellable, (client, res) => {
+        client.refresh(cancellable, (cl, res) => {
             try {
-                resolve(client.refresh_finish(res));
+                resolve(cl.refresh_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -153,9 +151,9 @@ function _refreshClient(client, cancellable = null) {
  */
 function _getTasks(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.get_object_list_as_comps(query, cancellable, (client, res) => {
+        client.get_object_list_as_comps(query, cancellable, (cl, res) => {
             try {
-                resolve(client.get_object_list_as_comps_finish(res)[1]);
+                resolve(cl.get_object_list_as_comps_finish(res)[1]);
             } catch (e) {
                 reject(e);
             }
@@ -176,9 +174,9 @@ function _getTasks(client, query, cancellable = null) {
  */
 function _modifyObjects(client, obj, mod, flag, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.modify_objects(obj, mod, flag, cancellable, (client, res) => {
+        client.modify_objects(obj, mod, flag, cancellable, (cl, res) => {
             try {
-                resolve(client.modify_objects_finish(res));
+                resolve(cl.modify_objects_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -300,10 +298,10 @@ function _writeBytesAsync(output, bytes, priority, cancellable = null) {
  */
 function _waitCheckAsync(process, cancellable = null) {
     return new Promise((resolve, reject) => {
-        process.wait_check_async(cancellable, (process, result) => {
+        process.wait_check_async(cancellable, (proc, result) => {
             try {
-                if (!process.wait_check_finish(result)) {
-                    const status = process.get_exit_status();
+                if (!proc.wait_check_finish(result)) {
+                    const status = proc.get_exit_status();
 
                     throw new Gio.IOErrorEnum({
                         code: Gio.io_error_from_errno(status),
