@@ -16,6 +16,10 @@
   height: 52px;
 }
 
+.task-widget-column .scroll-view {
+  margin-top: 10px;
+}
+
 /**
  * HACK: some of the overriden properties below are there to normalize looks in
  * custom Shell themes.
@@ -29,7 +33,6 @@
 
 .task-widget-column .task-list-name-button {
   padding: 5px 10px;
-  margin: 0 10px;
   border: none;
   box-shadow: none;
   text-shadow: none;

@@ -135,7 +135,7 @@ class TaskWidget extends St.BoxLayout {
             this._buildHeader();
 
             this._scrollView = new St.ScrollView({
-                style_class: 'vfade',
+                style_class: 'vfade scroll-view',
                 clip_to_allocation: true,
             });
 
@@ -728,9 +728,6 @@ class TaskWidget extends St.BoxLayout {
 
                     const boxWidth = widget._box.get_width() / scaleFactor;
 
-                    const boxPadding = widget._box.get_theme_node()
-                        .get_length('padding') / scaleFactor;
-
                     const spacing = Math.floor(widget.child.get_theme_node()
                         .get_length('spacing') / scaleFactor);
 
@@ -738,20 +735,18 @@ class TaskWidget extends St.BoxLayout {
                         widget._arrow.set_text('\u21B2');
 
                         widget._arrow.set_style(`padding-left: ${boxWidth -
-                            widget._arrow.get_width() / scaleFactor -
-                            2 * boxPadding}px`);
+                            widget._arrow.get_width() / scaleFactor}px`);
 
                         widget.set_style(`margin-right: ${--level *
-                            (boxWidth + spacing) + boxPadding}px`);
+                            (boxWidth + spacing)}px`);
                     } else {
                         widget._arrow.set_text('\u21B3');
 
                         widget._arrow.set_style(`padding-right: ${boxWidth -
-                            widget._arrow.get_width() / scaleFactor -
-                            2 * boxPadding}px`);
+                            widget._arrow.get_width() / scaleFactor}px`);
 
                         widget.set_style(`margin-left: ${--level *
-                            (boxWidth + spacing) + boxPadding}px`);
+                            (boxWidth + spacing)}px`);
                     }
                 });
 
