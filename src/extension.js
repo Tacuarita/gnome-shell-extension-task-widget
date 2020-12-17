@@ -216,9 +216,7 @@ class TaskWidget extends St.BoxLayout {
             y_align: Clutter.ActorAlign.CENTER,
         });
 
-        const taskListNameBox = new St.BoxLayout({
-            style_class: 'message-list-placeholder',
-        });
+        const taskListNameBox = new St.BoxLayout();
 
         taskListNameBox.add_child(this._taskListName);
         taskListNameBox.add_child(this._taskListNameArrow);
@@ -688,6 +686,8 @@ class TaskWidget extends St.BoxLayout {
             const buildCheckbox = (task, root = false) => {
                 const checkbox = new CheckBox.CheckBox(task.get_summary()
                     .get_value());
+
+                checkbox.getLabelActor().add_style_class_name('task-summary');
 
                 if (task.get_status() === ICalGLib.PropertyStatus.COMPLETED) {
                     checkbox.checked = true;
