@@ -474,10 +474,7 @@ const TaskWidgetSettings = GObject.registerClass({
 
         // Remove the row and insert it into new position:
         source.get_parent().remove(source);
-
-        index = widget.rowBelow ? widget.rowBelow.get_index()
-            : widget.rowAbove.get_index() + 1;
-
+        index = widget.rowBelow?.get_index() ?? widget.rowAbove.get_index() + 1;
         widget.insert(source, index);
 
         // Update the order of task lists:
