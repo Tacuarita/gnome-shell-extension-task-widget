@@ -131,7 +131,6 @@ class TaskWidget extends St.BoxLayout {
 
             await this._initSourceRegistry();
             await this._storeTaskLists(true);
-
             this._buildHeader();
 
             this._scrollView = new St.ScrollView({
@@ -217,7 +216,6 @@ class TaskWidget extends St.BoxLayout {
         });
 
         const taskListNameBox = new St.BoxLayout();
-
         taskListNameBox.add_child(this._taskListName);
         taskListNameBox.add_child(this._taskListNameArrow);
 
@@ -553,6 +551,7 @@ class TaskWidget extends St.BoxLayout {
                 continue;
 
             task._uid = task.get_icalcomponent().get_uid();
+            task._index = index++;
             task._tasklist = taskListUid;
             this._taskUids.add(task._uid);
 
@@ -566,7 +565,6 @@ class TaskWidget extends St.BoxLayout {
             if (related) {
                 const parentUid = related.get_value().get_string();
                 const parent = this._relatedTo.get(parentUid);
-                task._index = index++;
 
                 if (!this._taskUids.has(parentUid))
                     this._orphanTasks.add(parentUid);
@@ -576,7 +574,6 @@ class TaskWidget extends St.BoxLayout {
                 else
                     this._relatedTo.set(parentUid, [task]);
             } else {
-                task._index = index++;
                 this._rootTasks.push(task);
             }
 

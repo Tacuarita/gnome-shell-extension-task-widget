@@ -984,8 +984,7 @@ const SettingsMenuButton = GObject.registerClass({
      * information he/she considers to be private.
      *
      * @author Andy Holmes <andrew.g.r.holmes@gmail.com> (the original code was
-     * extended to include more data)
-     *
+     * extended to include more data).
      * @param {GLib.DateTime} time - Restricts log entries displayed to those
      * after this time.
      */
