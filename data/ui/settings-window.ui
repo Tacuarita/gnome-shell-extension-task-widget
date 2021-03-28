@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkAdjustment" id="hctApotacAdjustment">
     <property name="lower">1</property>
     <property name="upper">999</property>
@@ -16,28 +15,7 @@
     <property name="upper">59</property>
     <property name="step-increment">1</property>
   </object>
-  <object class="GtkPopoverMenu" id="refreshTaskLists">
-    <property name="can-focus">False</property>
-    <child>
-      <object class="GtkBox" id="refreshTaskListsBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-start">12</property>
-        <property name="margin-end">12</property>
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-      </object>
-      <packing>
-        <property name="submenu">main</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-  </object>
   <template class="TaskWidgetSettings" parent="GtkBox">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="halign">center</property>
     <property name="margin-start">30</property>
     <property name="margin-end">30</property>
@@ -46,329 +24,179 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkLabel" id="settingsLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Settings</property>
         <attributes>
-          <attribute name="weight" value="bold"/>
+          <attribute name="weight" value="bold"></attribute>
         </attributes>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkListBox" id="settingsListBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="selection-mode">none</property>
         <child>
           <object class="GtkListBoxRow" id="mergeTaskListsRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="activatable">False</property>
-            <property name="selectable">False</property>
-            <child>
+            <property name="activatable">0</property>
+            <property name="child">
               <object class="GtkBox" id="mtlBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid" id="mtlGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">12</property>
-                    <property name="margin-bottom">12</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="mtlLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Merge task lists</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSwitch" id="mtlSwitch">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
           <object class="GtkListBoxRow" id="groupPastTasksRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="activatable">False</property>
-            <property name="selectable">False</property>
-            <child>
+            <property name="activatable">0</property>
+            <property name="selectable">0</property>
+            <property name="child">
               <object class="GtkBox" id="gptBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid" id="gptGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">12</property>
-                    <property name="margin-bottom">12</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="gptLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Group past tasks</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSwitch" id="gptSwitch">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="active">True</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkSeparator" id="gptSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
           <object class="GtkListBoxRow" id="hideHeaderForSingularTaskListsRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="activatable">False</property>
-            <property name="selectable">False</property>
-            <child>
+            <property name="activatable">0</property>
+            <property name="selectable">0</property>
+            <property name="child">
               <object class="GtkBox" id="hhfstlBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid" id="hhfstlGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">12</property>
-                    <property name="margin-bottom">12</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="hhfstlLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide header for singular tasks lists</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSwitch" id="hhfstlSwitch">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkSeparator" id="hhfstlSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
           <object class="GtkListBoxRow" id="hideEmptyAndCompletedTaskListsRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="activatable">False</property>
-            <property name="selectable">False</property>
-            <child>
+            <property name="activatable">0</property>
+            <property name="selectable">0</property>
+            <property name="child">
               <object class="GtkBox" id="heactlBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid" id="heactlGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">12</property>
-                    <property name="margin-bottom">12</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="heactlLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide empty and completed task lists</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSwitch" id="heactlSwitch">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkSeparator" id="heactlSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
           <object class="GtkListBoxRow" id="hideCompletedTasksRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="activatable">False</property>
-            <property name="selectable">False</property>
-            <child>
+            <property name="activatable">0</property>
+            <property name="selectable">0</property>
+            <property name="child">
               <object class="GtkBox" id="hctBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid" id="hctOptions">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">12</property>
-                    <property name="margin-bottom">12</property>
+                    <property name="margin-top">5</property>
+                    <property name="margin-bottom">5</property>
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="hctLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide completed tasks</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkComboBoxText" id="hctComboBox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="active-id">0</property>
                         <items>
                           <item id="0" translatable="yes">Never</item>
                           <item id="1" translatable="yes">Immediately</item>
@@ -376,309 +204,169 @@
                           <item id="3" translatable="yes">After a specific time of the day</item>
                         </items>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkRevealer" id="hctSettingsRevealer">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
+                    <property name="child">
                       <object class="GtkStack" id="hctSettingsStack">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="transition-type">crossfade</property>
                         <child>
-                          <!-- n-columns=3 n-rows=1 -->
-                          <object class="GtkGrid" id="hctApotacPage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="margin-start">12</property>
-                            <property name="margin-end">12</property>
-                            <property name="margin-top">12</property>
-                            <property name="margin-bottom">12</property>
-                            <property name="column-spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="hctApotacPageLabel">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">After</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="hctApotacSpinButton">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="adjustment">hctApotacAdjustment</property>
-                                <property name="numeric">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="hctApotacComboBox">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="active-id">1</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
+                          <object class="GtkStackPage">
                             <property name="name">hctApotacPage</property>
-                          </packing>
+                            <property name="child">
+                              <object class="GtkGrid" id="hctApotacPage">
+                                <property name="halign">end</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-end">12</property>
+                                <property name="margin-top">10</property>
+                                <property name="margin-bottom">10</property>
+                                <property name="column-spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="hctApotacPageLabel">
+                                    <property name="label" translatable="yes">After</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="hctApotacSpinButton">
+                                    <property name="adjustment">hctApotacAdjustment</property>
+                                    <property name="numeric">1</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBoxText" id="hctApotacComboBox">
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                          </object>
                         </child>
                         <child>
-                          <!-- n-columns=4 n-rows=1 -->
-                          <object class="GtkGrid" id="hctAstodPage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="margin-start">12</property>
-                            <property name="margin-end">12</property>
-                            <property name="margin-top">12</property>
-                            <property name="margin-bottom">12</property>
-                            <property name="column-spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="hctAstodPageLabel">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">After</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="hctAstodSpinButtonHour">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="adjustment">hctAstodHourAdjustment</property>
-                                <property name="numeric">True</property>
-                                <property name="value">1</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="hctAstodPageColon">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="label">:</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="hctAstodSpinButtonMinute">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="adjustment">hctAstodMinuteAdjustment</property>
-                                <property name="numeric">True</property>
-                                <property name="value">1</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">3</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
+                          <object class="GtkStackPage">
                             <property name="name">hctAstodPage</property>
-                            <property name="position">1</property>
-                          </packing>
+                            <property name="child">
+                              <object class="GtkGrid" id="hctAstodPage">
+                                <property name="halign">end</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-end">12</property>
+                                <property name="margin-top">10</property>
+                                <property name="margin-bottom">10</property>
+                                <property name="column-spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="hctAstodPageLabel">
+                                    <property name="label" translatable="yes">After</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="hctAstodSpinButtonHour">
+                                    <property name="adjustment">hctAstodHourAdjustment</property>
+                                    <property name="numeric">1</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="hctAstodPageColon">
+                                    
+                                    <property name="label">:</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="hctAstodSpinButtonMinute">
+                                    <property name="adjustment">hctAstodMinuteAdjustment</property>
+                                    <property name="numeric">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                          </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <style>
           <class name="frame"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
-      <!-- n-columns=3 n-rows=1 -->
       <object class="GtkGrid" id="taskListGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="margin-top">18</property>
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkBox" id="taskListTextBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="hexpand">1</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="taskListLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin-bottom">6</property>
                 <property name="label" translatable="yes">Task Lists</property>
                 <attributes>
-                  <attribute name="weight" value="bold"/>
+                  <attribute name="weight" value="bold"></attribute>
                 </attributes>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="taskListDescription">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
+                <property name="hexpand">1</property>
                 <property name="margin-bottom">12</property>
                 <property name="label" translatable="yes">You can drag and drop rows to change the order of task lists in the widget.</property>
-                <property name="wrap">True</property>
+                <property name="wrap">1</property>
                 <property name="wrap-mode">word-char</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSeparator" id="taskListDescriptionSeparator">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="margin-bottom">12</property>
             <property name="orientation">vertical</property>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkMenuButton" id="backendRefreshButton">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
+            <property name="focus-on-click">0</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="margin-bottom">12</property>
-            <property name="popover">refreshTaskLists</property>
-            <child>
-              <object class="GtkBox" id="backendRefreshButtonBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <child>
-                  <object class="GtkImage" id="backendRefreshButtonImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">view-refresh-symbolic</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinner" id="backendRefreshButtonSpinner">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="active">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="backendRefreshButton-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Refresh the list of account task lists</property>
-                <property name="AtkObject::accessible-role" translatable="yes">menu</property>
-              </object>
-            </child>
-            <style>
-              <class name="image-button"/>
-            </style>
+            <property name="accessible-role" translatable="yes">menu</property>
+            <property name="icon-name">view-refresh-symbolic</property>
+            <accessibility>
+              <property name="label" translatable="yes">Refresh the list of account task lists</property>
+            </accessibility>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">0</property>
-          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="backendRefreshButtonSpinner">
+            <property name="visible">0</property>
+            <property name="sensitive">0</property>
+            <property name="margin-bottom">12</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkSpinner">
+                <property name="spinning">1</property>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <child>
       <object class="GtkListBox" id="taskListBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="selection-mode">none</property>
         <style>
           <class name="frame"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">5</property>
-      </packing>
     </child>
   </template>
 </interface>

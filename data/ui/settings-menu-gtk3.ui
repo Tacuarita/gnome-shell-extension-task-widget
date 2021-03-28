@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <menu id="settingsMenu">
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>Support Log</attribute>
+        <attribute name='action'>settings-menu.log</attribute>
+      </item>
+      <item>
+        <attribute name='label'>Wiki</attribute>
+        <attribute name='action'>settings-menu.wiki</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>About</attribute>
+        <attribute name='action'>settings-menu.about</attribute>
+      </item>
+    </section>
+  </menu>
+  <template class="SettingsMenuButton" parent="GtkMenuButton">
+    <property name="can-focus">1</property>
+    <property name="focus-on-click">0</property>
+    <property name="menu_model">settingsMenu</property>
+    <child>
+      <object class="GtkImage" id="settingsMenuButtonImage">
+        <property name="icon-name">open-menu-symbolic</property>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="settingsMenu-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">Help</property>
+        <property name="AtkObject::accessible-role" translatable="yes">menu</property>
+      </object>
+    </child>
+  </template>
+  <object class="GtkAboutDialog" id="aboutDialog">
+    <property name="modal">1</property>
+    <property name="copyright" translatable="yes">Copyright © 2020 Juozas Miškinis</property>
+    <property name="authors">Juozas Miškinis &lt;juozas@joasis.lt&gt;</property>
+    <property name="logo">resource:///org/gnome/shell/extensions/task-widget/task-widget-logo.svg</property>
+    <property name="license-type">gpl-2-0</property>
+  </object>
+  <object class="GtkMessageDialog" id="supportLogDialog">
+    <property name="text" translatable="yes">Support Log</property>
+    <property name="secondary-text" translatable="yes">Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private.</property>
+    <child type="action">
+      <object class="GtkButton" id="supportLogDialogCancelButton">
+        <property name="visible">1</property>
+        <property name="label" translatable="yes">Cancel</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="supportLogDialogReviewLogButton">
+        <property name="visible">1</property>
+        <property name="label" translatable="yes">Review Log</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">supportLogDialogCancelButton</action-widget>
+      <action-widget response="-5">supportLogDialogReviewLogButton</action-widget>
+    </action-widgets>
+  </object>
+</interface>

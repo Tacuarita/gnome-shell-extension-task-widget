@@ -1,234 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.0 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkPopoverMenu" id="TaskListRowMenu">
-    <property name="can-focus">False</property>
-    <child>
-      <object class="GtkBox" id="taskListRowMenuBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-start">12</property>
-        <property name="margin-end">12</property>
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkModelButton" id="rowMenuMoveUp">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="text" translatable="yes">Move Up</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkModelButton" id="rowMenuMoveDown">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="text" translatable="yes">Move Down</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkModelButton" id="rowMenuRefresh">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="text" translatable="yes">Refresh Tasks</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkModelButton" id="rowMenuProps">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="text" translatable="yes">Properties</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="submenu">main</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
+  <requires lib="gtk" version="4.0"/>
+  <menu id="optionsMenu">
+    <item>
+      <attribute name='label' translatable='yes'>Move Up</attribute>
+      <attribute name='action'>options-menu.up</attribute>
+    </item>
+    <item>
+      <attribute name='label' translatable='yes'>Move Down</attribute>
+      <attribute name='action'>options-menu.down</attribute>
+    </item>
+  </menu>
+  <object class="GtkBox" id="dragBox">
   </object>
   <template class="TaskListRow" parent="GtkListBoxRow">
-    <property name="visible">True</property>
-    <property name="can-focus">True</property>
-    <child>
+    <property name="child">
       <object class="GtkBox" id="taskListBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkEventBox" id="dragBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <!-- n-columns=7 n-rows=1 -->
-              <object class="GtkGrid" id="taskListRowGrid">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">8</property>
-                <property name="margin-bottom">8</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkSwitch" id="taskListSwitch">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">6</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="taskListName">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="ellipsize">end</property>
-                    <property name="max-width-chars">30</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="taskListProvider">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="dragHandle">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">list-drag-handle-symbolic</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">5</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="taskListOptionsButton">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="focus-on-click">False</property>
-                    <property name="receives-default">True</property>
-                    <property name="popover">TaskListRowMenu</property>
-                    <child>
-                      <object class="GtkBox" id="taskListOptionsButtonBox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <child>
-                          <object class="GtkImage" id="taskListOptionsImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">view-more-symbolic</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinner" id="taskListOptionsSpinner">
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="active">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="taskListOptionsButton-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Task list options</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="flat"/>
-                      <class name="image-button"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">4</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+          <child>
+            <object class="GtkGrid" id="taskListRowGrid">
+              <property name="margin-start">12</property>
+              <property name="margin-end">12</property>
+              <property name="margin-top">5</property>
+              <property name="margin-bottom">5</property>
+              <property name="column-spacing">12</property>
+              <child>
+                <object class="GtkImage" id="dragHandle">
+                  <property name="icon-name">list-drag-handle-symbolic</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkLabel" id="taskListName">
+                  <property name="halign">start</property>
+                  <property name="hexpand">1</property>
+                  <property name="ellipsize">end</property>
+                  <property name="max-width-chars">30</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkLabel" id="taskListProvider">
+                  <style>
+                    <class name="dim-label"/>
+                  </style>
+                </object>
+              </child>
+              <child>
+                <object class="GtkSeparator">
+                </object>
+              </child>
+              <child>
+                <object class="GtkMenuButton" id="taskListOptionsButton">
+                  <property name="focus-on-click">0</property>
+                  <property name="menu_model">optionsMenu</property>
+                  <property name="icon-name">view-more-symbolic</property>
+                  <property name="has-frame">0</property>
+                  <accessibility>
+                    <property name="label" translatable="yes">Task list options</property>
+                  </accessibility>
+                </object>
+              </child>
+              <child>
+                <object class="GtkButton" id="taskListOptionsSpinner">
+                  <property name="visible">0</property>
+                  <property name="sensitive">0</property>
+                  <property name="has-frame">0</property>
+                  <child>
+                    <object class="GtkSpinner">
+                      <property name="spinning">1</property>
+                    </object>
+                  </child>
+                </object>
+              </child>
+              <child>
+                <object class="GtkSeparator">
+                </object>
+              </child>
+              <child>
+                <object class="GtkSwitch" id="taskListSwitch">
+                  <property name="valign">center</property>
+                </object>
+              </child>
+            </object>
+          </child>
       </object>
-    </child>
+    </property>
     <style>
       <class name="row"/>
     </style>

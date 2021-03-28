@@ -4,9 +4,13 @@
     <file compressed="true" alias="prefs.css">css/prefs.css</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="settings-window.ui">ui/settings-window.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="settings-window-gtk3.ui">ui/settings-window-gtk3.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="settings-menu.ui">ui/settings-menu.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="settings-menu-gtk3.ui">ui/settings-menu-gtk3.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="task-list-row.ui">ui/task-list-row.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="task-list-row-gtk3.ui">ui/task-list-row-gtk3.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="task-list-properties-dialog.ui">ui/task-list-properties-dialog.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="task-list-properties-dialog-gtk3.ui">ui/task-list-properties-dialog-gtk3.ui</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="task-widget-logo.svg">images/task-widget-logo.svg</file>
   </gresource>

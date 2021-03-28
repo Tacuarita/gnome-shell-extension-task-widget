@@ -43,27 +43,37 @@ function init() {
  * @return {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
 function buildPrefsWidget() {
+    const scrolledWindow = new Gtk.ScrolledWindow();
+
     const widget = Gtk.Window.list_toplevels().filter(win => win._uuid &&
         win._uuid === Me.uuid).length === 1 && Utils._HAS_EDS
         ? new TaskWidgetSettings() : new BeGoneWidget();
 
-    const scrolledWindow = new Gtk.ScrolledWindow();
-    scrolledWindow.add(widget);
-    scrolledWindow.show_all();
+    if (Utils._shellVersionAtLeast(40)) {
+        scrolledWindow.set_child(widget);
+    } else {
+        scrolledWindow.add(widget);
+        scrolledWindow.show_all();
+    }
+
     return scrolledWindow;
 }
 
 const BeGoneWidget = GObject.registerClass(
 class BeGoneWidget extends Gtk.Box {
     /**
-     * Shows a message dialog if Evolution Data Server is not installed on the
+     * Shows a message dialog if required dependencies are not installed on the
      * system. Also, closes the settings window if there's another instance of
      * it already opened.
      */
     _init() {
         super._init();
-        this.connect('realize', () => {
-            this.get_toplevel().close();
+        // TODO: 'realize' here results in an error when using GTK4. Bug?
+        this.connect('map', () => {
+            const root = Utils._shellVersionAtLeast(40) ? this.get_root()
+                : this.get_toplevel();
+
+            root.close();
 
             if (Utils._HAS_EDS)
                 return;
@@ -81,8 +91,8 @@ class BeGoneWidget extends Gtk.Box {
                     ' Server to use this extension.'),
             });
 
+            dialog.set_transient_for(root);
             dialog.add_button(_('Help'), 0);
-            dialog.set_keep_above(true);
             dialog.set_name('task-widget-error');
             dialog.present();
 
@@ -100,7 +110,8 @@ class BeGoneWidget extends Gtk.Box {
 
 const TaskWidgetSettings = GObject.registerClass({
     GTypeName: 'TaskWidgetSettings',
-    Template: `resource://${Me.metadata.epath}/settings-window.ui`,
+    Template: `resource://${Me.metadata.epath}/settings-window${
+        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'mtlSwitch',
         'gptSwitch',
@@ -114,10 +125,7 @@ const TaskWidgetSettings = GObject.registerClass({
         'hctAstodSpinButtonHour',
         'hctAstodSpinButtonMinute',
         'taskListBox',
-        'refreshTaskLists',
-        'refreshTaskListsBox',
         'backendRefreshButton',
-        'backendRefreshButtonImage',
         'backendRefreshButtonSpinner',
     ],
 }, class TaskWidgetSettings extends Gtk.Box {
@@ -126,12 +134,16 @@ const TaskWidgetSettings = GObject.registerClass({
      */
     _init() {
         super._init();
-
         const provider = new Gtk.CssProvider();
         provider.load_from_resource(`${Me.metadata.epath}/prefs.css`);
 
-        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
-            provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        if (Utils._shellVersionAtLeast(40)) {
+            Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(),
+                provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        } else {
+            Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
+                provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
 
         this.connect('realize', this._onRealized.bind(this));
         this.connect('unrealize', this._onUnrealized.bind(this));
@@ -150,17 +162,17 @@ const TaskWidgetSettings = GObject.registerClass({
             switch (option.active) {
                 case Utils._HIDE_COMPLETED_TASKS['never']:
                 case Utils._HIDE_COMPLETED_TASKS['immediately']:
-                    this._hctSettingsRevealer.reveal_child = false;
+                    this._hctSettingsRevealer.set_reveal_child(false);
                     break;
                 case Utils._HIDE_COMPLETED_TASKS['after-time-period']:
-                    this._hctSettingsRevealer.reveal_child = true;
+                    this._hctSettingsRevealer.set_reveal_child(true);
 
                     this._hctSettingsStack.set_visible_child_name(
                         'hctApotacPage');
 
                     break;
                 case Utils._HIDE_COMPLETED_TASKS['after-specified-time']:
-                    this._hctSettingsRevealer.reveal_child = true;
+                    this._hctSettingsRevealer.set_reveal_child(true);
 
                     this._hctSettingsStack.set_visible_child_name(
                         'hctAstodPage');
@@ -213,20 +225,6 @@ const TaskWidgetSettings = GObject.registerClass({
             row.set_header(new Gtk.Separator({orientation:
                 Gtk.Orientation.HORIZONTAL}));
         });
-
-        this._taskListBox.set_selection_mode(Gtk.SelectionMode.NONE);
-
-        // Enable drag and drop in the task list box:
-        this._taskListBox.drag_dest_set(Gtk.DestDefaults.MOTION |
-            Gtk.DestDefaults.DROP, [Gtk.TargetEntry.new('Gtk.ListBoxRow',
-            Gtk.TargetFlags.SAME_APP, 0)], Gdk.DragAction.MOVE);
-
-        // Connect signal handlers for drag and drop operations:
-        this._taskListBox.connect('drag-motion', this._dragMotion.bind(this));
-        this._taskListBox.connect('drag-leave', this._dragLeave.bind(this));
-
-        this._taskListBox.connect('drag-data-received',
-            this._dragDataReceived.bind(this));
 
         this._listTaskListsAndAccounts(false, true);
     }
@@ -307,10 +305,14 @@ const TaskWidgetSettings = GObject.registerClass({
                     continue;
 
                 const taskListRow = new TaskListRow(client,
-                    this._sourceRegistry, remote, this._settings);
+                    this._sourceRegistry, remote, this._settings, this._window);
 
-                this._taskListBox.add(taskListRow);
-                taskListRow.show_all();
+                if (Utils._shellVersionAtLeast(40)) {
+                    this._taskListBox.append(taskListRow);
+                } else {
+                    this._taskListBox.add(taskListRow);
+                    taskListRow.show_all();
+                }
             }
 
             if (!accounts.size) {
@@ -328,16 +330,23 @@ const TaskWidgetSettings = GObject.registerClass({
                     _('Refresh the list of account task lists'));
             }
 
-            for (const [account, source] of accounts) {
-                const accountButton = Gtk.ModelButton.new();
-                accountButton.text = account;
-                this._refreshTaskListsBox.add(accountButton);
+            let action;
+            const menu = Gio.Menu.new();
+            const actionGroup = new Gio.SimpleActionGroup();
 
-                accountButton.connect('clicked',
-                    this._onAccountButtonClicked.bind(this, source, account));
+            for (const [account, source] of accounts) {
+                menu.append(account, `accounts.${account}`);
+                action = new Gio.SimpleAction({name: account});
+
+                action.connect('activate', () => {
+                    this._onAccountButtonClicked(source, account);
+                });
+
+                actionGroup.add_action(action);
             }
 
-            this._refreshTaskListsBox.show_all();
+            this._backendRefreshButton.set_menu_model(menu);
+            this._window.insert_action_group('accounts', actionGroup);
 
             if (accountsOnly)
                 return;
@@ -380,26 +389,21 @@ const TaskWidgetSettings = GObject.registerClass({
             if (!source.has_extension(extension))
                 throw new Error(`${account} is not refreshable`);
 
-            const tooltip = this._backendRefreshButton.get_tooltip_text();
-
             // Refresh list of account task lists:
             if (!await Utils._refreshBackend(this._sourceRegistry,
                 source.uid, null))
                 throw new Error(`${account} could not be refreshed`);
 
-            this._backendRefreshButton.set_tooltip_text(
+            this._backendRefreshButtonSpinner.set_tooltip_text(
                 _('Refresh in progress') + Utils._ELLIPSIS_CHAR);
 
-            this._backendRefreshButtonImage.set_visible(false);
+            this._backendRefreshButton.set_visible(false);
             this._backendRefreshButtonSpinner.set_visible(true);
-            this._backendRefreshButton.set_sensitive(false);
 
             GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 10,
                 () => {
-                    this._backendRefreshButton.set_tooltip_text(tooltip);
-                    this._backendRefreshButtonImage.set_visible(true);
+                    this._backendRefreshButton.set_visible(true);
                     this._backendRefreshButtonSpinner.set_visible(false);
-                    this._backendRefreshButton.set_sensitive(true);
                     return GLib.SOURCE_REMOVE;
                 }
             );
@@ -416,6 +420,9 @@ const TaskWidgetSettings = GObject.registerClass({
      */
     async _onTaskListEvent(event, source) {
         try {
+            let i = 0;
+            let row = this._taskListBox.get_row_at_index(i);
+
             switch (event) {
                 case 'added': {
                     const client = await Utils._getECalClient(source,
@@ -425,145 +432,49 @@ const TaskWidgetSettings = GObject.registerClass({
 
                     const taskListRow = new TaskListRow(client,
                         this._sourceRegistry, client.check_refresh_supported(),
-                        this._settings);
+                        this._settings, this._window);
 
-                    this._taskListBox.add(taskListRow);
-                    taskListRow.show_all();
+                    if (Utils._shellVersionAtLeast(40)) {
+                        this._taskListBox.append(taskListRow);
+                    } else {
+                        this._taskListBox.add(taskListRow);
+                        taskListRow.show_all();
+                    }
+
                     break;
                 }
-                case 'removed':
+
+                case 'removed': {
                     this._clients.delete(source.uid);
 
-                    this._taskListBox.foreach(row => {
-                        if (row._uid === source.uid)
+                    while (row) {
+                        if (row._uid === source.uid) {
                             row.destroy();
-                    });
+                            break;
+                        }
+
+                        row = this._taskListBox.get_row_at_index(i++);
+                    }
 
                     break;
-                case 'changed':
-                    this._taskListBox.foreach(row => {
-                        if (row._uid === source.uid)
+                }
+
+                case 'changed': {
+                    while (row) {
+                        if (row._uid === source.uid) {
                             row._taskListName.set_text(source.display_name);
-                    });
+                            break;
+                        }
+
+                        row = this._taskListBox.get_row_at_index(i++);
+                    }
+                }
             }
 
             // Refresh the list of accounts:
-            this._refreshTaskListsBox.foreach(account => account.destroy());
             this._listTaskListsAndAccounts(true);
         } catch (e) {
             logError(e);
-        }
-    }
-
-    /**
-     * Processes data received from the drag and drop operation.
-     *
-     * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} _context - Drag context.
-     * @param {number} _x - x coordinate of where the drop happened.
-     * @param {number} _y - y coordinate of where the drop happened.
-     * @param {Gtk.SelectionData} data - Received data.
-     */
-    _dragDataReceived(widget, _context, _x, _y, data) {
-        let index = parseInt(imports.byteArray.toString(data.get_data()));
-        const source = widget.get_row_at_index(index);
-
-        // Do nothing if we didn't move the row into new position:
-        if ((widget.dragRow === widget.rowAbove) || source === widget.rowBelow)
-            return;
-
-        // Remove the row and insert it into new position:
-        source.get_parent().remove(source);
-        index = widget.rowBelow?.get_index() ?? widget.rowAbove.get_index() + 1;
-        widget.insert(source, index);
-
-        // Update the order of task lists:
-        this._settings.set_strv('task-list-order',
-            widget.get_children().map(row => row._uid));
-
-        delete widget.rowAbove;
-        delete widget.rowBelow;
-    }
-
-    /**
-     * Handles events taking place during the drag and drop operation.
-     *
-     * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} _context - Drag context.
-     * @param {number} _x - x coordinate of the current cursor position.
-     * @param {number} y - y coordinate of the current cursor position.
-     */
-    _dragMotion(widget, _context, _x, y) {
-        widget.dragRow.get_style_context().remove_class('drag-hover');
-
-        if (widget.rowAbove) {
-            widget.rowAbove.get_style_context()
-                .remove_class('drag-hover-bottom');
-        }
-
-        if (widget.rowBelow) {
-            widget.rowBelow.get_style_context().remove_class('drag-hover-top');
-
-            if (widget.rowBelow.get_header()) {
-                widget.rowBelow.get_header().get_style_context()
-                    .remove_class('row-separator');
-            }
-        }
-
-        // Get the row under the mouse cursor:
-        const row = widget.get_row_at_y(y);
-
-        if (row) {
-            const allocation = row.get_allocation();
-
-            // Check if the cursor is in the top half of that row:
-            const topHalf = y < allocation.y + allocation.height / 2;
-
-            widget.rowBelow = topHalf ? row : widget.get_row_at_index(
-                row.get_index() + 1);
-
-            widget.rowAbove = topHalf
-                ? widget.get_row_at_index(row.get_index() - 1) : row;
-        }
-
-        if (widget.dragRow === widget.rowAbove ||
-            widget.dragRow === widget.rowBelow) {
-            widget.dragRow.get_style_context().add_class('drag-hover');
-        } else {
-            if (widget.rowAbove) {
-                widget.rowAbove.get_style_context().add_class(
-                    'drag-hover-bottom');
-            }
-
-            if (widget.rowBelow) {
-                widget.rowBelow.get_style_context().add_class('drag-hover-top');
-
-                if (widget.rowBelow.get_header()) {
-                    widget.rowBelow.get_header().get_style_context()
-                        .add_class('row-separator');
-                }
-            }
-        }
-    }
-
-    /**
-     * Finalizes drag and drop operations.
-     *
-     * @param {*} widget - Widget involved in the operation.
-     */
-    _dragLeave(widget) {
-        if (widget.rowAbove) {
-            widget.rowAbove.get_style_context()
-                .remove_class('drag-hover-bottom');
-        }
-
-        if (widget.rowBelow) {
-            widget.rowBelow.get_style_context().remove_class('drag-hover-top');
-
-            if (widget.rowBelow.get_header()) {
-                widget.rowBelow.get_header().get_style_context()
-                    .remove_class('row-separator');
-            }
         }
     }
 
@@ -600,26 +511,30 @@ const TaskWidgetSettings = GObject.registerClass({
      * @param {TaskWidgetSettings} widget - Widget that has been realized.
      */
     _onRealized(widget) {
-        const window = widget.get_toplevel();
-        window._headerBar.pack_end(new SettingsMenuButton(window));
-        window._headerBar.show_all();
+        if (Utils._shellVersionAtLeast(40)) {
+            this._window = widget.get_root();
+            const headerBar = new Gtk.HeaderBar({show_title_buttons: true});
+            headerBar.pack_end(new SettingsMenuButton(this._window));
+            this._window.set_titlebar(headerBar);
+        } else {
+            this._window = widget.get_toplevel();
+            this._window._headerBar.pack_end(
+                new SettingsMenuButton(this._window));
+            this._window._headerBar.show_all();
+        }
     }
 });
 
 const TaskListRow = GObject.registerClass({
     GTypeName: 'TaskListRow',
-    Template: `resource://${Me.metadata.epath}/task-list-row.ui`,
+    Template: `resource://${Me.metadata.epath}/task-list-row${
+        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'taskListSwitch',
         'taskListName',
         'taskListProvider',
         'dragBox',
-        'rowMenuRefresh',
-        'rowMenuMoveUp',
-        'rowMenuMoveDown',
-        'rowMenuProps',
         'taskListOptionsButton',
-        'taskListOptionsImage',
         'taskListOptionsSpinner',
     ],
 }, class TaskListRow extends Gtk.ListBoxRow {
@@ -631,10 +546,10 @@ const TaskListRow = GObject.registerClass({
      * @param {boolean} remote - It's a remote task list.
      * @param {Gio.Settings} settings - API for storing and retrieving
      * extension settings.
+     * @param {Gtk.Window} window - Extension settings window.
      */
-    _init(client, registry, remote, settings) {
+    _init(client, registry, remote, settings, window) {
         super._init();
-
         const {source} = client;
         this._settings = settings;
         this._uid = source.uid;
@@ -646,38 +561,119 @@ const TaskListRow = GObject.registerClass({
         this._taskListSwitch.active = this._settings.get_strv(
             'disabled-task-lists').indexOf(source.uid) === -1;
 
-        this._rowMenuMoveUp.connect('clicked', this._moveRow.bind(this, true));
+        let action;
+        const actionGroup = new Gio.SimpleActionGroup();
+        action = new Gio.SimpleAction({name: 'up'});
 
-        this._rowMenuMoveDown.connect('clicked', this._moveRow.bind(this,
-            false));
+        action.connect('activate', () => {
+            this._moveRow(true);
+        });
+
+        actionGroup.add_action(action);
+        action = new Gio.SimpleAction({name: 'down'});
+
+        action.connect('activate', () => {
+            this._moveRow(false);
+        });
+
+        actionGroup.add_action(action);
+
+        if (remote) {
+            const menu = this._taskListOptionsButton.menu_model;
+            menu.append(_('Refresh Tasks'), 'options-menu.refresh');
+            action = new Gio.SimpleAction({name: 'refresh'});
+
+            action.connect('activate', () => {
+                this._onRefreshButtonClicked(client);
+            });
+
+            actionGroup.add_action(action);
+            menu.append(_('Properties'), 'options-menu.properties');
+            action = new Gio.SimpleAction({name: 'properties'});
+
+            action.connect('activate', () => {
+                const dialog = new TaskListPropertiesDialog(window, source);
+                dialog.present();
+            });
+
+            actionGroup.add_action(action);
+            this._taskListOptionsButton.set_menu_model(menu);
+        }
+
+        this.insert_action_group('options-menu', actionGroup);
 
         this._taskListSwitch.connect('state-set', this._setTaskListState.bind(
             this, source));
 
-        if (!remote) {
-            this._rowMenuRefresh.set_visible(false);
-            this._rowMenuProps.set_visible(false);
-        } else {
-            this._rowMenuProps.connect('clicked', button => {
-                const dialog = new TaskListPropertiesDialog(
-                    button.get_toplevel(), source);
-
-                dialog.run();
+        // Enable drag and drop operations:
+        if (Utils._shellVersionAtLeast(40)) {
+            const dragSource = new Gtk.DragSource({
+                actions: Gdk.DragAction.MOVE,
             });
 
-            this._rowMenuRefresh.connect('clicked',
-                this._onRefreshButtonClicked.bind(this, client));
+            const dropTarget = new Gtk.DropTargetAsync({
+                actions: Gdk.DragAction.MOVE,
+            });
+
+            this.add_controller(dropTarget);
+            this.add_controller(dragSource);
+
+            dragSource.connect('drag-begin', this._dragBegin.bind(this));
+            dragSource.connect('drag-end', this._dragEnd.bind(this));
+
+            dragSource.connect('prepare', (_sourceWidget, x, y) => {
+                const taskListBox = this.get_parent();
+                taskListBox.dragX = x;
+                taskListBox.dragY = y;
+                return new Gdk.ContentProvider(TaskListRow);
+            });
+
+            dropTarget.connect('drag-enter', () => {
+                this.get_parent().drag_highlight_row(this);
+            });
+
+            dropTarget.connect('drag-leave', () => {
+                this.get_parent().drag_unhighlight_row();
+            });
+
+            dropTarget.connect('drop', (_targetWidget, gdkDrop) => {
+                const taskListBox = this.get_parent();
+                const index = this.get_index();
+
+                if (index === taskListBox.dragRow.get_index()) {
+                    gdkDrop.read_value_async(TaskListRow, 1, null, () => {
+                        gdkDrop.finish(Gdk.DragAction.MOVE);
+                    });
+
+                    return true;
+                }
+
+                taskListBox.remove(taskListBox.dragRow);
+                taskListBox.insert(taskListBox.dragRow, index);
+                this._updateTaskListOrder();
+
+                gdkDrop.read_value_async(TaskListRow, 1, null, () => {
+                    gdkDrop.finish(Gdk.DragAction.MOVE);
+                });
+
+                return true;
+            });
+        } else {
+            this.drag_dest_set(Gtk.DestDefaults.ALL, [Gtk.TargetEntry.new(
+                'Gtk.ListBoxRow', Gtk.TargetFlags.SAME_APP, 0)],
+            Gdk.DragAction.MOVE);
+
+            this.connect('drag-motion', () => {
+                this.get_parent().dropRow = this;
+            });
+
+            this._dragBox.drag_source_set(Gdk.ModifierType.BUTTON1_MASK,
+                [Gtk.TargetEntry.new('Gtk.ListBoxRow', Gtk.TargetFlags.SAME_APP,
+                    0)], Gdk.DragAction.MOVE);
+
+            this._dragBox.connect('drag-begin', this._dragBegin.bind(this));
+            this._dragBox.connect('drag-end', this._dragEnd.bind(this));
         }
-
-        // Make the row draggable:
-        this._dragBox.drag_source_set(Gdk.ModifierType.BUTTON1_MASK,
-            [Gtk.TargetEntry.new('Gtk.ListBoxRow', Gtk.TargetFlags.SAME_APP,
-                0)], Gdk.DragAction.MOVE);
-
-        // Connect to signals required for drag and drop operations:
-        this._dragBox.connect('drag-begin', this._dragBegin.bind(this));
-        this._dragBox.connect('drag-end', this._dragEnd.bind(this));
-        this._dragBox.connect('drag-data-get', this._dragDataGet.bind(this));
     }
 
     /**
@@ -688,15 +684,13 @@ const TaskListRow = GObject.registerClass({
      */
     async _onRefreshButtonClicked(client) {
         try {
-            this._taskListOptionsImage.set_visible(false);
+            this._taskListOptionsButton.set_visible(false);
             this._taskListOptionsSpinner.set_visible(true);
-            this._taskListOptionsButton.set_sensitive(false);
 
             GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1,
                 () => {
-                    this._taskListOptionsImage.set_visible(true);
+                    this._taskListOptionsButton.set_visible(true);
                     this._taskListOptionsSpinner.set_visible(false);
-                    this._taskListOptionsButton.set_sensitive(true);
                     return GLib.SOURCE_REMOVE;
                 }
             );
@@ -710,83 +704,93 @@ const TaskListRow = GObject.registerClass({
         }
     }
 
+
+    /**
+     * Ensures that changes in task list order are saved in settings.
+     */
+    _updateTaskListOrder() {
+        let i = 0;
+        const uids = [];
+        const taskListBox = this.get_parent();
+        let row = taskListBox.get_row_at_index(i);
+
+        while (row) {
+            uids.push(row._uid);
+            row = taskListBox.get_row_at_index(i++);
+        }
+
+        this._settings.set_strv('task-list-order', uids);
+    }
+
     /**
      * Moves the row up or down in the list of task lists.
      *
      * @param {boolean} up - Move the row upwards.
      */
     _moveRow(up) {
-        const parent = this.get_parent();
         let index = this.get_index();
-        parent.remove(this);
+        const taskListBox = this.get_parent();
+        taskListBox.remove(this);
 
         if (up)
-            index = --index;
-        else if (parent.get_row_at_index(index))
-            index = ++index;
+            --index;
+        else if (taskListBox.get_row_at_index(index))
+            ++index;
         else
             index = 0;
 
-        parent.insert(this, index);
-
-        this._settings.set_strv('task-list-order',
-            parent.get_children().map(row => row._uid));
+        taskListBox.insert(this, index);
+        this._updateTaskListOrder();
     }
 
     /**
      * Initializes the drag and drop operation.
      *
-     * @todo Use set_device_offset() if/when gjs supports it.
-     *
      * @param {*} widget - Widget involved in the operation.
      * @param {Gdk.DragContext} context - Drag context.
      */
     _dragBegin(widget, context) {
-        const taskListRow = widget.get_ancestor(Gtk.ListBoxRow.$gtype);
-        const rowSize = taskListRow.get_allocation();
+        this.get_style_context().add_class('drag-icon');
+        const taskListBox = this.get_parent();
+        taskListBox.dragRow = this;
 
-        const imageSurface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
-            rowSize.width, rowSize.height);
+        if (Utils._shellVersionAtLeast(40)) {
+            widget.set_icon(Gtk.WidgetPaintable.new(this), taskListBox.dragX,
+                taskListBox.dragY);
+        } else {
+            const allocation = this.get_allocation();
 
-        const cairoContext = new Cairo.Context(imageSurface);
-        taskListRow.get_style_context().add_class('drag-icon');
-        taskListRow.draw(cairoContext);
-        taskListRow.get_style_context().remove_class('drag-icon');
-        /*
-         * // Adjust the position of a floating row image:
-         * const [x, y] = widget.translate_coordinates(row, 0, 0);
-         * imageSurface.set_device_offset(-x, -y);
-        */
-        Gtk.drag_set_icon_surface(context, imageSurface);
-        taskListRow.get_parent().dragRow = taskListRow;
-        taskListRow.get_style_context().add_class('drag-row');
-        cairoContext.$dispose();
+            const imageSurface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
+                allocation.width, allocation.height);
+
+            const cairoContext = new Cairo.Context(imageSurface);
+            this.draw(cairoContext);
+            Gtk.drag_set_icon_surface(context, imageSurface);
+            cairoContext.$dispose();
+        }
     }
 
     /**
      * Finalizes the drag and drop operation.
-
-     * @param {*} widget - Widget involved in the operation.
      */
-    _dragEnd(widget) {
-        const taskListRow = widget.get_ancestor(Gtk.ListBoxRow.$gtype);
-        taskListRow.get_parent().dragRow = null;
-        taskListRow.get_style_context().remove_class('drag-row');
-        taskListRow.get_style_context().remove_class('drag-hover');
-    }
+    _dragEnd() {
+        this.get_style_context().remove_class('drag-icon');
+        const taskListBox = this.get_parent();
 
-    /**
-     * Stores data (index of the task list row being dragged) for the drag and
-     * drop operation.
-     *
-     * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} _context - Drag context.
-     * @param {Gtk.SelectionData} data - Gtk.SelectionData to be filled with
-     * the dragged data.
-     */
-    _dragDataGet(widget, _context, data) {
-        data.set(Gdk.Atom.intern_static_string('Gtk.ListBoxRow'), 8,
-            `${widget.get_ancestor(Gtk.ListBoxRow.$gtype).get_index()}`);
+        if (Utils._shellVersionAtLeast(40)) {
+            taskListBox.drag_unhighlight_row();
+        } else {
+            const dropIndex = taskListBox.dropRow.get_index();
+
+            if (taskListBox.dragRow.get_index() === dropIndex)
+                return;
+
+            taskListBox.remove(taskListBox.dragRow);
+            taskListBox.insert(taskListBox.dragRow, dropIndex);
+            this._updateTaskListOrder();
+            delete taskListBox.dragRow;
+            delete taskListBox.dropRow;
+        }
     }
 
     /**
@@ -814,7 +818,8 @@ const TaskListRow = GObject.registerClass({
 
 const TaskListPropertiesDialog = GObject.registerClass({
     GTypeName: 'TaskListPropertiesDialog',
-    Template: `resource://${Me.metadata.epath}/task-list-properties-dialog.ui`,
+    Template: `resource://${Me.metadata.epath}/task-list-properties-dialog${
+        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'taskListPropertiesDialogComboBox',
         'taskListPropertiesDialogSpinButton',
@@ -828,7 +833,6 @@ const TaskListPropertiesDialog = GObject.registerClass({
      */
     _init(window, source) {
         super._init();
-
         this.set_transient_for(window);
         this.set_title(`${this.get_title()} — ${source.display_name}`);
         this._source = source;
@@ -910,11 +914,9 @@ const TaskListPropertiesDialog = GObject.registerClass({
 
 const SettingsMenuButton = GObject.registerClass({
     GTypeName: 'SettingsMenuButton',
-    Template: `resource://${Me.metadata.epath}/settings-menu.ui`,
+    Template: `resource://${Me.metadata.epath}/settings-menu${
+        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
-        'settingsMenuAbout',
-        'settingsMenuSupportLog',
-        'settingsMenuHelp',
         'aboutDialog',
         'supportLogDialog',
     ],
@@ -930,7 +932,6 @@ const SettingsMenuButton = GObject.registerClass({
      */
     _init(window) {
         super._init();
-
         const {modal} = window;
         this._aboutDialog.transient_for = window;
         this._aboutDialog.program_name = _(Me.metadata.name);
@@ -944,12 +945,10 @@ const SettingsMenuButton = GObject.registerClass({
             window of the extension settings. */
             Gettext.pgettext('translator name <email>', 'translator-credits');
 
-        this._settingsMenuAbout.connect('clicked', () =>
-            this._aboutDialog.run());
+        const actionGroup = new Gio.SimpleActionGroup();
+        let action = new Gio.SimpleAction({name: 'log'});
 
-        this._aboutDialog.connect('response', dialog => dialog.hide());
-
-        this._settingsMenuSupportLog.connect('clicked', () => {
+        action.connect('activate', () => {
             this._supportLogDialog._time =
                 GLib.DateTime.new_now_local().format('%F %T');
 
@@ -959,6 +958,35 @@ const SettingsMenuButton = GObject.registerClass({
             this._supportLogDialog.present();
             this.set_sensitive(false);
         });
+
+        actionGroup.add_action(action);
+        action = new Gio.SimpleAction({name: 'wiki'});
+
+        action.connect('activate', () => {
+            Gio.AppInfo.launch_default_for_uri_async(Me.metadata.wiki,
+                null, null, null);
+        });
+
+        actionGroup.add_action(action);
+        action = new Gio.SimpleAction({name: 'about'});
+
+        action.connect('activate', () => {
+            this._aboutDialog.present();
+        });
+
+        actionGroup.add_action(action);
+        this.insert_action_group('settings-menu', actionGroup);
+
+        if (Utils._shellVersionAtLeast(40)) {
+            this._aboutDialog.connect('close-request', () => {
+                this._aboutDialog.hide();
+            });
+        } else {
+            this._aboutDialog.connect('delete-event', () => {
+                this._aboutDialog.hide();
+                return true;
+            });
+        }
 
         this._supportLogDialog.connect('response', (dialog, response) => {
             if (response === Gtk.ResponseType.OK)
@@ -971,12 +999,6 @@ const SettingsMenuButton = GObject.registerClass({
             dialog._time = null;
             dialog.hide();
         });
-
-        this._supportLogDialog.connect('delete-event', () => true);
-        window.connect('destroy', () => this._supportLogDialog.destroy());
-
-        this._settingsMenuHelp.connect('clicked', () => Gio.AppInfo
-            .launch_default_for_uri_async(Me.metadata.wiki, null, null, null));
     }
 
     /**
