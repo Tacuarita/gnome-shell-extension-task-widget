@@ -790,6 +790,19 @@ class TaskWidget extends St.BoxLayout {
                         label._skip = true;
                 } else {
                     let format = due.getYear() === today.getYear()
+                        /* Translators: %A is the weekday name (e.g. Friday)
+                        %B is the name of the month (e.g. February)
+                        %-d is the day of the month, a decimal number ("-"
+                        before "d" disables padding with zeros (e.g. prints "2"
+                        instead of "02")
+                        %Y is the year as a decimal number including the
+                        century (e.g. 2021)
+
+                        So, "%A, %B %-d" in English translates to e.g. "Friday,
+                        February 2".
+
+                        The idea is of course to adjust these placeholders
+                        according to the format used in your language. */
                         ? NC_('task due date', '%A, %B %-d')
                         : NC_('task due date with a year', '%A, %B %-d, %Y');
 
