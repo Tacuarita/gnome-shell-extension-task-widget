@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-28 14:50+0300\n"
-"PO-Revision-Date: 2020-10-13 20:28\n"
+"PO-Revision-Date: 2021-03-28 12:04\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -194,15 +194,8 @@ msgid "Copyright © 2020 Juozas Miškinis"
 msgstr "Copyright © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen "
-"Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das "
-"Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, "
-"entfernen oder zensieren."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, entfernen oder zensieren."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -261,11 +254,8 @@ msgid "Task Lists"
 msgstr "Aufgabenlisten"
 
 #: data/ui/settings-window.ui:318
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der "
-"Aufgabenlisten im Widget zu ändern."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der Aufgabenlisten im Widget zu ändern."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -291,3 +281,4 @@ msgstr "Runter bewegen"
 #: data/ui/task-list-row.ui:58
 msgid "Task list options"
 msgstr "Optionen der Aufgabenliste"
+
