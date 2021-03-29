@@ -1,0 +1,284 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: task-widget\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-28 14:50+0300\n"
+"PO-Revision-Date: 2021-03-29 00:32\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese, Brazilian\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: task-widget\n"
+"X-Crowdin-Project-ID: 418358\n"
+"X-Crowdin-Language: pt-BR\n"
+"X-Crowdin-File: /master/data/po/org.gnome.shell.extensions.task-widget.pot\n"
+"X-Crowdin-File-ID: 8\n"
+
+#: src/extension.js:93
+msgid "Loading"
+msgstr ""
+
+#: src/extension.js:196
+msgid "Previous task list"
+msgstr ""
+
+#: src/extension.js:228
+msgid "Select task list"
+msgstr ""
+
+#: src/extension.js:269 src/extension.js:1173
+msgid "All Tasks"
+msgstr ""
+
+#: src/extension.js:298
+msgid "Next task list"
+msgstr ""
+
+#: src/extension.js:715
+msgid "Beginning of a subtask list"
+msgstr ""
+
+#. Translators: this denotes a subtask with an inaccessible
+#. parent task.
+#: src/extension.js:761
+msgid "Orphan task"
+msgstr ""
+
+#: src/extension.js:780
+msgid "No due date"
+msgstr ""
+
+#: src/extension.js:782
+msgid "Today"
+msgstr ""
+
+#. Translators: this is a category name for tasks with
+#. due date in the past.
+#: src/extension.js:787
+msgid "Past"
+msgstr ""
+
+#. Translators: %A is the weekday name (e.g. Friday)
+#. %B is the name of the month (e.g. February)
+#. %-d is the day of the month, a decimal number ("-"
+#. before "d" disables padding with zeros (e.g. prints "2"
+#. instead of "02")
+#. %Y is the year as a decimal number including the
+#. century (e.g. 2021)
+#.
+#. So, "%A, %B %-d" in English translates to e.g. "Friday,
+#. February 2".
+#.
+#. The idea is of course to adjust these placeholders
+#. according to the format used in your language.
+#: src/extension.js:806
+msgctxt "task due date"
+msgid "%A, %B %-d"
+msgstr ""
+
+#: src/extension.js:807
+msgctxt "task due date with a year"
+msgid "%A, %B %-d, %Y"
+msgstr ""
+
+#: src/extension.js:1205
+msgid "No Tasks"
+msgstr ""
+
+#: src/extension.js:1211 src/prefs.js:89
+msgid "Error: Missing Dependencies"
+msgstr ""
+
+#: src/prefs.js:90
+msgid "Please install Evolution Data Server to use this extension."
+msgstr ""
+
+#: src/prefs.js:95 data/ui/settings-menu.ui:26
+msgid "Help"
+msgstr ""
+
+#: src/prefs.js:242
+msgctxt "after X second(s)"
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:244
+msgctxt "after X minute(s)"
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:245
+msgctxt "after X hour(s)"
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:247
+msgctxt "after X day(s)"
+msgid "day"
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:322
+msgid "No remote task lists found"
+msgstr ""
+
+#: src/prefs.js:330 data/ui/settings-window.ui:343
+msgid "Refresh the list of account task lists"
+msgstr ""
+
+#: src/prefs.js:398
+msgid "Refresh in progress"
+msgstr ""
+
+#: src/prefs.js:583
+msgid "Refresh Tasks"
+msgstr ""
+
+#: src/prefs.js:591
+msgid "Properties"
+msgstr ""
+
+#: src/prefs.js:874
+msgctxt "refresh every X minutes(s)"
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:876
+msgctxt "refresh every X hour(s)"
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/prefs.js:878
+msgctxt "refresh every X day(s)"
+msgid "day"
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: put down your name/nickname and email (optional)
+#. according to the format below. This will credit you in the "About"
+#. window of the extension settings.
+#: src/prefs.js:946
+msgctxt "translator name <email>"
+msgid "translator-credits"
+msgstr ""
+
+#: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:37
+msgid "Support Log"
+msgstr ""
+
+#: data/ui/settings-menu.ui:15
+msgid "About"
+msgstr ""
+
+#: data/ui/settings-menu.ui:24 data/ui/settings-window.ui:340
+msgid "menu"
+msgstr ""
+
+#: data/ui/settings-menu.ui:31
+msgid "Copyright © 2020 Juozas Miškinis"
+msgstr ""
+
+#: data/ui/settings-menu.ui:38
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr ""
+
+#: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
+msgid "Cancel"
+msgstr ""
+
+#: data/ui/settings-menu.ui:46
+msgid "Review Log"
+msgstr ""
+
+#: data/ui/settings-window.ui:29
+msgid "Settings"
+msgstr ""
+
+#: data/ui/settings-window.ui:55
+msgid "Merge task lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:90
+msgid "Group past tasks"
+msgstr ""
+
+#: data/ui/settings-window.ui:125
+msgid "Hide header for singular tasks lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:160
+msgid "Hide empty and completed task lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:195
+msgid "Hide completed tasks"
+msgstr ""
+
+#: data/ui/settings-window.ui:201
+msgid "Never"
+msgstr ""
+
+#: data/ui/settings-window.ui:202
+msgid "Immediately"
+msgstr ""
+
+#: data/ui/settings-window.ui:203
+msgid "After a period of time after completion"
+msgstr ""
+
+#: data/ui/settings-window.ui:204
+msgid "After a specific time of the day"
+msgstr ""
+
+#: data/ui/settings-window.ui:228 data/ui/settings-window.ui:258
+msgid "After"
+msgstr ""
+
+#: data/ui/settings-window.ui:308
+msgid "Task Lists"
+msgstr ""
+
+#: data/ui/settings-window.ui:318
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+
+#: data/ui/task-list-properties-dialog.ui:11
+msgid "Task List Properties"
+msgstr ""
+
+#. Translators: e.g. "Refresh every 10 minutes".
+#: data/ui/task-list-properties-dialog.ui:26
+msgid "Refresh every"
+msgstr ""
+
+#: data/ui/task-list-properties-dialog.ui:52
+msgid "OK"
+msgstr ""
+
+#: data/ui/task-list-row.ui:6
+msgid "Move Up"
+msgstr ""
+
+#: data/ui/task-list-row.ui:10
+msgid "Move Down"
+msgstr ""
+
+#: data/ui/task-list-row.ui:58
+msgid "Task list options"
+msgstr ""
+
