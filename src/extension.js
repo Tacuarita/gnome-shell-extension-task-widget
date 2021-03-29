@@ -1090,7 +1090,7 @@ class TaskWidget extends St.BoxLayout {
                 if (cb.checked) {
                     label.set_opacity(100);
 
-                    if (Utils._shellVersionAtLeast(38)) {
+                    if (Utils._shellVersionAtLeast(3.38)) {
                         ECal.util_mark_task_complete_sync(
                             task.get_icalcomponent(), -1, client, null);
                     } else {
