@@ -227,7 +227,7 @@
                             <property name="column-spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="hctApotacPageLabel">
-                                <property name="label" translatable="yes" context="e.g. after 5 minutes">After</property>
+                                <property name="label" translatable="yes" context="e.g. After 5 minutes">After</property>
                               </object>
                             </child>
                             <child>
