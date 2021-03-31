@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-28 14:50+0300\n"
+"POT-Creation-Date: 2021-03-31 07:38+0300\n"
 "PO-Revision-Date: 2021-03-28 12:04\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
@@ -194,8 +194,15 @@ msgid "Copyright © 2020 Juozas Miškinis"
 msgstr "Copyright © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, entfernen oder zensieren."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen "
+"Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das "
+"Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, "
+"entfernen oder zensieren."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -245,7 +252,15 @@ msgstr "Nach einer Zeitspanne nach Fertigstellung"
 msgid "After a specific time of the day"
 msgstr "Nach einer bestimmten Tageszeit"
 
-#: data/ui/settings-window.ui:228 data/ui/settings-window.ui:258
+#: data/ui/settings-window.ui:228
+#, fuzzy
+msgctxt "e. g. After 5 minutes"
+msgid "After"
+msgstr "Nach"
+
+#: data/ui/settings-window.ui:258
+#, fuzzy
+msgctxt "e. g. After 9:00"
 msgid "After"
 msgstr "Nach"
 
@@ -254,8 +269,11 @@ msgid "Task Lists"
 msgstr "Aufgabenlisten"
 
 #: data/ui/settings-window.ui:318
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der Aufgabenlisten im Widget zu ändern."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der "
+"Aufgabenlisten im Widget zu ändern."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -282,3 +300,7 @@ msgstr "Runter bewegen"
 msgid "Task list options"
 msgstr "Optionen der Aufgabenliste"
 
+#, fuzzy
+#~ msgctxt "e. g. after 9:00"
+#~ msgid "After"
+#~ msgstr "Nach"
