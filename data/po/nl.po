@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 14:11+0300\n"
-"PO-Revision-Date: 2021-03-28 12:04\n"
+"PO-Revision-Date: 2021-04-12 11:14\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -95,8 +95,7 @@ msgstr "Fout: ontbrekende afhankelijkheden"
 
 #: src/prefs.js:92
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
+msgstr "Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
 
 #: src/prefs.js:97 data/ui/settings-menu.ui:26
 msgid "Help"
@@ -196,14 +195,8 @@ msgid "Copyright © 2020 Juozas Miškinis"
 msgstr "Auteursrecht © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het "
-"probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-"
-"informatie."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-informatie."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -254,24 +247,21 @@ msgid "After a specific time of the day"
 msgstr "Op een bepaald tijdstip"
 
 #: data/ui/settings-window.ui:213
-#, fuzzy
 msgctxt "e.g. After 5 minutes"
 msgid "After"
-msgstr "Na"
+msgstr ""
 
 #: data/ui/settings-window.ui:243
-#, fuzzy
 msgctxt "e.g. After 9:00"
 msgid "After"
-msgstr "Na"
+msgstr ""
 
 #: data/ui/settings-window.ui:292
 msgid "Task Lists"
 msgstr "Takenlijsten"
 
 #: data/ui/settings-window.ui:302
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Je kunt rijen op de widget verslepen om de volgorde aan te passen."
 
 #: data/ui/task-list-properties-dialog.ui:11
@@ -299,12 +289,3 @@ msgstr "Omlaag"
 msgid "Task list options"
 msgstr "Takenlijstopties"
 
-#, fuzzy
-#~ msgctxt "e. g. After 9:00"
-#~ msgid "After"
-#~ msgstr "Na"
-
-#, fuzzy
-#~ msgctxt "e. g. after 9:00"
-#~ msgid "After"
-#~ msgstr "Na"
