@@ -35,6 +35,7 @@
     <child>
       <object class="GtkListBox" id="settingsListBox">
         <property name="selection-mode">none</property>
+        <property name="show-separators">1</property>
         <child>
           <object class="GtkListBoxRow" id="mergeTaskListsRow">
             <property name="activatable">0</property>
@@ -59,10 +60,6 @@
                       <object class="GtkSwitch" id="mtlSwitch">
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
                   </object>
                 </child>
               </object>
@@ -96,10 +93,6 @@
                     </child>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkSeparator" id="gptSeparator">
-                  </object>
-                </child>
               </object>
             </property>
           </object>
@@ -131,10 +124,6 @@
                     </child>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkSeparator" id="hhfstlSeparator">
-                  </object>
-                </child>
               </object>
             </property>
           </object>
@@ -164,10 +153,6 @@
                       <object class="GtkSwitch" id="heactlSwitch">
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="heactlSeparator">
                   </object>
                 </child>
               </object>
@@ -299,12 +284,11 @@
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkBox" id="taskListTextBox">
-            <property name="hexpand">1</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="taskListLabel">
-                <property name="halign">start</property>
                 <property name="margin-bottom">6</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Task Lists</property>
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
@@ -313,8 +297,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="taskListDescription">
-                <property name="hexpand">1</property>
                 <property name="margin-bottom">12</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">You can drag and drop rows to change the order of task lists in the widget.</property>
                 <property name="wrap">1</property>
                 <property name="wrap-mode">word-char</property>
@@ -363,6 +347,7 @@
     <child>
       <object class="GtkListBox" id="taskListBox">
         <property name="selection-mode">none</property>
+        <property name="show-separators">1</property>
         <style>
           <class name="frame"/>
         </style>

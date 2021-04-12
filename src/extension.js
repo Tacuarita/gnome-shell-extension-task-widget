@@ -90,6 +90,7 @@ class TaskWidget extends St.BoxLayout {
         });
 
         this._statusLabel = new St.Label({
+            // Translators: without the ellipsis as it's appended automatically.
             text: _('Loading') + Utils._ELLIPSIS_CHAR,
             reactive: true,
         });
