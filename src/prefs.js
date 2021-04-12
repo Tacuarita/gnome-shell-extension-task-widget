@@ -65,11 +65,13 @@ class BeGoneWidget extends Gtk.Box {
      * Shows a message dialog if required dependencies are not installed on the
      * system. Also, closes the settings window if there's another instance of
      * it already opened.
+     *
+     * @todo Possibly https://gitlab.gnome.org/GNOME/gjs/-/issues/356
      */
     _init() {
         super._init();
-        // TODO: 'realize' here results in an error when using GTK4. Bug?
-        this.connect('map', () => {
+
+        this.connect('realize', () => {
             const root = Utils._shellVersionAtLeast(40) ? this.get_root()
                 : this.get_toplevel();
 
@@ -91,7 +93,7 @@ class BeGoneWidget extends Gtk.Box {
                     ' Server to use this extension.'),
             });
 
-            dialog.set_transient_for(root);
+            // dialog.set_transient_for(root);
             dialog.add_button(_('Help'), 0);
             dialog.set_name('task-widget-error');
             dialog.present();
@@ -218,13 +220,15 @@ const TaskWidgetSettings = GObject.registerClass({
         this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
             .bind(this));
 
-        this._taskListBox.set_header_func((row, before) => {
-            if (!before || row.get_header())
-                return;
+        if (!Utils._shellVersionAtLeast(40)) {
+            this._taskListBox.set_header_func((row, before) => {
+                if (!before || row.get_header())
+                    return;
 
-            row.set_header(new Gtk.Separator({orientation:
-                Gtk.Orientation.HORIZONTAL}));
-        });
+                row.set_header(new Gtk.Separator({orientation:
+                    Gtk.Orientation.HORIZONTAL}));
+            });
+        }
 
         this._listTaskListsAndAccounts(false, true);
     }
