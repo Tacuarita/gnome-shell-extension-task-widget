@@ -16,7 +16,6 @@ let ECal, EDataServer, ICalGLib;
 if (Utils._HAS_EDS)
     ({ECal, EDataServer, ICalGLib} = imports.gi);
 
-// eslint-disable-next-line no-redeclare
 const _ = Gettext.domain(Me.metadata.base).gettext;
 
 const NC_ = (context, str) => Gettext.domain(Me.metadata.base)
@@ -546,8 +545,9 @@ class TaskWidget extends St.BoxLayout {
         this._relatedTo = new Map();
         this._orphanTasks = new Set();
 
-        for (const [taskListUid, task] of tasks.sort(Utils._sortByName).sort(
-            Utils._sortByPriority).sort(Utils._sortByDueDate)) {
+        for (const [taskListUid, task] of tasks.sort((a, b) =>
+            Utils._sortByDueDate(a, b) || Utils._sortByPriority(a, b) ||
+            Utils._sortByName(a, b))) {
             if (!task.get_summary())
                 continue;
 
@@ -619,7 +619,7 @@ class TaskWidget extends St.BoxLayout {
      *
      * @param {string} uid - Unique task list identifier.
      * @param {boolean} merge - Task lists will be merged into one.
-     * @return {Promise<boolean>} `true` if there's at least one task.
+     * @returns {Promise<boolean>} `true` if there's at least one task.
      */
     async _listTasks(uid, merge) {
         try {
@@ -984,7 +984,7 @@ class TaskWidget extends St.BoxLayout {
      * Filters tasks and task lists based on user-defined settings.
      *
      * @param {ECal.Client} client - Task list to perform filtering on.
-     * @return {Promise<ECal.Component[]>} List of tasks.
+     * @returns {Promise<ECal.Component[]>} List of tasks.
      */
     async _filterTasks(client) {
         try {
@@ -1257,7 +1257,7 @@ class TaskWidget extends St.BoxLayout {
         else if (i === 0)
             i = this._taskLists.length - 1;
         else
-            i = --i;
+            --i;
 
         if (this._mergeTaskLists)
             delete this._mergeTaskLists;
@@ -1345,7 +1345,7 @@ class TaskWidget extends St.BoxLayout {
      *
      * @param {Clutter.Actor} _actor - Actor the event is associated to.
      * @param {Clutter.Event} event - Holds information about the event.
-     * @return {boolean} `false` to continue the propagation of the event.
+     * @returns {boolean} `false` to continue the propagation of the event.
      */
     _onHeaderScrolled(_actor, event) {
         if (this._taskLists.length !== 1 &&
@@ -1524,15 +1524,27 @@ class TaskWidget extends St.BoxLayout {
 
 let _widget;
 
+/**
+ * Called when the extension is enabled.
+ *
+ * https://gjs.guide/extensions/overview/anatomy.html#extension-js-required
+ */
 function enable() {
     _widget = new TaskWidget();
 }
 
+/**
+ * Called when the extension is uninstalled, disabled in GNOME Extensions,
+ * when user logs out or when the screen locks.
+ */
 function disable() {
     _widget.destroy();
     _widget = null;
 }
 
+/**
+ * Called once when the extension is loaded, not enabled.
+ */
 function init() {
     const dir = Me.metadata.locale === 'user-specific'
         ? Me.dir.get_child('locale').get_path() : Me.metadata.locale;

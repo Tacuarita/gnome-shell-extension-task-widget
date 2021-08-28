@@ -40,7 +40,7 @@ var _HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT = value => {
  * Gets the source registry.
  *
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<EDataServer.SourceRegistry>} Source registry.
+ * @returns {Promise<EDataServer.SourceRegistry>} Source registry.
  */
 function _getSourceRegistry(cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -63,7 +63,7 @@ function _getSourceRegistry(cancellable = null) {
  * @param {number} wait - Timeout, in seconds, to wait for the backend to be
  * fully connected.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<ECal.Client>} `ECal.Client` of the source.
+ * @returns {Promise<ECal.Client>} `ECal.Client` of the source.
  */
 function _getECalClient(source, type, wait, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -84,7 +84,7 @@ function _getECalClient(source, type, wait, cancellable = null) {
  * @param {ECal.Client} client - `ECal.Client` of the source.
  * @param {string} query - An S-expression representing the query.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<ECal.ClientView>} `ECal.ClientView` of the source.
+ * @returns {Promise<ECal.ClientView>} `ECal.ClientView` of the source.
  */
 function _getECalClientView(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -106,7 +106,7 @@ function _getECalClientView(client, query, cancellable = null) {
  * @param {ECal.SourceRegistry} registry - Source registry
  * @param {str} uid - UID of a collection source whose backend to refresh.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<boolean>} `true` if no errors occurred.
+ * @returns {Promise<boolean>} `true` if no errors occurred.
  */
 function _refreshBackend(registry, uid, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -126,7 +126,7 @@ function _refreshBackend(registry, uid, cancellable = null) {
  *
  * @param {EDataServer.Client} client - `EDataServer.Client` of a source.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<boolean>} `true` if no errors occurred.
+ * @returns {Promise<boolean>} `true` if no errors occurred.
  */
 function _refreshClient(client, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -147,7 +147,7 @@ function _refreshClient(client, cancellable = null) {
  * @param {ECal.Client} client - `ECal.Client` of a source.
  * @param {str} query - An S-expression representing the query.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<ECal.Component[]>} A list of objects.
+ * @returns {Promise<ECal.Component[]>} A list of objects.
  */
 function _getTasks(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -170,7 +170,7 @@ function _getTasks(client, query, cancellable = null) {
  * @param {ECal.ObjModType} mod - Type of modification.
  * @param {int} flag - bit-or of `ECal.OperationFlags`.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<boolean>} `true` if no errors occurred.
+ * @returns {Promise<boolean>} `true` if no errors occurred.
  */
 function _modifyObjects(client, obj, mod, flag, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -191,7 +191,7 @@ function _modifyObjects(client, obj, mod, flag, cancellable = null) {
  * @param {string[]} order - A list of task list uids.
  * @param {Object} a - Task list object.
  * @param {Object} b - Task list object.
- * @return {int} Negative, zero or positive value to facilitate sorting.
+ * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function _customSort(order, a, b) {
     if (order.indexOf(a.uid) === -1)
@@ -210,7 +210,7 @@ function _customSort(order, a, b) {
  * and task objects.
  * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
  * and task objects.
- * @return {int} Negative, zero or positive value to facilitate sorting.
+ * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByName(a, b) {
     const lc = x => x[1].get_summary().get_value().toLowerCase();
@@ -232,10 +232,13 @@ function _sortByName(a, b) {
  * and task objects.
  * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
  * and task objects.
- * @return {int} Negative, zero or positive value to facilitate sorting.
+ * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByDueDate(a, b) {
     const time = x => x[1].get_due().get_value().as_timet();
+
+    if (a[1].get_due() === null && b[1].get_due() === null)
+        return _sortByPriority(a, b);
 
     if (b[1].get_due() === null)
         return -1;
@@ -254,10 +257,13 @@ function _sortByDueDate(a, b) {
  * and task objects.
  * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
  * and task objects.
- * @return {int} Negative, zero or positive value to facilitate sorting.
+ * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function _sortByPriority(a, b) {
     const priority = x => x[1].get_priority();
+
+    if (priority(a) < 1 && priority(b) < 1)
+        return _sortByName(a, b);
 
     if (priority(b) < 1)
         return -1;
@@ -275,7 +281,7 @@ function _sortByPriority(a, b) {
  * @param {ByteArray} bytes - The bytes to write.
  * @param {number} priority - The io priority of the request.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<number>} Number of bytes written to the stream.
+ * @returns {Promise<number>} Number of bytes written to the stream.
  */
 function _writeBytesAsync(output, bytes, priority, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -294,7 +300,7 @@ function _writeBytesAsync(output, bytes, priority, cancellable = null) {
  *
  * @param {Gio.Subprocess} process - Process.
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
- * @return {Promise<boolean>} `true` if successful.
+ * @returns {Promise<boolean>} `true` if successful.
  */
 function _waitCheckAsync(process, cancellable = null) {
     return new Promise((resolve, reject) => {
@@ -322,11 +328,11 @@ function _waitCheckAsync(process, cancellable = null) {
  * continues to be invoked, will not be triggered. The function will be called
  * after it stops being called for `wait` milliseconds.
  *
- * @param {function} func - Function to debounce.
+ * @param {Function} func - Function to debounce.
  * @param {number} wait - Milliseconds to wait before calling the function.
  * @param {boolean} [immediate] - If true, trigger the function on the
  * leading edge, instead of the trailing.
- * @return {function} The `func` function with all its arguments.
+ * @returns {Function} The `func` function with all its arguments.
  */
 function _debounce(func, wait, immediate = false) {
     return (...args) => {
@@ -352,7 +358,7 @@ function _debounce(func, wait, immediate = false) {
  * Checks if running GNOME Shell version is at least `required`.
  *
  * @param {number} required - Lower bound for required GNOME Shell version.
- * @return {boolean} `true` if GNOME Shell version is at least `required`.
+ * @returns {boolean} `true` if GNOME Shell version is at least `required`.
  */
 function _shellVersionAtLeast(required) {
     return parseFloat(imports.misc.config.PACKAGE_VERSION) >= required;
