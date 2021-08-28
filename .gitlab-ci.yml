@@ -15,6 +15,7 @@ build:
       libxml2-utils npm zip gettext
     - pip3 install meson
     - npm install -g eslint
+    - npm install -g eslint-plugin-jsdoc
   script:
     - meson _build -Dper_user=true -Dbuild_zip=true
     - meson test -C _build
