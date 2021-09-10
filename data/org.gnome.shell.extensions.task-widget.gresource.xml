@@ -7,6 +7,8 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="settings-window-gtk3.ui">ui/settings-window-gtk3.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="settings-menu.ui">ui/settings-menu.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="settings-menu-gtk3.ui">ui/settings-menu-gtk3.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="donate-menu.ui">ui/donate-menu.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="donate-menu-gtk3.ui">ui/donate-menu-gtk3.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="task-list-row.ui">ui/task-list-row.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="task-list-row-gtk3.ui">ui/task-list-row-gtk3.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="task-list-properties-dialog.ui">ui/task-list-properties-dialog.ui</file>

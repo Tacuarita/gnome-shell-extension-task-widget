@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <menu id="donateMenu">
+    <section>
+      <item>
+        <attribute name='label'>Buy Me a Coffee</attribute>
+        <attribute name='action'>donate-menu.coffee</attribute>
+      </item>
+      <item>
+        <attribute name='label'>PayPal</attribute>
+        <attribute name='action'>donate-menu.paypal</attribute>
+      </item>
+      <item>
+        <attribute name='label'>Bitcoin</attribute>
+        <attribute name='action'>donate-menu.bitcoin</attribute>
+      </item>
+    </section>
+  </menu>
+  <template class="DonateMenuButton" parent="GtkMenuButton">
+    <property name="can-focus">1</property>
+    <property name="focus-on-click">0</property>
+    <property name="menu_model">donateMenu</property>
+    <child>
+      <object class="GtkImage" id="settingsMenuButtonImage">
+        <property name="icon-name">emote-love-symbolic</property>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="settingsMenu-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">Donate</property>
+        <property name="AtkObject::accessible-role" translatable="yes">menu</property>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -10,10 +10,10 @@ const Utils = Me.imports.utils;
 
 let ECal, EDataServer, ICalGLib;
 
-if (Utils._HAS_EDS)
+if (Utils.HAS_EDS_)
+    /* exported ICalGLib */
     ({ECal, EDataServer, ICalGLib} = imports.gi);
 
-// eslint-disable-next-line no-redeclare
 const _ = Gettext.gettext;
 
 // Enable the use of context in translation of plurals:
@@ -27,6 +27,11 @@ const _npgettext = (context, singular, plural, n) => {
 Gio.Resource.load(GLib.build_filenamev([Me.dir.get_path(),
     Me.metadata.gresource]))._register();
 
+/**
+ * Used for any one-time setup like translations.
+ *
+ * https://gjs.guide/extensions/overview/anatomy.html#prefs-js
+ */
 function init() {
     const dir = Me.metadata.locale === 'user-specific'
         ? Me.dir.get_child('locale').get_path() : Me.metadata.locale;
@@ -40,16 +45,16 @@ function init() {
  * dependencies) are installed and if there are no prior instances of the
  * settings window. Otherwise, an instance of `BeGoneWidget` is returned.
  *
- * @return {Gtk.ScrolledWindow} Scrolled window with either widget in it.
+ * @returns {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
 function buildPrefsWidget() {
     const scrolledWindow = new Gtk.ScrolledWindow();
 
     const widget = Gtk.Window.list_toplevels().filter(win => win._uuid &&
-        win._uuid === Me.uuid).length === 1 && Utils._HAS_EDS
+        win._uuid === Me.uuid).length === 1 && Utils.HAS_EDS_
         ? new TaskWidgetSettings() : new BeGoneWidget();
 
-    if (Utils._shellVersionAtLeast(40)) {
+    if (Utils.shellVersionAtLeast_(40)) {
         scrolledWindow.set_child(widget);
     } else {
         scrolledWindow.add(widget);
@@ -64,20 +69,16 @@ class BeGoneWidget extends Gtk.Box {
     /**
      * Shows a message dialog if required dependencies are not installed on the
      * system. Also, closes the settings window if there's another instance of
-     * it already opened.
-     *
-     * @todo Possibly https://gitlab.gnome.org/GNOME/gjs/-/issues/356
+     * it already opened (only X11 sessions are affected by this).
      */
     _init() {
         super._init();
 
-        this.connect('realize', () => {
-            const root = Utils._shellVersionAtLeast(40) ? this.get_root()
-                : this.get_toplevel();
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            (Utils.shellVersionAtLeast_(40) ? this.get_root()
+                : this.get_toplevel()).close();
 
-            root.close();
-
-            if (Utils._HAS_EDS)
+            if (Utils.HAS_EDS_)
                 return;
 
             let [dialog] = Gtk.Window.list_toplevels().filter(window =>
@@ -93,7 +94,6 @@ class BeGoneWidget extends Gtk.Box {
                     ' Server to use this extension.'),
             });
 
-            // dialog.set_transient_for(root);
             dialog.add_button(_('Help'), 0);
             dialog.set_name('task-widget-error');
             dialog.present();
@@ -106,6 +106,8 @@ class BeGoneWidget extends Gtk.Box {
 
                 widget.destroy();
             });
+
+            return GLib.SOURCE_REMOVE;
         });
     }
 });
@@ -113,7 +115,7 @@ class BeGoneWidget extends Gtk.Box {
 const TaskWidgetSettings = GObject.registerClass({
     GTypeName: 'TaskWidgetSettings',
     Template: `resource://${Me.metadata.epath}/settings-window${
-        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
+        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'mtlSwitch',
         'gptSwitch',
@@ -139,7 +141,7 @@ const TaskWidgetSettings = GObject.registerClass({
         const provider = new Gtk.CssProvider();
         provider.load_from_resource(`${Me.metadata.epath}/prefs.css`);
 
-        if (Utils._shellVersionAtLeast(40)) {
+        if (Utils.shellVersionAtLeast_(40)) {
             Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(),
                 provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         } else {
@@ -162,18 +164,18 @@ const TaskWidgetSettings = GObject.registerClass({
 
         this._hctComboBox.connect('changed', option => {
             switch (option.active) {
-                case Utils._HIDE_COMPLETED_TASKS['never']:
-                case Utils._HIDE_COMPLETED_TASKS['immediately']:
+                case Utils.HIDE_COMPLETED_TASKS_['never']:
+                case Utils.HIDE_COMPLETED_TASKS_['immediately']:
                     this._hctSettingsRevealer.set_reveal_child(false);
                     break;
-                case Utils._HIDE_COMPLETED_TASKS['after-time-period']:
+                case Utils.HIDE_COMPLETED_TASKS_['after-time-period']:
                     this._hctSettingsRevealer.set_reveal_child(true);
 
                     this._hctSettingsStack.set_visible_child_name(
                         'hctApotacPage');
 
                     break;
-                case Utils._HIDE_COMPLETED_TASKS['after-specified-time']:
+                case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']:
                     this._hctSettingsRevealer.set_reveal_child(true);
 
                     this._hctSettingsStack.set_visible_child_name(
@@ -220,13 +222,14 @@ const TaskWidgetSettings = GObject.registerClass({
         this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
             .bind(this));
 
-        if (!Utils._shellVersionAtLeast(40)) {
+        if (!Utils.shellVersionAtLeast_(40)) {
             this._taskListBox.set_header_func((row, before) => {
                 if (!before || row.get_header())
                     return;
 
-                row.set_header(new Gtk.Separator({orientation:
-                    Gtk.Orientation.HORIZONTAL}));
+                row.set_header(new Gtk.Separator({
+                    orientation: Gtk.Orientation.HORIZONTAL,
+                }));
             });
         }
 
@@ -242,13 +245,13 @@ const TaskWidgetSettings = GObject.registerClass({
      */
     _fillApotacComboBox(duration, active = null) {
         const time = new Map([
-            [Utils._TIME_UNITS['seconds'], _npgettext('after X second(s)',
+            [Utils.TIME_UNITS_['seconds'], _npgettext('after X second(s)',
                 'second', 'seconds', duration)],
-            [Utils._TIME_UNITS['minutes'], _npgettext('after X minute(s)',
+            [Utils.TIME_UNITS_['minutes'], _npgettext('after X minute(s)',
                 'minute', 'minutes', duration)],
-            [Utils._TIME_UNITS['hours'], _npgettext('after X hour(s)', 'hour',
+            [Utils.TIME_UNITS_['hours'], _npgettext('after X hour(s)', 'hour',
                 'hours', duration)],
-            [Utils._TIME_UNITS['days'], _npgettext('after X day(s)', 'day',
+            [Utils.TIME_UNITS_['days'], _npgettext('after X day(s)', 'day',
                 'days', duration)],
         ]);
 
@@ -271,17 +274,17 @@ const TaskWidgetSettings = GObject.registerClass({
         try {
             if (initRegistry) {
                 this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
-                this._sourceRegistry = await Utils._getSourceRegistry(null);
+                this._sourceRegistry = await Utils.getSourceRegistry_(null);
                 const customOrder = this._settings.get_strv('task-list-order');
 
-                const customSort = customOrder.length ? Utils._customSort.bind(
+                const customSort = customOrder.length ? Utils.customSort_.bind(
                     this, customOrder) : undefined;
 
                 const sources = this._sourceRegistry.list_sources(
                     this._sourceType).sort(customSort);
 
                 const clients = await Promise.all(sources.map(source =>
-                    Utils._getECalClient(source, ECal.ClientSourceType.TASKS,
+                    Utils.getECalClient_(source, ECal.ClientSourceType.TASKS,
                         1, null)));
 
                 this._clients = new Map(clients.map(client =>
@@ -298,6 +301,8 @@ const TaskWidgetSettings = GObject.registerClass({
                     const account = this._sourceRegistry.ref_source(
                         client.source.get_parent()).display_name;
 
+
+                    // TODO: Do we need this check?
                     // Keep an object of unique accounts:
                     if (!accounts.get(account)) {
                         accounts.set(account, this._sourceRegistry.ref_source(
@@ -311,7 +316,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 const taskListRow = new TaskListRow(client,
                     this._sourceRegistry, remote, this._settings, this._window);
 
-                if (Utils._shellVersionAtLeast(40)) {
+                if (Utils.shellVersionAtLeast_(40)) {
                     this._taskListBox.append(taskListRow);
                 } else {
                     this._taskListBox.add(taskListRow);
@@ -394,12 +399,12 @@ const TaskWidgetSettings = GObject.registerClass({
                 throw new Error(`${account} is not refreshable`);
 
             // Refresh list of account task lists:
-            if (!await Utils._refreshBackend(this._sourceRegistry,
+            if (!await Utils.refreshBackend_(this._sourceRegistry,
                 source.uid, null))
                 throw new Error(`${account} could not be refreshed`);
 
             this._backendRefreshButtonSpinner.set_tooltip_text(
-                _('Refresh in progress') + Utils._ELLIPSIS_CHAR);
+                _('Refresh in progress') + Utils.ELLIPSIS_CHAR_);
 
             this._backendRefreshButton.set_visible(false);
             this._backendRefreshButtonSpinner.set_visible(true);
@@ -429,7 +434,7 @@ const TaskWidgetSettings = GObject.registerClass({
 
             switch (event) {
                 case 'added': {
-                    const client = await Utils._getECalClient(source,
+                    const client = await Utils.getECalClient_(source,
                         ECal.ClientSourceType.TASKS, 1, null);
 
                     this._clients.set(source.uid, client);
@@ -438,7 +443,7 @@ const TaskWidgetSettings = GObject.registerClass({
                         this._sourceRegistry, client.check_refresh_supported(),
                         this._settings, this._window);
 
-                    if (Utils._shellVersionAtLeast(40)) {
+                    if (Utils.shellVersionAtLeast_(40)) {
                         this._taskListBox.append(taskListRow);
                     } else {
                         this._taskListBox.add(taskListRow);
@@ -487,7 +492,7 @@ const TaskWidgetSettings = GObject.registerClass({
      * two digits.
      *
      * @param {Gtk.SpinButton} button - Widget involved in the operation.
-     * @return {boolean} `true` to display the formatted value.
+     * @returns {boolean} `true` to display the formatted value.
      */
     _timeOutput(button) {
         button.set_text(button.adjustment.value.toString().padStart(2, 0));
@@ -515,10 +520,11 @@ const TaskWidgetSettings = GObject.registerClass({
      * @param {TaskWidgetSettings} widget - Widget that has been realized.
      */
     _onRealized(widget) {
-        if (Utils._shellVersionAtLeast(40)) {
+        if (Utils.shellVersionAtLeast_(40)) {
             this._window = widget.get_root();
             const headerBar = new Gtk.HeaderBar({show_title_buttons: true});
             headerBar.pack_end(new SettingsMenuButton(this._window));
+            headerBar.pack_end(new DonateMenuButton());
             this._window.set_titlebar(headerBar);
         } else {
             this._window = widget.get_toplevel();
@@ -532,7 +538,7 @@ const TaskWidgetSettings = GObject.registerClass({
 const TaskListRow = GObject.registerClass({
     GTypeName: 'TaskListRow',
     Template: `resource://${Me.metadata.epath}/task-list-row${
-        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
+        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'taskListSwitch',
         'taskListName',
@@ -610,7 +616,7 @@ const TaskListRow = GObject.registerClass({
             this, source));
 
         // Enable drag and drop operations:
-        if (Utils._shellVersionAtLeast(40)) {
+        if (Utils.shellVersionAtLeast_(40)) {
             const dragSource = new Gtk.DragSource({
                 actions: Gdk.DragAction.MOVE,
             });
@@ -699,7 +705,7 @@ const TaskListRow = GObject.registerClass({
                 }
             );
 
-            if (!await Utils._refreshClient(client, null)) {
+            if (!await Utils.refreshClient_(client, null)) {
                 throw new Error('Cannot refresh the task list: ' +
                     client.source.display_name);
             }
@@ -758,7 +764,7 @@ const TaskListRow = GObject.registerClass({
         const taskListBox = this.get_parent();
         taskListBox.dragRow = this;
 
-        if (Utils._shellVersionAtLeast(40)) {
+        if (Utils.shellVersionAtLeast_(40)) {
             widget.set_icon(Gtk.WidgetPaintable.new(this), taskListBox.dragX,
                 taskListBox.dragY);
         } else {
@@ -781,7 +787,7 @@ const TaskListRow = GObject.registerClass({
         this.get_style_context().remove_class('drag-icon');
         const taskListBox = this.get_parent();
 
-        if (Utils._shellVersionAtLeast(40)) {
+        if (Utils.shellVersionAtLeast_(40)) {
             taskListBox.drag_unhighlight_row();
         } else {
             const dropIndex = taskListBox.dropRow.get_index();
@@ -823,7 +829,7 @@ const TaskListRow = GObject.registerClass({
 const TaskListPropertiesDialog = GObject.registerClass({
     GTypeName: 'TaskListPropertiesDialog',
     Template: `resource://${Me.metadata.epath}/task-list-properties-dialog${
-        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
+        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'taskListPropertiesDialogComboBox',
         'taskListPropertiesDialogSpinButton',
@@ -848,15 +854,15 @@ const TaskListPropertiesDialog = GObject.registerClass({
         let interval = this._extension.interval_minutes;
 
         if (interval === 0) {
-            units = Utils._TIME_UNITS['minutes'];
-        } else if (interval % Utils._MINUTES_PER_DAY === 0) {
-            interval /= Utils._MINUTES_PER_DAY;
-            units = Utils._TIME_UNITS['days'];
-        } else if (interval % Utils._MINUTES_PER_HOUR === 0) {
-            interval /= Utils._MINUTES_PER_HOUR;
-            units = Utils._TIME_UNITS['hours'];
+            units = Utils.TIME_UNITS_['minutes'];
+        } else if (interval % Utils.MINUTES_PER_DAY_ === 0) {
+            interval /= Utils.MINUTES_PER_DAY_;
+            units = Utils.TIME_UNITS_['days'];
+        } else if (interval % Utils.MINUTES_PER_HOUR_ === 0) {
+            interval /= Utils.MINUTES_PER_HOUR_;
+            units = Utils.TIME_UNITS_['hours'];
         } else {
-            units = Utils._TIME_UNITS['minutes'];
+            units = Utils.TIME_UNITS_['minutes'];
         }
 
         this._fillTimeUnitComboBox(interval, `${units}`);
@@ -874,11 +880,11 @@ const TaskListPropertiesDialog = GObject.registerClass({
      */
     _fillTimeUnitComboBox(interval, active = null) {
         const time = new Map([
-            [Utils._TIME_UNITS['minutes'], _npgettext(
+            [Utils.TIME_UNITS_['minutes'], _npgettext(
                 'refresh every X minutes(s)', 'minute', 'minutes', interval)],
-            [Utils._TIME_UNITS['hours'], _npgettext(
+            [Utils.TIME_UNITS_['hours'], _npgettext(
                 'refresh every X hour(s)', 'hour', 'hours', interval)],
-            [Utils._TIME_UNITS['days'], _npgettext(
+            [Utils.TIME_UNITS_['days'], _npgettext(
                 'refresh every X day(s)', 'day', 'days', interval)],
         ]);
 
@@ -901,11 +907,11 @@ const TaskListPropertiesDialog = GObject.registerClass({
             let interval = this._taskListPropertiesDialogSpinButton.value;
 
             switch (parseInt(active)) {
-                case Utils._TIME_UNITS['hours']:
-                    interval *= Utils._MINUTES_PER_HOUR;
+                case Utils.TIME_UNITS_['hours']:
+                    interval *= Utils.MINUTES_PER_HOUR_;
                     break;
-                case Utils._TIME_UNITS['days']:
-                    interval *= Utils._MINUTES_PER_DAY;
+                case Utils.TIME_UNITS_['days']:
+                    interval *= Utils.MINUTES_PER_DAY_;
             }
 
             this._extension.set_interval_minutes(interval);
@@ -919,7 +925,7 @@ const TaskListPropertiesDialog = GObject.registerClass({
 const SettingsMenuButton = GObject.registerClass({
     GTypeName: 'SettingsMenuButton',
     Template: `resource://${Me.metadata.epath}/settings-menu${
-        Utils._shellVersionAtLeast(40) ? '' : '-gtk3'}.ui`,
+        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
     InternalChildren: [
         'aboutDialog',
         'supportLogDialog',
@@ -981,7 +987,7 @@ const SettingsMenuButton = GObject.registerClass({
         actionGroup.add_action(action);
         this.insert_action_group('settings-menu', actionGroup);
 
-        if (Utils._shellVersionAtLeast(40)) {
+        if (Utils.shellVersionAtLeast_(40)) {
             this._aboutDialog.connect('close-request', () => {
                 this._aboutDialog.hide();
             });
@@ -1046,6 +1052,29 @@ const SettingsMenuButton = GObject.registerClass({
                 shellTheme = 'Adwaita (default)';
             }
 
+            const monitors = Utils.shellVersionAtLeast_(40)
+                ? Gdk.Display.get_default().get_monitors()
+                : Gdk.Display.get_default();
+
+            const total = Utils.shellVersionAtLeast_(40)
+                ? monitors.get_n_items()
+                : monitors.get_n_monitors();
+
+            let display = '';
+
+            for (let i = 0; i < total; i++) {
+                const item = Utils.shellVersionAtLeast_(40)
+                    ? monitors.get_item(i)
+                    : monitors.get_monitor(i);
+
+                display += item.geometry.width * item.scale_factor + 'x' +
+                    item.geometry.height * item.scale_factor + '@' +
+                    item.scale_factor + 'x';
+
+                if (i !== total - 1)
+                    display += ', ';
+            }
+
             const logHeader = widgetName + ' (' + userType + ')\n' +
                 GLib.get_os_info('PRETTY_NAME') + '\n' +
                 'GNOME Shell ' + imports.misc.config.PACKAGE_VERSION + '\n' +
@@ -1055,9 +1084,10 @@ const SettingsMenuButton = GObject.registerClass({
                 'GDM Session Type: ' + GLib.getenv('GDMSESSION') + '\n' +
                 'Shell Theme: ' + shellTheme + '\n' +
                 'Icon Theme: ' + iconTheme + '\n' +
-                'GTK Theme: ' + gtkTheme + '\n\n';
+                'GTK Theme: ' + gtkTheme + '\n' +
+                'Display: ' + display + '\n\n';
 
-            await Utils._writeBytesAsync(logFile, new GLib.Bytes(logHeader), 0,
+            await Utils.writeBytesAsync_(logFile, new GLib.Bytes(logHeader), 0,
                 null);
 
             const process = new Gio.Subprocess({
@@ -1079,12 +1109,44 @@ const SettingsMenuButton = GObject.registerClass({
                 }
             );
 
-            await Utils._waitCheckAsync(process, null);
+            await Utils.waitCheckAsync_(process, null);
 
             Gio.AppInfo.launch_default_for_uri_async(file.get_uri(), null,
                 null, null);
         } catch (e) {
             logError(e);
         }
+    }
+});
+
+const DonateMenuButton = GObject.registerClass({
+    GTypeName: 'DonateMenuButton',
+    Template: `resource://${Me.metadata.epath}/donate-menu${
+        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
+    InternalChildren: [],
+}, class DonateMenuButton extends Gtk.MenuButton {
+    /**
+     * Initializes the donations menu.
+     */
+    _init() {
+        super._init();
+        const actionGroup = new Gio.SimpleActionGroup();
+        let action = new Gio.SimpleAction({name: 'coffee'});
+
+        action.connect('activate', () => {
+            Gio.AppInfo.launch_default_for_uri_async(Me.metadata.coffee,
+                null, null, null);
+        });
+
+        actionGroup.add_action(action);
+        action = new Gio.SimpleAction({name: 'paypal'});
+
+        action.connect('activate', () => {
+            Gio.AppInfo.launch_default_for_uri_async(Me.metadata.paypal,
+                null, null, null);
+        });
+
+        actionGroup.add_action(action);
+        this.insert_action_group('donate-menu', actionGroup);
     }
 });

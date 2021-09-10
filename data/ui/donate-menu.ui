@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <menu id="donateMenu">
+    <section>
+      <item>
+        <attribute name='label'>Buy Me a Coffee</attribute>
+        <attribute name='action'>donate-menu.coffee</attribute>
+      </item>
+      <item>
+        <attribute name='label'>PayPal</attribute>
+        <attribute name='action'>donate-menu.paypal</attribute>
+      </item>
+      <item>
+        <attribute name='label'>Bitcoin</attribute>
+        <attribute name='action'>donate-menu.bitcoin</attribute>
+      </item>
+    </section>
+  </menu>
+  <template class="DonateMenuButton" parent="GtkMenuButton">
+    <property name="focus-on-click">0</property>
+    <property name="icon-name">emote-love-symbolic</property>
+    <property name="menu-model">donateMenu</property>
+    <property name="accessible-role" translatable="yes">menu</property>
+    <accessibility>
+      <property name="label" translatable="yes">Donate</property>
+    </accessibility>
+  </template>
+</interface>
