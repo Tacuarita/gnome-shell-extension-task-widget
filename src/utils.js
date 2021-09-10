@@ -3,37 +3,38 @@
 const {Gio, GLib} = imports.gi;
 
 var _debounceTimeoutId;
-var _HAS_EDS = true;
-var _ELLIPSIS_CHAR = '\u2026';
-var _MINUTES_PER_HOUR = 60;
-var _MINUTES_PER_DAY = _MINUTES_PER_HOUR * 24;
-var _MSECS_IN_DAY = _MINUTES_PER_DAY * 60 * 1000;
+var HAS_EDS_ = true;
+var ELLIPSIS_CHAR_ = '\u2026';
+var MINUTES_PER_HOUR_ = 60;
+var MINUTES_PER_DAY_ = MINUTES_PER_HOUR_ * 24;
+var MSECS_IN_DAY_ = MINUTES_PER_DAY_ * 60 * 1000;
 
 let ECal, EDataServer, ICalGLib;
 
 try {
+    /* exported ICalGLib */
     ({ECal, EDataServer, ICalGLib} = imports.gi);
 } catch (e) {
-    _HAS_EDS = false;
+    HAS_EDS_ = false;
 }
 
-var _TIME_UNITS = {
+var TIME_UNITS_ = {
     'seconds': 0,
     'minutes': 1,
     'hours': 2,
     'days': 3,
 };
 
-var _HIDE_COMPLETED_TASKS = {
+var HIDE_COMPLETED_TASKS_ = {
     'never': 0,
     'immediately': 1,
     'after-time-period': 2,
     'after-specified-time': 3,
 };
 
-var _HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT = value => {
-    return [_HIDE_COMPLETED_TASKS['after-time-period'],
-        _HIDE_COMPLETED_TASKS['after-specified-time']].includes(value);
+var HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT_ = value => {
+    return [HIDE_COMPLETED_TASKS_['after-time-period'],
+        HIDE_COMPLETED_TASKS_['after-specified-time']].includes(value);
 };
 
 /**
@@ -42,7 +43,7 @@ var _HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT = value => {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<EDataServer.SourceRegistry>} Source registry.
  */
-function _getSourceRegistry(cancellable = null) {
+function getSourceRegistry_(cancellable = null) {
     return new Promise((resolve, reject) => {
         EDataServer.SourceRegistry.new(cancellable, (_registry, res) => {
             try {
@@ -65,7 +66,7 @@ function _getSourceRegistry(cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<ECal.Client>} `ECal.Client` of the source.
  */
-function _getECalClient(source, type, wait, cancellable = null) {
+function getECalClient_(source, type, wait, cancellable = null) {
     return new Promise((resolve, reject) => {
         ECal.Client.connect(source, type, wait, cancellable, (_source, res) => {
             try {
@@ -86,7 +87,7 @@ function _getECalClient(source, type, wait, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<ECal.ClientView>} `ECal.ClientView` of the source.
  */
-function _getECalClientView(client, query, cancellable = null) {
+function getECalClientView_(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.get_view(query, cancellable, (cl, res) => {
             try {
@@ -108,7 +109,7 @@ function _getECalClientView(client, query, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if no errors occurred.
  */
-function _refreshBackend(registry, uid, cancellable = null) {
+function refreshBackend_(registry, uid, cancellable = null) {
     return new Promise((resolve, reject) => {
         registry.refresh_backend(uid, cancellable, (reg, res) => {
             try {
@@ -128,7 +129,7 @@ function _refreshBackend(registry, uid, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if no errors occurred.
  */
-function _refreshClient(client, cancellable = null) {
+function refreshClient_(client, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.refresh(cancellable, (cl, res) => {
             try {
@@ -149,7 +150,7 @@ function _refreshClient(client, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<ECal.Component[]>} A list of objects.
  */
-function _getTasks(client, query, cancellable = null) {
+function getTasks_(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.get_object_list_as_comps(query, cancellable, (cl, res) => {
             try {
@@ -172,7 +173,7 @@ function _getTasks(client, query, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if no errors occurred.
  */
-function _modifyObjects(client, obj, mod, flag, cancellable = null) {
+function modifyObjects_(client, obj, mod, flag, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.modify_objects(obj, mod, flag, cancellable, (cl, res) => {
             try {
@@ -193,7 +194,7 @@ function _modifyObjects(client, obj, mod, flag, cancellable = null) {
  * @param {Object} b - Task list object.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function _customSort(order, a, b) {
+function customSort_(order, a, b) {
     if (order.indexOf(a.uid) === -1)
         return 1;
 
@@ -212,7 +213,7 @@ function _customSort(order, a, b) {
  * and task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function _sortByName(a, b) {
+function sortByName_(a, b) {
     const lc = x => x[1].get_summary().get_value().toLowerCase();
 
     if (a[1].get_summary() === null)
@@ -234,11 +235,11 @@ function _sortByName(a, b) {
  * and task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function _sortByDueDate(a, b) {
+function sortByDueDate_(a, b) {
     const time = x => x[1].get_due().get_value().as_timet();
 
     if (a[1].get_due() === null && b[1].get_due() === null)
-        return _sortByPriority(a, b);
+        return sortByPriority_(a, b);
 
     if (b[1].get_due() === null)
         return -1;
@@ -259,11 +260,11 @@ function _sortByDueDate(a, b) {
  * and task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function _sortByPriority(a, b) {
+function sortByPriority_(a, b) {
     const priority = x => x[1].get_priority();
 
     if (priority(a) < 1 && priority(b) < 1)
-        return _sortByName(a, b);
+        return sortByName_(a, b);
 
     if (priority(b) < 1)
         return -1;
@@ -283,7 +284,7 @@ function _sortByPriority(a, b) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<number>} Number of bytes written to the stream.
  */
-function _writeBytesAsync(output, bytes, priority, cancellable = null) {
+function writeBytesAsync_(output, bytes, priority, cancellable = null) {
     return new Promise((resolve, reject) => {
         output.write_bytes_async(bytes, priority, cancellable, (file, res) => {
             try {
@@ -302,7 +303,7 @@ function _writeBytesAsync(output, bytes, priority, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if successful.
  */
-function _waitCheckAsync(process, cancellable = null) {
+function waitCheckAsync_(process, cancellable = null) {
     return new Promise((resolve, reject) => {
         process.wait_check_async(cancellable, (proc, result) => {
             try {
@@ -334,7 +335,7 @@ function _waitCheckAsync(process, cancellable = null) {
  * leading edge, instead of the trailing.
  * @returns {Function} The `func` function with all its arguments.
  */
-function _debounce(func, wait, immediate = false) {
+function debounce_(func, wait, immediate = false) {
     return (...args) => {
         const later = () => {
             _debounceTimeoutId = 0;
@@ -360,6 +361,6 @@ function _debounce(func, wait, immediate = false) {
  * @param {number} required - Lower bound for required GNOME Shell version.
  * @returns {boolean} `true` if GNOME Shell version is at least `required`.
  */
-function _shellVersionAtLeast(required) {
+function shellVersionAtLeast_(required) {
     return parseFloat(imports.misc.config.PACKAGE_VERSION) >= required;
 }

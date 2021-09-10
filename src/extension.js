@@ -13,7 +13,7 @@ const Utils = Me.imports.utils;
 
 let ECal, EDataServer, ICalGLib;
 
-if (Utils._HAS_EDS)
+if (Utils.HAS_EDS_)
     ({ECal, EDataServer, ICalGLib} = imports.gi);
 
 const _ = Gettext.domain(Me.metadata.base).gettext;
@@ -90,7 +90,7 @@ class TaskWidget extends St.BoxLayout {
 
         this._statusLabel = new St.Label({
             // Translators: without the ellipsis as it's appended automatically.
-            text: _('Loading') + Utils._ELLIPSIS_CHAR,
+            text: _('Loading') + Utils.ELLIPSIS_CHAR_,
             reactive: true,
         });
 
@@ -117,7 +117,7 @@ class TaskWidget extends St.BoxLayout {
 
             this.add_child(this._contentBox);
 
-            if (!Utils._HAS_EDS) {
+            if (!Utils.HAS_EDS_) {
                 this._showPlaceholderWithStatus('missing-dependencies');
                 return;
             }
@@ -139,7 +139,7 @@ class TaskWidget extends St.BoxLayout {
             });
 
             this._scrollView.vscroll.adjustment.connect('notify::value',
-                Utils._debounce(this._onTaskListScrolled.bind(this),
+                Utils.debounce_(this._onTaskListScrolled.bind(this),
                     100, false));
 
             this._taskBox = new St.BoxLayout({
@@ -243,7 +243,7 @@ class TaskWidget extends St.BoxLayout {
 
             for (const [index, taskList] of this._taskLists.entries()) {
                 const name = taskList.name.length > 25
-                    ? taskList.name.substring(0, 22) + Utils._ELLIPSIS_CHAR
+                    ? taskList.name.substring(0, 22) + Utils.ELLIPSIS_CHAR_
                     : taskList.name;
 
                 const item = new PopupMenu.PopupMenuItem(name);
@@ -320,7 +320,7 @@ class TaskWidget extends St.BoxLayout {
     async _initSourceRegistry() {
         try {
             this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
-            this._sourceRegistry = await Utils._getSourceRegistry();
+            this._sourceRegistry = await Utils.getSourceRegistry_();
 
             this._taskListAddedId = this._sourceRegistry.connect(
                 'source-added', (registry, source) => {
@@ -361,7 +361,7 @@ class TaskWidget extends St.BoxLayout {
             const disabled = this._settings.get_strv('disabled-task-lists');
             const sources = this._sourceRegistry.list_sources(this._sourceType);
 
-            const customSort = customOrder.length ? Utils._customSort.bind(
+            const customSort = customOrder.length ? Utils.customSort_.bind(
                 this, customOrder) : undefined;
 
             await Promise.all(sources.filter(source => disabled.indexOf(
@@ -393,14 +393,14 @@ class TaskWidget extends St.BoxLayout {
             if (!this._clientViews.get(source.uid)) {
                 // Since `source` is only a descriptor of a data source, we
                 // need an `ECal.Client` - interface to access the data itself:
-                client = await Utils._getECalClient(source,
+                client = await Utils.getECalClient_(source,
                     ECal.ClientSourceType.TASKS, 1);
 
                 // `ECal.ClientView` allows to receive change notifications on
                 // task lists, specifically task additions, removals and
                 // changes. Tasks can be matched using a specified query - we
                 // use `#t` here which matches all tasks:
-                const view = await Utils._getECalClientView(client, '#t');
+                const view = await Utils.getECalClientView_(client, '#t');
 
                 view._taskAddedId = view.connect('objects-added',
                     this._onTaskEvent.bind(this));
@@ -546,8 +546,8 @@ class TaskWidget extends St.BoxLayout {
         this._orphanTasks = new Set();
 
         for (const [taskListUid, task] of tasks.sort((a, b) =>
-            Utils._sortByDueDate(a, b) || Utils._sortByPriority(a, b) ||
-            Utils._sortByName(a, b))) {
+            Utils.sortByDueDate_(a, b) || Utils.sortByPriority_(a, b) ||
+            Utils.sortByName_(a, b))) {
             if (!task.get_summary())
                 continue;
 
@@ -812,7 +812,7 @@ class TaskWidget extends St.BoxLayout {
 
                     label.text = `${due.toLocaleFormat(format)} (${diff > 0
                         ? '+' : '-'}${Math.floor(Math.abs(diff) /
-                            Utils._MSECS_IN_DAY)})`;
+                            Utils.MSECS_IN_DAY_)})`;
                 }
 
                 return label;
@@ -990,8 +990,8 @@ class TaskWidget extends St.BoxLayout {
         try {
             // (User-defined) Hide completed tasks:
             const tasks = this._settings.get_int('hide-completed-tasks')
-                ? await Utils._getTasks(client, this._hideCompletedTasks())
-                : await Utils._getTasks(client, '#t');
+                ? await Utils.getTasks_(client, this._hideCompletedTasks())
+                : await Utils.getTasks_(client, '#t');
 
             // (User-defined) Hide empty and completed task lists:
             if (this._settings.get_boolean('hide-empty-completed-task-lists') &&
@@ -1023,22 +1023,22 @@ class TaskWidget extends St.BoxLayout {
             ICalGLib.Timezone.get_utc_timezone());
 
         switch (this._settings.get_int('hide-completed-tasks')) {
-            case Utils._HIDE_COMPLETED_TASKS['immediately']:
+            case Utils.HIDE_COMPLETED_TASKS_['immediately']:
                 return '(not is-completed?)';
-            case Utils._HIDE_COMPLETED_TASKS['after-time-period']: {
+            case Utils.HIDE_COMPLETED_TASKS_['after-time-period']: {
                 const adjust = this._settings.get_int('hct-apotac-value');
 
                 switch (this._settings.get_int('hct-apotac-unit')) {
-                    case Utils._TIME_UNITS['seconds']:
+                    case Utils.TIME_UNITS_['seconds']:
                         current.adjust(0, 0, 0, -adjust);
                         break;
-                    case Utils._TIME_UNITS['minutes']:
+                    case Utils.TIME_UNITS_['minutes']:
                         current.adjust(0, 0, -adjust, 0);
                         break;
-                    case Utils._TIME_UNITS['hours']:
+                    case Utils.TIME_UNITS_['hours']:
                         current.adjust(0, -adjust, 0, 0);
                         break;
-                    case Utils._TIME_UNITS['days']:
+                    case Utils.TIME_UNITS_['days']:
                         current.adjust(-adjust, 0, 0, 0);
                 }
 
@@ -1046,7 +1046,7 @@ class TaskWidget extends St.BoxLayout {
                     ECal.isodate_from_time_t(current.as_timet())}")))`;
             }
 
-            case Utils._HIDE_COMPLETED_TASKS['after-specified-time']: {
+            case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']: {
                 const start = ICalGLib.Time.new_current_with_zone(
                     ECal.util_get_system_timezone());
 
@@ -1091,7 +1091,7 @@ class TaskWidget extends St.BoxLayout {
                 if (cb.checked) {
                     label.set_opacity(100);
 
-                    if (Utils._shellVersionAtLeast(3.38)) {
+                    if (Utils.shellVersionAtLeast_(3.38)) {
                         ECal.util_mark_task_complete_sync(
                             task.get_icalcomponent(), -1, client, null);
                     } else {
@@ -1142,7 +1142,7 @@ class TaskWidget extends St.BoxLayout {
             if (client.check_refresh_supported())
                 objects.sort(task => task._subtasks ? -1 : 1);
 
-            await Utils._modifyObjects(client, objects, ECal.ObjModType.THIS,
+            await Utils.modifyObjects_(client, objects, ECal.ObjModType.THIS,
                 ECal.OperationFlags.NONE, null);
         } catch (e) {
             logError(e);
@@ -1177,7 +1177,7 @@ class TaskWidget extends St.BoxLayout {
                 this._setHeader();
 
                 if (!await this._listTasks(taskList.uid, merge)) {
-                    Utils._debounce(this._showActiveTaskList.bind(this),
+                    Utils.debounce_(this._showActiveTaskList.bind(this),
                         100, false)(this._activeTaskList);
                 }
             } else if (this._contentBox.visible) {
@@ -1419,7 +1419,7 @@ class TaskWidget extends St.BoxLayout {
             this._showActiveTaskList(this._activeTaskList);
             const hct = this._settings.get_int('hide-completed-tasks');
 
-            if (Utils._HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT(hct)) {
+            if (Utils.HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT_(hct)) {
                 this._refreshTimeoutId = GLib.timeout_add_seconds(
                     GLib.PRIORITY_DEFAULT, 2, () => {
                         if (!this._idleAddId)
