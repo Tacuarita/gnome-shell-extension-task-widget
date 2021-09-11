@@ -12,8 +12,10 @@ build:
     - apt-get -qq update
     - > 
       apt-get -qq install -y python3-pip ninja-build libglib2.0-dev
-      libxml2-utils nodejs npm zip gettext
+      libxml2-utils npm zip gettext
     - pip3 install meson
+    - npm install -g n
+    - n latest
     - npm install -g eslint
     - npm install -g eslint-plugin-jsdoc
   script:
