@@ -1,5 +1,5 @@
 default:
-  image: ubuntu:latest
+  image: ubuntu:20.10
 
 stages:
   - build
