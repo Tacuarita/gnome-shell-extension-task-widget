@@ -1132,7 +1132,7 @@ const DonateMenuButton = GObject.registerClass({
     InternalChildren: [
         'donateCrypto',
         'donateOptionsComboBox',
-        'donationOptionsStack',
+        'donateOptionsStack',
     ],
 }, class DonateMenuButton extends Gtk.MenuButton {
     /**
@@ -1181,18 +1181,18 @@ const DonateMenuButton = GObject.registerClass({
         this._donateOptionsComboBox.connect('changed', option => {
             switch (option.active_id) {
                 case 'bitcoin':
-                    this._donationOptionsStack.set_visible_child_name(
-                        'donationsBitcoinPage');
+                    this._donateOptionsStack.set_visible_child_name(
+                        'donateBitcoinPage');
 
                     break;
                 case 'bitcoin-cash':
-                    this._donationOptionsStack.set_visible_child_name(
-                        'donationsBitcoinCashPage');
+                    this._donateOptionsStack.set_visible_child_name(
+                        'donateBitcoinCashPage');
 
                     break;
                 case 'ethereum':
-                    this._donationOptionsStack.set_visible_child_name(
-                        'donationsEthereumPage');
+                    this._donateOptionsStack.set_visible_child_name(
+                        'donateEthereumPage');
             }
         });
     }

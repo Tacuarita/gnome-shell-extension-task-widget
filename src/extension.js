@@ -11,15 +11,9 @@ const DateMenu = Main.panel.statusArea.dateMenu.menu;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-let ECal, EDataServer, ICalGLib;
-
-if (Utils.HAS_EDS_)
-    ({ECal, EDataServer, ICalGLib} = imports.gi);
-
 const _ = Gettext.domain(Me.metadata.base).gettext;
-
-const NC_ = (context, str) => Gettext.domain(Me.metadata.base)
-    .pgettext(context, str);
+const NC_ = (c, s) => Gettext.domain(Me.metadata.base).pgettext(c, s);
+const {ECal, EDataServer, ICalGLib} = Utils.HAS_EDS_ ? imports.gi : {undefined};
 
 const TaskWidget = GObject.registerClass(
 class TaskWidget extends St.BoxLayout {

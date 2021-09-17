@@ -12,7 +12,7 @@
         <attribute name='action'>donate-menu.paypal</attribute>
       </item>
       <item>
-        <attribute name='label'>Crypto</attribute>
+        <attribute name='label' translatable="yes">Cryptocurrencies</attribute>
         <attribute name='action'>donate-menu.crypto</attribute>
       </item>
     </section>
@@ -50,14 +50,14 @@
           </object>
         </child>
         <child>
-          <object class="GtkRevealer" id="donationOptionsRevealer">
+          <object class="GtkRevealer">
             <property name="reveal-child">1</property>
             <property name="child">
-              <object class="GtkStack" id="donationOptionsStack">
+              <object class="GtkStack" id="donateOptionsStack">
                 <property name="transition-type">crossfade</property>
                 <child>
                   <object class="GtkStackPage">
-                    <property name="name">donationsBitcoinPage</property>
+                    <property name="name">donateBitcoinPage</property>
                     <property name="child">
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
@@ -81,7 +81,7 @@
                 </child>
                 <child>
                   <object class="GtkStackPage">
-                    <property name="name">donationsBitcoinCashPage</property>
+                    <property name="name">donateBitcoinCashPage</property>
                     <property name="child">
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
@@ -105,7 +105,7 @@
                 </child>
                 <child>
                   <object class="GtkStackPage">
-                    <property name="name">donationsEthereumPage</property>
+                    <property name="name">donateEthereumPage</property>
                     <property name="child">
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>

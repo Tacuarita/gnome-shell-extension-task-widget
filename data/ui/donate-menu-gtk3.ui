@@ -12,7 +12,7 @@
         <attribute name='action'>donate-menu.paypal</attribute>
       </item>
       <item>
-        <attribute name='label'>Crypto</attribute>
+        <attribute name='label'>Cryptocurrencies</attribute>
         <attribute name='action'>donate-menu.crypto</attribute>
       </item>
     </section>
@@ -56,13 +56,13 @@
           </object>
         </child>
         <child>
-          <object class="GtkRevealer" id="donationOptionsRevealer">
+          <object class="GtkRevealer">
             <property name="reveal-child">1</property>
             <child>
-              <object class="GtkStack" id="donationOptionsStack">
+              <object class="GtkStack" id="donateOptionsStack">
                 <property name="transition-type">crossfade</property>
                 <child>
-                  <object class="GtkBox" id="donationsBitcoinPage">
+                  <object class="GtkBox">
                     <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
@@ -80,11 +80,11 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="name">donationsBitcoinPage</property>
+                    <property name="name">donateBitcoinPage</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="donationsBitcoinCashPage">
+                  <object class="GtkBox">
                     <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
@@ -102,11 +102,11 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="name">donationsBitcoinCashPage</property>
+                    <property name="name">donateBitcoinCashPage</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="donationsEthereumPage">
+                  <object class="GtkBox">
                     <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
@@ -124,7 +124,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="name">donationsEthereumPage</property>
+                    <property name="name">donateEthereumPage</property>
                   </packing>
                 </child>
               </object>
