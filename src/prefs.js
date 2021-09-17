@@ -8,12 +8,8 @@ const Gettext = imports.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-let ECal, EDataServer, ICalGLib;
-
-if (Utils.HAS_EDS_)
-    /* exported ICalGLib */
-    ({ECal, EDataServer, ICalGLib} = imports.gi);
-
+/* exported ICalGLib */
+const {ECal, EDataServer, ICalGLib} = Utils.HAS_EDS_ ? imports.gi : {undefined};
 const _ = Gettext.gettext;
 
 // Enable the use of context in translation of plurals:
@@ -32,7 +28,7 @@ Gio.Resource.load(GLib.build_filenamev([Me.dir.get_path(),
  *
  * https://gjs.guide/extensions/overview/anatomy.html#prefs-js
  */
-function init() {
+function init() {   
     const dir = Me.metadata.locale === 'user-specific'
         ? Me.dir.get_child('locale').get_path() : Me.metadata.locale;
 
@@ -47,7 +43,7 @@ function init() {
  *
  * @returns {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
-function buildPrefsWidget() {
+function buildPrefsWidget() {    
     const scrolledWindow = new Gtk.ScrolledWindow();
 
     const widget = Gtk.Window.list_toplevels().filter(win => win._uuid &&
@@ -458,7 +454,11 @@ const TaskWidgetSettings = GObject.registerClass({
 
                     while (row) {
                         if (row._uid === source.uid) {
-                            row.destroy();
+                            if (Utils.shellVersionAtLeast_(40))
+                                this._taskListBox.remove(row);
+                            else
+                                row.destroy();
+
                             break;
                         }
 
@@ -520,16 +520,22 @@ const TaskWidgetSettings = GObject.registerClass({
      * @param {TaskWidgetSettings} widget - Widget that has been realized.
      */
     _onRealized(widget) {
+        // TODO: can't we avoid passing this._window as argument?
         if (Utils.shellVersionAtLeast_(40)) {
             this._window = widget.get_root();
             const headerBar = new Gtk.HeaderBar({show_title_buttons: true});
             headerBar.pack_end(new SettingsMenuButton(this._window));
-            headerBar.pack_end(new DonateMenuButton());
+            headerBar.pack_end(new DonateMenuButton(this._window));
             this._window.set_titlebar(headerBar);
         } else {
             this._window = widget.get_toplevel();
+
             this._window._headerBar.pack_end(
                 new SettingsMenuButton(this._window));
+
+            this._window._headerBar.pack_end(
+                new DonateMenuButton(this._window));
+
             this._window._headerBar.show_all();
         }
     }
@@ -1123,12 +1129,16 @@ const DonateMenuButton = GObject.registerClass({
     GTypeName: 'DonateMenuButton',
     Template: `resource://${Me.metadata.epath}/donate-menu${
         Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
-    InternalChildren: [],
+    InternalChildren: [
+        'donateCrypto',
+        'donateOptionsComboBox',
+        'donationOptionsStack',
+    ],
 }, class DonateMenuButton extends Gtk.MenuButton {
     /**
      * Initializes the donations menu.
      */
-    _init() {
+    _init(parent) {
         super._init();
         const actionGroup = new Gio.SimpleActionGroup();
         let action = new Gio.SimpleAction({name: 'coffee'});
@@ -1147,6 +1157,44 @@ const DonateMenuButton = GObject.registerClass({
         });
 
         actionGroup.add_action(action);
+        action = new Gio.SimpleAction({name: 'crypto'});
+
+        action.connect('activate', () => {
+            this._donateCrypto.set_transient_for(parent);
+
+            if (Utils.shellVersionAtLeast_(40))
+                this._donateCrypto.show();
+            else
+                this._donateCrypto.show_all();
+        });
+
+        actionGroup.add_action(action);
         this.insert_action_group('donate-menu', actionGroup);
+
+        if (!Utils.shellVersionAtLeast_(40)) {
+            this._donateCrypto.connect('delete-event', () => {
+                this._donateCrypto.hide();
+                return true;
+            });
+        }
+
+        this._donateOptionsComboBox.connect('changed', option => {
+            switch (option.active_id) {
+                case 'bitcoin':
+                    this._donationOptionsStack.set_visible_child_name(
+                        'donationsBitcoinPage');
+
+                    break;
+                case 'bitcoin-cash':
+                    this._donationOptionsStack.set_visible_child_name(
+                        'donationsBitcoinCashPage');
+
+                    break;
+                case 'ethereum':
+                    this._donationOptionsStack.set_visible_child_name(
+                        'donationsEthereumPage');
+            }
+        });
     }
 });
+

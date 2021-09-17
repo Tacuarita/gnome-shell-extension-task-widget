@@ -15,5 +15,8 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="task-list-properties-dialog-gtk3.ui">ui/task-list-properties-dialog-gtk3.ui</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="task-widget-logo.svg">images/task-widget-logo.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="donate-bitcoin.svg">images/donate-bitcoin.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="donate-bitcoin-cash.svg">images/donate-bitcoin-cash.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="donate-ethereum.svg">images/donate-ethereum.svg</file>
   </gresource>
 </gresources>
