@@ -1174,8 +1174,8 @@ class TaskWidget extends St.BoxLayout {
                     : taskList.name);
 
                 this._settings.set_string('last-active', merge ? 'merge'
-                    : taskList.uid);    
-                
+                    : taskList.uid);
+
                 this._setHeader();
 
                 if (!await this._listTasks(taskList.uid, merge)) {
@@ -1401,8 +1401,6 @@ class TaskWidget extends St.BoxLayout {
 
         if (this._settings.get_strv('task-list-order').length)
             this._settings.set_strv('task-list-order', uids);
-
-        Gio.Settings.sync();
     }
 
     /**
@@ -1449,13 +1447,15 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * Updates the widget when extension settings change.
-     * 
+     *
      * @param {Gio.Settings} _api - API for storing and retrieving settings.
      * @param {string} key - The name of the settings key that changed.
      */
     async _onSettingsChanged(_api, key) {
         try {
-            if (key === 'last-active')
+            if (['last-active',
+                'task-list-order',
+                'disabled-task-lists'].includes(key))
                 return;
 
             const active = this._taskLists[this._activeTaskList]
