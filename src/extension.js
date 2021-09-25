@@ -1173,10 +1173,8 @@ class TaskWidget extends St.BoxLayout {
                 this._taskListName.set_text(merge ? _('All Tasks')
                     : taskList.name);
 
-                if (merge)
-                    this._settings.set_string('last-active', 'merge');
-                else
-                    this._settings.set_string('last-active', taskList.uid);
+                this._settings.set_string('last-active', merge ? 'merge'
+                    : taskList.uid);    
                 
                 this._setHeader();
 
