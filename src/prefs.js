@@ -28,7 +28,7 @@ Gio.Resource.load(GLib.build_filenamev([Me.dir.get_path(),
  *
  * https://gjs.guide/extensions/overview/anatomy.html#prefs-js
  */
-function init() {   
+function init() {
     const dir = Me.metadata.locale === 'user-specific'
         ? Me.dir.get_child('locale').get_path() : Me.metadata.locale;
 
@@ -43,7 +43,7 @@ function init() {
  *
  * @returns {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
-function buildPrefsWidget() {    
+function buildPrefsWidget() {
     const scrolledWindow = new Gtk.ScrolledWindow();
 
     const widget = Gtk.Window.list_toplevels().filter(win => win._uuid &&
@@ -1153,6 +1153,14 @@ const DonateMenuButton = GObject.registerClass({
 
         action.connect('activate', () => {
             Gio.AppInfo.launch_default_for_uri_async(Me.metadata.paypal,
+                null, null, null);
+        });
+
+        actionGroup.add_action(action);
+        action = new Gio.SimpleAction({name: 'liberapay'});
+
+        action.connect('activate', () => {
+            Gio.AppInfo.launch_default_for_uri_async(Me.metadata.liberapay,
                 null, null, null);
         });
 
