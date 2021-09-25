@@ -161,7 +161,15 @@ class TaskWidget extends St.BoxLayout {
                 return;
             }
 
-            this._showActiveTaskList(0);
+            const last = this._settings.get_string('last-active');
+            const index = this._taskLists.map(i => i.uid).indexOf(last);
+
+            if (last === 'merge') {
+                this._mergeTaskLists = true;
+                this._showActiveTaskList(0);
+            } else {
+                this._showActiveTaskList(index !== -1 ? index : 0);
+            }
         } catch (e) {
             logError(e);
         }
@@ -1168,6 +1176,11 @@ class TaskWidget extends St.BoxLayout {
                 this._taskListName.set_text(merge ? _('All Tasks')
                     : taskList.name);
 
+                if (merge)
+                    this._settings.set_string('last-active', 'merge');
+                else
+                    this._settings.set_string('last-active', taskList.uid);
+                
                 this._setHeader();
 
                 if (!await this._listTasks(taskList.uid, merge)) {
@@ -1441,9 +1454,15 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * Updates the widget when extension settings change.
+     * 
+     * @param {Gio.Settings} _api - API for storing and retrieving settings.
+     * @param {string} key - The name of the settings key that changed.
      */
-    async _onSettingsChanged() {
+    async _onSettingsChanged(_api, key) {
         try {
+            if (key === 'last-active')
+                return;
+
             const active = this._taskLists[this._activeTaskList]
                 ? this._taskLists[this._activeTaskList].uid : null;
 
