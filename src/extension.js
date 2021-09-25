@@ -163,13 +163,10 @@ class TaskWidget extends St.BoxLayout {
 
             const last = this._settings.get_string('last-active');
             const index = this._taskLists.map(i => i.uid).indexOf(last);
+            this._mergeTaskLists = last === 'merge';
 
-            if (last === 'merge') {
-                this._mergeTaskLists = true;
-                this._showActiveTaskList(0);
-            } else {
-                this._showActiveTaskList(index !== -1 ? index : 0);
-            }
+            this._showActiveTaskList(index !== -1 && !this._mergeTaskLists
+                ? index : 0);
         } catch (e) {
             logError(e);
         }
