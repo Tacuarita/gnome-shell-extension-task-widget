@@ -23,7 +23,7 @@
     <property name="margin-bottom">30</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel" id="settingsLabel">
+      <object class="GtkLabel">
         <property name="halign">start</property>
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Settings</property>
@@ -33,24 +33,24 @@
       </object>
     </child>
     <child>
-      <object class="GtkListBox" id="settingsListBox">
+      <object class="GtkListBox">
         <property name="selection-mode">none</property>
         <child>
-          <object class="GtkListBoxRow" id="mergeTaskListsRow">
+          <object class="GtkListBoxRow">
             <property name="can-focus">1</property>
             <property name="activatable">0</property>
             <child>
-              <object class="GtkBox" id="mtlBox">
+              <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkGrid" id="mtlGrid">
+                  <object class="GtkGrid">
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <property name="margin-top">10</property>
                     <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="mtlLabel">
+                      <object class="GtkLabel">
                         <property name="halign">start</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Merge task lists</property>
@@ -72,21 +72,21 @@
           </object>
         </child>
         <child>
-          <object class="GtkListBoxRow" id="groupPastTasksRow">
+          <object class="GtkListBoxRow">
             <property name="can-focus">1</property>
             <property name="activatable">0</property>
             <child>
-              <object class="GtkBox" id="gptBox">
+              <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkGrid" id="gptGrid">
+                  <object class="GtkGrid">
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <property name="margin-top">10</property>
                     <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="gptLabel">
+                      <object class="GtkLabel">
                         <property name="halign">start</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Group past tasks</property>
@@ -108,21 +108,21 @@
           </object>
         </child>
         <child>
-          <object class="GtkListBoxRow" id="hideHeaderForSingularTaskListsRow">
+          <object class="GtkListBoxRow">
             <property name="can-focus">1</property>
             <property name="activatable">0</property>
             <child>
-              <object class="GtkBox" id="hhfstlBox">
+              <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkGrid" id="hhfstlGrid">
+                  <object class="GtkGrid">
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <property name="margin-top">10</property>
                     <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="hhfstlLabel">
+                      <object class="GtkLabel">
                         <property name="halign">start</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide header for singular tasks lists</property>
@@ -136,7 +136,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="hhfstlSeparator">
+                  <object class="GtkSeparator">
                   </object>
                 </child>
               </object>
@@ -144,21 +144,21 @@
           </object>
         </child>
         <child>
-          <object class="GtkListBoxRow" id="hideEmptyAndCompletedTaskListsRow">
+          <object class="GtkListBoxRow">
             <property name="can-focus">1</property>
             <property name="activatable">0</property>
             <child>
-              <object class="GtkBox" id="heactlBox">
+              <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkGrid" id="heactlGrid">
+                  <object class="GtkGrid">
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <property name="margin-top">10</property>
                     <property name="margin-bottom">10</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="heactlLabel">
+                      <object class="GtkLabel">
                         <property name="halign">start</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide empty and completed task lists</property>
@@ -172,7 +172,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="heactlSeparator">
+                  <object class="GtkSeparator">
                   </object>
                 </child>
               </object>
@@ -180,21 +180,21 @@
           </object>
         </child>
         <child>
-          <object class="GtkListBoxRow" id="hideCompletedTasksRow">
+          <object class="GtkListBoxRow">
             <property name="can-focus">1</property>
             <property name="activatable">0</property>
             <child>
-              <object class="GtkBox" id="hctBox">
+              <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkGrid" id="hctOptions">
+                  <object class="GtkGrid">
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <property name="margin-top">5</property>
                     <property name="margin-bottom">5</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="hctLabel">
+                      <object class="GtkLabel">
                         <property name="halign">start</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide completed tasks</property>
@@ -226,7 +226,7 @@
                             <property name="margin-bottom">10</property>
                             <property name="column-spacing">12</property>
                             <child>
-                              <object class="GtkLabel" id="hctApotacPageLabel">
+                              <object class="GtkLabel">
                                 <property name="label" translatable="yes" context="e.g. After 5 minutes">After</property>
                               </object>
                             </child>
@@ -255,7 +255,7 @@
                             <property name="margin-bottom">10</property>
                             <property name="column-spacing">12</property>
                             <child>
-                              <object class="GtkLabel" id="hctAstodPageLabel">
+                              <object class="GtkLabel">
                                 <property name="label" translatable="yes" context="e.g. After 9:00">After</property>
                               </object>
                             </child>
@@ -267,7 +267,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="hctAstodPageColon">
+                              <object class="GtkLabel">
                                 <property name="label">:</property>
                               </object>
                             </child>
@@ -297,15 +297,15 @@
       </object>
     </child>
     <child>
-      <object class="GtkGrid" id="taskListGrid">
+      <object class="GtkGrid">
         <property name="margin-top">18</property>
         <property name="column-spacing">12</property>
         <child>
-          <object class="GtkBox" id="taskListTextBox">
+          <object class="GtkBox">
             <property name="hexpand">1</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel" id="taskListLabel">
+              <object class="GtkLabel">
                 <property name="halign">start</property>
                 <property name="margin-bottom">6</property>
                 <property name="label" translatable="yes">Task Lists</property>
@@ -315,7 +315,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="taskListDescription">
+              <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <property name="margin-bottom">12</property>
                 <property name="label" translatable="yes">You can drag and drop rows to change the order of task lists in the widget.</property>
@@ -329,7 +329,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSeparator" id="taskListDescriptionSeparator">
+          <object class="GtkSeparator">
             <property name="margin-bottom">12</property>
             <property name="orientation">vertical</property>
           </object>
@@ -342,12 +342,12 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkImage" id="backendRefreshButtonImage">
+              <object class="GtkImage">
                 <property name="icon-name">view-refresh-symbolic</property>
               </object>
             </child>
             <child internal-child="accessible">
-              <object class="AtkObject" id="backendRefreshButton-atkobject">
+              <object class="AtkObject">
                 <property name="AtkObject::accessible-name" translatable="yes">Refresh the list of account task lists</property>
                 <property name="AtkObject::accessible-role" translatable="yes">menu</property>
               </object>

@@ -13,18 +13,18 @@
   </menu>
   <template class="TaskListRow" parent="GtkListBoxRow">
     <child>
-      <object class="GtkBox" id="taskListBox">
+      <object class="GtkBox">
         <child>
           <object class="GtkEventBox" id="dragBox">
             <child>
-              <object class="GtkGrid" id="taskListRowGrid">
+              <object class="GtkGrid">
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
                 <property name="margin-top">5</property>
                 <property name="margin-bottom">5</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkImage" id="dragHandle">
+                  <object class="GtkImage">
                     <property name="icon-name">list-drag-handle-symbolic</property>
                   </object>
                 </child>
@@ -55,12 +55,12 @@
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="GtkImage" id="taskListOptionsImage">
+                      <object class="GtkImage">
                         <property name="icon-name">view-more-symbolic</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="taskListOptionsButton-atkobject">
+                      <object class="AtkObject">
                         <property name="AtkObject::accessible-name" translatable="yes">Task list options</property>
                         <property name="AtkObject::accessible-role" translatable="yes">menu</property>
                       </object>

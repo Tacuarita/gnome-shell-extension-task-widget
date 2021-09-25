@@ -11,18 +11,18 @@
     <property name="title" translatable="yes">Task List Properties</property>
     <property name="modal">1</property>
     <child>
-      <object class="GtkBox" id="taskListPropertiesDialogBox">
+      <object class="GtkBox">
         <property name="margin-start">18</property>
         <property name="margin-end">18</property>
         <property name="margin-top">18</property>
         <property name="margin-bottom">18</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkGrid" id="taskListPropertiesDialogGrid">
+          <object class="GtkGrid">
             <property name="margin-bottom">12</property>
             <property name="column-spacing">12</property>
             <child>
-              <object class="GtkLabel" id="taskListPropertiesDialogLabel">
+              <object class="GtkLabel">
                 <property name="label" translatable="yes" comments="Translators: e.g. &quot;Refresh every 10 minutes&quot;.">Refresh every</property>
               </object>
             </child>
@@ -39,7 +39,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox" id="taskListPropertiesDialogButtonBox">
+          <object class="GtkBox">
             <property name="halign">end</property>
             <property name="spacing">4</property>
             <child>

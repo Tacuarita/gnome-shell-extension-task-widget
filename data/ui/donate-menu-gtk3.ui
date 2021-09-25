@@ -12,6 +12,10 @@
         <attribute name='action'>donate-menu.paypal</attribute>
       </item>
       <item>
+        <attribute name='label'>Liberapay</attribute>
+        <attribute name='action'>donate-menu.liberapay</attribute>
+      </item>
+      <item>
         <attribute name='label'>Cryptocurrencies</attribute>
         <attribute name='action'>donate-menu.crypto</attribute>
       </item>

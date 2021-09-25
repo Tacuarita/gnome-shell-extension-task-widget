@@ -22,12 +22,12 @@
     <property name="focus-on-click">0</property>
     <property name="menu_model">settingsMenu</property>
     <child>
-      <object class="GtkImage" id="settingsMenuButtonImage">
+      <object class="GtkImage">
         <property name="icon-name">open-menu-symbolic</property>
       </object>
     </child>
     <child internal-child="accessible">
-      <object class="AtkObject" id="settingsMenu-atkobject">
+      <object class="AtkObject">
         <property name="AtkObject::accessible-name" translatable="yes">Help</property>
         <property name="AtkObject::accessible-role" translatable="yes">menu</property>
       </object>
@@ -35,7 +35,7 @@
   </template>
   <object class="GtkAboutDialog" id="aboutDialog">
     <property name="modal">1</property>
-    <property name="copyright" translatable="yes">Copyright © 2020 Juozas Miškinis</property>
+    <property name="copyright" translatable="yes">Copyright © 2020-2021 Juozas Miškinis</property>
     <property name="authors">Juozas Miškinis &lt;juozas@joasis.lt&gt;</property>
     <property name="logo">resource:///org/gnome/shell/extensions/task-widget/task-widget-logo.svg</property>
     <property name="license-type">gpl-2-0</property>
