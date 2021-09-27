@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-12 14:11+0300\n"
+"POT-Creation-Date: 2021-09-27 09:18+0200\n"
 "PO-Revision-Date: 2021-04-12 11:14\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
@@ -18,23 +18,23 @@ msgstr ""
 "X-Crowdin-File-ID: 8\n"
 
 #. Translators: without the ellipsis as it's appended automatically.
-#: src/extension.js:94
+#: src/extension.js:86
 msgid "Loading"
 msgstr "Chargement"
 
-#: src/extension.js:197
+#: src/extension.js:196
 msgid "Previous task list"
 msgstr "Liste des tâches précédente"
 
-#: src/extension.js:229
+#: src/extension.js:228
 msgid "Select task list"
 msgstr "Sélectionner la liste des tâches"
 
-#: src/extension.js:270 src/extension.js:1174
+#: src/extension.js:269 src/extension.js:1174
 msgid "All Tasks"
 msgstr "Toutes les tâches"
 
-#: src/extension.js:299
+#: src/extension.js:298
 msgid "Next task list"
 msgstr "Liste des tâches suivante"
 
@@ -85,85 +85,86 @@ msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %B %-d, %Y"
 
-#: src/extension.js:1206
+#: src/extension.js:1209
 msgid "No Tasks"
 msgstr "Aucune tâche"
 
-#: src/extension.js:1212 src/prefs.js:91
+#: src/extension.js:1215 src/prefs.js:88
 msgid "Error: Missing Dependencies"
 msgstr "Erreur: Dépendances manquantes"
 
-#: src/prefs.js:92
+#: src/prefs.js:89
 msgid "Please install Evolution Data Server to use this extension."
-msgstr "Veuillez installer Evolution Data Server pour utiliser cette extension."
+msgstr ""
+"Veuillez installer Evolution Data Server pour utiliser cette extension."
 
-#: src/prefs.js:97 data/ui/settings-menu.ui:26
+#: src/prefs.js:93 data/ui/settings-menu.ui:26
 msgid "Help"
 msgstr "Aide"
 
-#: src/prefs.js:246
+#: src/prefs.js:245
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "seconde"
 msgstr[1] "secondes"
 
-#: src/prefs.js:248
+#: src/prefs.js:247
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minute"
 msgstr[1] "minutes"
 
-#: src/prefs.js:249
+#: src/prefs.js:248
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "heure"
 msgstr[1] "heures"
 
-#: src/prefs.js:251
+#: src/prefs.js:250
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] "jour"
 msgstr[1] "jours"
 
-#: src/prefs.js:326
+#: src/prefs.js:325
 msgid "No remote task lists found"
 msgstr "Aucune liste de tâches distantes trouvée"
 
-#: src/prefs.js:334 data/ui/settings-window.ui:327
+#: src/prefs.js:333 data/ui/settings-window.ui:322
 msgid "Refresh the list of account task lists"
 msgstr "Actualiser les listes de tâches du compte"
 
-#: src/prefs.js:402
+#: src/prefs.js:401
 msgid "Refresh in progress"
 msgstr "Actualisation en cours"
 
-#: src/prefs.js:587
+#: src/prefs.js:596
 msgid "Refresh Tasks"
 msgstr "Actualiser les tâches"
 
-#: src/prefs.js:595
+#: src/prefs.js:604
 msgid "Properties"
 msgstr "Propriétés"
 
-#: src/prefs.js:878
+#: src/prefs.js:887
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minute"
 msgstr[1] "minutes"
 
-#: src/prefs.js:880
+#: src/prefs.js:889
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "heure"
 msgstr[1] "heures"
 
-#: src/prefs.js:882
+#: src/prefs.js:891
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -173,7 +174,7 @@ msgstr[1] "jours"
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:950
+#: src/prefs.js:959
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "Rob'OT"
@@ -186,17 +187,26 @@ msgstr "Journal de support"
 msgid "About"
 msgstr "À propos"
 
-#: data/ui/settings-menu.ui:24 data/ui/settings-window.ui:324
+#: data/ui/settings-menu.ui:24 data/ui/settings-window.ui:319
+#: data/ui/donate-menu.ui:28
 msgid "menu"
 msgstr "Menu"
 
 #: data/ui/settings-menu.ui:31
-msgid "Copyright © 2020 Juozas Miškinis"
+#, fuzzy
+msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr "Copyright © 2020 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Les messages de débogage sont enregistrés. Effectuez toutes les étapes nécessaires pour reproduire un problème, puis consultez le journal. Vous devriez supprimer ou censurer toute information que vous considérez comme privée."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Les messages de débogage sont enregistrés. Effectuez toutes les étapes "
+"nécessaires pour reproduire un problème, puis consultez le journal. Vous "
+"devriez supprimer ou censurer toute information que vous considérez comme "
+"privée."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -214,55 +224,58 @@ msgstr "Paramètres"
 msgid "Merge task lists"
 msgstr "Fusionner les listes de tâches"
 
-#: data/ui/settings-window.ui:87
+#: data/ui/settings-window.ui:86
 msgid "Group past tasks"
 msgstr "Regrouper les tâches passées"
 
-#: data/ui/settings-window.ui:118
+#: data/ui/settings-window.ui:116
 msgid "Hide header for singular tasks lists"
 msgstr "Masquer l'en-tête pour les listes de tâches uniques"
 
-#: data/ui/settings-window.ui:149
+#: data/ui/settings-window.ui:146
 msgid "Hide empty and completed task lists"
 msgstr "Masquer les listes de tâches vides et terminées"
 
-#: data/ui/settings-window.ui:180
+#: data/ui/settings-window.ui:176
 msgid "Hide completed tasks"
 msgstr "Masquer les tâches terminées"
 
-#: data/ui/settings-window.ui:186
+#: data/ui/settings-window.ui:182
 msgid "Never"
 msgstr "Jamais"
 
-#: data/ui/settings-window.ui:187
+#: data/ui/settings-window.ui:183
 msgid "Immediately"
 msgstr "Immédiatement"
 
-#: data/ui/settings-window.ui:188
+#: data/ui/settings-window.ui:184
 msgid "After a period of time after completion"
 msgstr "Après un délai suivant l'achèvement"
 
-#: data/ui/settings-window.ui:189
+#: data/ui/settings-window.ui:185
 msgid "After a specific time of the day"
 msgstr "Après une heure précise de la journée"
 
-#: data/ui/settings-window.ui:213
+#: data/ui/settings-window.ui:209
 msgctxt "e.g. After 5 minutes"
 msgid "After"
 msgstr "Après"
 
-#: data/ui/settings-window.ui:243
+#: data/ui/settings-window.ui:239
 msgctxt "e.g. After 9:00"
 msgid "After"
 msgstr "Après"
 
-#: data/ui/settings-window.ui:292
+#: data/ui/settings-window.ui:287
 msgid "Task Lists"
 msgstr "Listes de tâches"
 
-#: data/ui/settings-window.ui:302
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "Vous pouvez faire glisser et déposer des lignes pour modifier l'ordre des listes de tâches dans le widget."
+#: data/ui/settings-window.ui:297
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"Vous pouvez faire glisser et déposer des lignes pour modifier l'ordre des "
+"listes de tâches dans le widget."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -289,3 +302,14 @@ msgstr "Déplacer vers le bas"
 msgid "Task list options"
 msgstr "Options de la liste des tâches"
 
+#: data/ui/donate-menu.ui:19
+msgid "Cryptocurrencies"
+msgstr ""
+
+#: data/ui/donate-menu.ui:30
+msgid "Donate"
+msgstr ""
+
+#: data/ui/donate-menu.ui:34
+msgid "Donate Cryptocurrencies"
+msgstr ""
