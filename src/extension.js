@@ -49,8 +49,7 @@ class TaskWidget extends St.BoxLayout {
             ? Me.dir.get_child('schemas').get_path() : Me.metadata.schemas;
 
         const gschema = Gio.SettingsSchemaSource.new_from_directory(
-            dir, Gio.SettingsSchemaSource.get_default(),
-            false);
+            dir, Gio.SettingsSchemaSource.get_default(), false);
 
         this._settings = new Gio.Settings({
             settings_schema: gschema.lookup(Me.metadata.base, true),
@@ -152,6 +151,8 @@ class TaskWidget extends St.BoxLayout {
 
             this._themeChangedId = themeContext.connect('changed',
                 this._loadThemeHacks.bind(this));
+
+            Gio.Settings.sync();
 
             this._settingsChangedId = this._settings.connect('changed',
                 this._onSettingsChanged.bind(this));
@@ -1167,8 +1168,8 @@ class TaskWidget extends St.BoxLayout {
                 if (!this._contentBox.visible)
                     this._contentBox.show();
 
-                const merge = this._settings.get_boolean('merge-task-lists') ||
-                    this._mergeTaskLists;
+                const merge = (this._settings.get_boolean('merge-task-lists') ||
+                    this._mergeTaskLists) && this._taskLists.length > 1;
 
                 this._taskListName.set_text(merge ? _('All Tasks')
                     : taskList.name);
@@ -1453,9 +1454,9 @@ class TaskWidget extends St.BoxLayout {
      */
     async _onSettingsChanged(_api, key) {
         try {
-            if (['last-active',
-                'task-list-order',
-                'disabled-task-lists'].includes(key))
+            const silentKeys = ['last-active'];
+
+            if (silentKeys.includes(key))
                 return;
 
             const active = this._taskLists[this._activeTaskList]

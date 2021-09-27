@@ -297,8 +297,6 @@ const TaskWidgetSettings = GObject.registerClass({
                     const account = this._sourceRegistry.ref_source(
                         client.source.get_parent()).display_name;
 
-
-                    // TODO: Do we need this check?
                     // Keep an object of unique accounts:
                     if (!accounts.get(account)) {
                         accounts.set(account, this._sourceRegistry.ref_source(
@@ -520,7 +518,6 @@ const TaskWidgetSettings = GObject.registerClass({
      * @param {TaskWidgetSettings} widget - Widget that has been realized.
      */
     _onRealized(widget) {
-        // TODO: can't we avoid passing this._window as argument?
         if (Utils.shellVersionAtLeast_(40)) {
             this._window = widget.get_root();
             const headerBar = new Gtk.HeaderBar({show_title_buttons: true});
@@ -1137,8 +1134,10 @@ const DonateMenuButton = GObject.registerClass({
 }, class DonateMenuButton extends Gtk.MenuButton {
     /**
      * Initializes the donations menu.
+     *
+     * @param {Gtk.Window} window - Extension settings window.
      */
-    _init(parent) {
+    _init(window) {
         super._init();
         const actionGroup = new Gio.SimpleActionGroup();
         let action = new Gio.SimpleAction({name: 'coffee'});
@@ -1168,7 +1167,7 @@ const DonateMenuButton = GObject.registerClass({
         action = new Gio.SimpleAction({name: 'crypto'});
 
         action.connect('activate', () => {
-            this._donateCrypto.set_transient_for(parent);
+            this._donateCrypto.set_transient_for(window);
 
             if (Utils.shellVersionAtLeast_(40))
                 this._donateCrypto.show();
