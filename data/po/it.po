@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 09:18+0200\n"
-"PO-Revision-Date: 2021-08-30 20:07\n"
+"PO-Revision-Date: 2021-09-27 08:15\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -192,19 +192,12 @@ msgid "menu"
 msgstr "menu"
 
 #: data/ui/settings-menu.ui:31
-#, fuzzy
 msgid "Copyright © 2020-2021 Juozas Miškinis"
-msgstr "Copyright © 2020 Juozas Miškinis"
+msgstr ""
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"I messaggi di debug stanno venendo registrati. Prendi tutte le misure "
-"necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti "
-"rimuovere o censurare qualsiasi informazione che ritieni privata."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "I messaggi di debug stanno venendo registrati. Prendi tutte le misure necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti rimuovere o censurare qualsiasi informazione che ritieni privata."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -269,11 +262,8 @@ msgid "Task Lists"
 msgstr "Elenco attività"
 
 #: data/ui/settings-window.ui:297
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"È possibile trascinare le righe per modificare l'ordine degli elenchi di "
-"attività nel widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "È possibile trascinare le righe per modificare l'ordine degli elenchi di attività nel widget."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -311,3 +301,4 @@ msgstr ""
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr ""
+
