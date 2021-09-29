@@ -24,7 +24,7 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkLabel">
-        <property name="halign">start</property>
+        <property name="xalign">0</property>
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Settings</property>
         <attributes>
@@ -51,7 +51,7 @@
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Merge task lists</property>
                       </object>
@@ -87,7 +87,7 @@
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Group past tasks</property>
                       </object>
@@ -123,7 +123,7 @@
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide header for singular tasks lists</property>
                       </object>
@@ -159,7 +159,7 @@
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide empty and completed task lists</property>
                       </object>
@@ -195,7 +195,7 @@
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">1</property>
                         <property name="label" translatable="yes">Hide completed tasks</property>
                       </object>
@@ -302,11 +302,10 @@
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkBox">
-            <property name="hexpand">1</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel">
-                <property name="halign">start</property>
+                <property name="xalign">0</property>
                 <property name="margin-bottom">6</property>
                 <property name="label" translatable="yes">Task Lists</property>
                 <attributes>
@@ -316,8 +315,8 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="hexpand">1</property>
                 <property name="margin-bottom">12</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">You can drag and drop rows to change the order of task lists in the widget.</property>
                 <property name="wrap">1</property>
                 <property name="wrap-mode">word-char</property>
