@@ -331,25 +331,27 @@ const TaskWidgetSettings = GObject.registerClass({
 
                 this._backendRefreshButton.set_tooltip_text(
                     _('Refresh the list of account task lists'));
+
+                let action;
+                const menu = Gio.Menu.new();
+                const actionGroup = new Gio.SimpleActionGroup();
+
+                for (const [account, source] of accounts) {
+                    menu.append(account, `accounts.${account}`);
+                    action = new Gio.SimpleAction({name: account});
+
+                    action.connect('activate', () => {
+                        this._onAccountButtonClicked(source, account);
+                    });
+
+                    actionGroup.add_action(action);
+                }
+
+                this._backendRefreshButton.set_menu_model(menu);
+
+                this._backendRefreshButton.insert_action_group('accounts',
+                    actionGroup);
             }
-
-            let action;
-            const menu = Gio.Menu.new();
-            const actionGroup = new Gio.SimpleActionGroup();
-
-            for (const [account, source] of accounts) {
-                menu.append(account, `accounts.${account}`);
-                action = new Gio.SimpleAction({name: account});
-
-                action.connect('activate', () => {
-                    this._onAccountButtonClicked(source, account);
-                });
-
-                actionGroup.add_action(action);
-            }
-
-            this._backendRefreshButton.set_menu_model(menu);
-            this._window.insert_action_group('accounts', actionGroup);
 
             if (accountsOnly)
                 return;
@@ -613,7 +615,8 @@ const TaskListRow = GObject.registerClass({
             this._taskListOptionsButton.set_menu_model(menu);
         }
 
-        this.insert_action_group('options-menu', actionGroup);
+        this._taskListOptionsButton.insert_action_group('options-menu',
+            actionGroup);
 
         this._taskListSwitch.connect('state-set', this._setTaskListState.bind(
             this, source));
