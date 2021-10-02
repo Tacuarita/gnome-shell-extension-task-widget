@@ -23,14 +23,12 @@
               <object class="GtkButton" id="taskListPropertiesDialogCancelButton">
                 <property name="visible">1</property>
                 <property name="label" translatable="yes">Cancel</property>
-                <property name="can-focus">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="taskListPropertiesDialogOkButton">
                 <property name="visible">1</property>
                 <property name="label" translatable="yes">OK</property>
-                <property name="can-focus">1</property>
               </object>
             </child>
           </object>
@@ -49,7 +47,6 @@
             <child>
               <object class="GtkSpinButton" id="taskListPropertiesDialogSpinButton">
                 <property name="visible">1</property>
-                <property name="can-focus">1</property>
                 <property name="adjustment">RefreshTaskListAdjustment</property>
               </object>
             </child>

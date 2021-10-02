@@ -18,7 +18,6 @@
     </section>
   </menu>
   <template class="SettingsMenuButton" parent="GtkMenuButton">
-    <property name="can-focus">1</property>
     <property name="focus-on-click">0</property>
     <property name="menu_model">settingsMenu</property>
     <child>
