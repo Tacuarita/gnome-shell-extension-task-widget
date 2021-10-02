@@ -62,7 +62,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject">
                         <property name="AtkObject::accessible-name" translatable="yes">Task list options</property>
-                        <property name="AtkObject::accessible-role" translatable="yes">menu</property>
+                        <property name="AtkObject::accessible-role">menu</property>
                       </object>
                     </child>
                     <style>

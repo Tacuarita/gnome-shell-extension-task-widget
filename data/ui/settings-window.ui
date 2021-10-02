@@ -316,7 +316,7 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="margin-bottom">12</property>
-            <property name="accessible-role" translatable="yes">menu</property>
+            <property name="accessible-role">menu</property>
             <property name="icon-name">view-refresh-symbolic</property>
             <accessibility>
               <property name="label" translatable="yes">Refresh the list of account task lists</property>
