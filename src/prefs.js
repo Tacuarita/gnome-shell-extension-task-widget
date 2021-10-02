@@ -327,8 +327,6 @@ const TaskWidgetSettings = GObject.registerClass({
                 if (accountsOnly)
                     return;
             } else {
-                this._backendRefreshButton.set_sensitive(true);
-
                 this._backendRefreshButton.set_tooltip_text(
                     _('Refresh the list of account task lists'));
 
@@ -993,15 +991,9 @@ const SettingsMenuButton = GObject.registerClass({
         actionGroup.add_action(action);
         this.insert_action_group('settings-menu', actionGroup);
 
-        if (Utils.shellVersionAtLeast_(40)) {
-            this._aboutDialog.connect('close-request', () => {
-                this._aboutDialog.hide();
-            });
-        } else {
-            this._aboutDialog.connect('delete-event', () => {
-                this._aboutDialog.hide();
-                return true;
-            });
+        if (!Utils.shellVersionAtLeast_(40)) {
+            this._aboutDialog.connect('delete-event', () =>
+                this._aboutDialog.hide_on_delete());
         }
 
         this._supportLogDialog.connect('response', (dialog, response) => {
@@ -1055,7 +1047,7 @@ const SettingsMenuButton = GObject.registerClass({
                 if (!shellTheme)
                     throw new Error();
             } catch (e) {
-                shellTheme = 'Adwaita (default)';
+                shellTheme = 'Default';
             }
 
             const monitors = Utils.shellVersionAtLeast_(40)
@@ -1182,10 +1174,8 @@ const DonateMenuButton = GObject.registerClass({
         this.insert_action_group('donate-menu', actionGroup);
 
         if (!Utils.shellVersionAtLeast_(40)) {
-            this._donateCrypto.connect('delete-event', () => {
-                this._donateCrypto.hide();
-                return true;
-            });
+            this._donateCrypto.connect('delete-event', () =>
+                this._donateCrypto.hide_on_delete());
         }
 
         this._donateOptionsComboBox.connect('changed', option => {
