@@ -2,7 +2,7 @@
 
 const {Gio, GLib} = imports.gi;
 
-var _debounceTimeoutId;
+var _debounceTimeoutIds = new Map();
 var HAS_EDS_ = true;
 var ELLIPSIS_CHAR_ = '\u2026';
 var MINUTES_PER_HOUR_ = 60;
@@ -330,27 +330,28 @@ function waitCheckAsync_(process, cancellable = null) {
  * after it stops being called for `wait` milliseconds.
  *
  * @param {Function} func - Function to debounce.
+ * @param {string} id - Function id.
  * @param {number} wait - Milliseconds to wait before calling the function.
  * @param {boolean} [immediate] - If true, trigger the function on the
  * leading edge, instead of the trailing.
  * @returns {Function} The `func` function with all its arguments.
  */
-function debounce_(func, wait, immediate = false) {
+function debounce_(func, id, wait, immediate = false) {
     return (...args) => {
         const later = () => {
-            _debounceTimeoutId = 0;
+            _debounceTimeoutIds.delete(id);
 
             if (!immediate)
                 func(...args);
         };
 
-        if (_debounceTimeoutId)
-            GLib.source_remove(_debounceTimeoutId);
+        if (_debounceTimeoutIds.get(id))
+            GLib.source_remove(_debounceTimeoutIds.get(id));
 
-        _debounceTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
-            wait, later);
+        _debounceTimeoutIds.set(id, GLib.timeout_add(GLib.PRIORITY_DEFAULT,
+            wait, later));
 
-        if (immediate && !_debounceTimeoutId)
+        if (immediate && !_debounceTimeoutIds.get(id))
             func(...args);
     };
 }

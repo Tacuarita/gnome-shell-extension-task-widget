@@ -132,7 +132,7 @@ class TaskWidget extends St.BoxLayout {
             });
 
             this._scrollView.vscroll.adjustment.connect('notify::value',
-                Utils.debounce_(this._onTaskListScrolled.bind(this),
+                Utils.debounce_(this._onTaskListScrolled.bind(this), 'vscroll',
                     100, false));
 
             this._taskBox = new St.BoxLayout({
@@ -711,7 +711,7 @@ class TaskWidget extends St.BoxLayout {
             };
 
             // Adds arrows and margins to denote subtasks:
-            const styleSubtaskCheckbox = (checkbox, level) => {
+            const styleSubtaskCheckbox = (checkbox, depth) => {
                 const arrow = new St.Label({
                     accessible_name: _('Beginning of a subtask list'),
                     accessible_role: Atk.Role.ARROW,
@@ -735,7 +735,7 @@ class TaskWidget extends St.BoxLayout {
                         widget._arrow.set_style(`padding-left: ${boxWidth -
                             widget._arrow.get_width() / scaleFactor}px`);
 
-                        widget.set_style(`margin-right: ${--level *
+                        widget.set_style(`margin-right: ${--depth *
                             (boxWidth + spacing)}px`);
                     } else {
                         widget._arrow.set_text('\u21B3');
@@ -743,7 +743,7 @@ class TaskWidget extends St.BoxLayout {
                         widget._arrow.set_style(`padding-right: ${boxWidth -
                             widget._arrow.get_width() / scaleFactor}px`);
 
-                        widget.set_style(`margin-left: ${--level *
+                        widget.set_style(`margin-left: ${--depth *
                             (boxWidth + spacing)}px`);
                     }
                 });
@@ -836,7 +836,7 @@ class TaskWidget extends St.BoxLayout {
             };
 
             // Adds subtasks:
-            const addSubtasks = (parentCheckbox, parentUid, level = 0) => {
+            const addSubtasks = (parentCheckbox, parentUid, depth = 0) => {
                 if (!this._idleAddId)
                     return;
 
@@ -849,7 +849,7 @@ class TaskWidget extends St.BoxLayout {
                     let subtaskCheckbox = buildCheckbox(subtask);
 
                     subtaskCheckbox = styleSubtaskCheckbox(subtaskCheckbox,
-                        level + 1);
+                        depth + 1);
 
                     if (parentCheckbox._subtasks)
                         parentCheckbox._subtasks.push(subtaskCheckbox);
@@ -866,7 +866,7 @@ class TaskWidget extends St.BoxLayout {
 
                     idleAddHelper(subtaskCheckbox);
                     this._relatedTo.delete(parentUid);
-                    addSubtasks(subtaskCheckbox, subtask._uid, level + 1);
+                    addSubtasks(subtaskCheckbox, subtask._uid, depth + 1);
                 }
             };
 
@@ -1169,7 +1169,7 @@ class TaskWidget extends St.BoxLayout {
                     this._contentBox.show();
 
                 const merge = (this._settings.get_boolean('merge-task-lists') ||
-                    this._mergeTaskLists) && this._taskLists.length > 1;
+                    this._mergeTaskLists) && this._taskLists.length;
 
                 this._taskListName.set_text(merge ? _('All Tasks')
                     : taskList.name);
@@ -1180,8 +1180,8 @@ class TaskWidget extends St.BoxLayout {
                 this._setHeader();
 
                 if (!await this._listTasks(taskList.uid, merge)) {
-                    Utils.debounce_(this._showActiveTaskList.bind(this),
-                        100, false)(this._activeTaskList);
+                    Utils.debounce_(this._showActiveTaskList.bind(this), 'show',
+                        200, false)(this._activeTaskList);
                 }
             } else if (this._contentBox.visible) {
                 this._contentBox.hide();
