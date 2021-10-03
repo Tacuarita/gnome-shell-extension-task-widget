@@ -57,6 +57,7 @@ function buildPrefsWidget() {
         scrolledWindow.show_all();
     }
 
+    scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
     return scrolledWindow;
 }
 
