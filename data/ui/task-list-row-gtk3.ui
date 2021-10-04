@@ -13,12 +13,16 @@
   </menu>
   <template class="TaskListRow" parent="GtkListBoxRow">
     <property name="activatable">0</property>
+    <property name="visible">1</property>
     <child>
       <object class="GtkBox">
+        <property name="visible">1</property>
         <child>
           <object class="GtkEventBox" id="dragBox">
+            <property name="visible">1</property>
             <child>
               <object class="GtkGrid">
+                <property name="visible">1</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
                 <property name="margin-top">5</property>
@@ -26,11 +30,13 @@
                 <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkImage">
+                    <property name="visible">1</property>
                     <property name="icon-name">list-drag-handle-symbolic</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkLabel" id="taskListName">
+                    <property name="visible">1</property>
                     <property name="xalign">0</property>
                     <property name="hexpand">1</property>
                     <property name="ellipsize">end</property>
@@ -39,6 +45,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="taskListProvider">
+                    <property name="visible">1</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -46,16 +53,19 @@
                 </child>
                 <child>
                   <object class="GtkSeparator">
+                    <property name="visible">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="taskListOptionsButton">
+                    <property name="visible">1</property>
                     <property name="focus-on-click">0</property>
                     <property name="menu_model">optionsMenu</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <child>
                       <object class="GtkImage">
+                        <property name="visible">1</property>
                         <property name="icon-name">view-more-symbolic</property>
                       </object>
                     </child>
@@ -88,10 +98,12 @@
                 </child>
                 <child>
                   <object class="GtkSeparator">
+                    <property name="visible">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkSwitch" id="taskListSwitch">
+                    <property name="visible">1</property>
                     <property name="valign">center</property>
                   </object>
                 </child>

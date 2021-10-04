@@ -311,12 +311,10 @@ const TaskWidgetSettings = GObject.registerClass({
                 const taskListRow = new TaskListRow(client,
                     this._sourceRegistry, remote, this._settings, this._window);
 
-                if (Utils.shellVersionAtLeast_(40)) {
+                if (Utils.shellVersionAtLeast_(40))
                     this._taskListBox.append(taskListRow);
-                } else {
+                else
                     this._taskListBox.add(taskListRow);
-                    taskListRow.show_all();
-                }
             }
 
             if (!accounts.size) {
