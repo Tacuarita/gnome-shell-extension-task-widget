@@ -41,6 +41,7 @@
     <property name="modal">1</property>
     <child internal-child="vbox">
       <object class="GtkBox">
+        <property name="visible">1</property>
         <property name="margin-start">30</property>
         <property name="margin-end">30</property>
         <property name="margin-top">30</property>
@@ -51,6 +52,7 @@
           <object class="GtkComboBoxText" id="donateOptionsComboBox">
             <property name="active-id">bitcoin</property>
             <property name="hexpand">1</property>
+            <property name="visible">1</property>
             <items>
               <item id="bitcoin">Bitcoin</item>
               <item id="bitcoin-cash">Bitcoin Cash</item>
@@ -60,16 +62,20 @@
         </child>
         <child>
           <object class="GtkRevealer">
+            <property name="visible">1</property>
             <property name="reveal-child">1</property>
             <child>
               <object class="GtkStack" id="donateOptionsStack">
+                <property name="visible">1</property>
                 <property name="transition-type">crossfade</property>
                 <child>
                   <object class="GtkBox">
+                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
                       <object class="GtkEntry">
+                        <property name="visible">1</property>
                         <property name="editable">0</property>
                         <property name="width-chars">42</property>
                         <property name="text">1PKr1RtXqMgmBzbCjVrxwhU525L5Car69p</property>
@@ -77,6 +83,7 @@
                     </child>
                     <child>
                       <object class="GtkImage">
+                        <property name="visible">1</property>
                         <property name="pixel-size">500</property>
                         <property name="resource">/org/gnome/shell/extensions/task-widget/donate-bitcoin.svg</property>
                       </object>
@@ -88,10 +95,12 @@
                 </child>
                 <child>
                   <object class="GtkBox">
+                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
                       <object class="GtkEntry">
+                        <property name="visible">1</property>
                         <property name="editable">0</property>
                         <property name="width-chars">42</property>
                         <property name="text">qr6wx20n0xwqmzufsfwnunqm9hemf7rf3ceezk55dt</property>
@@ -99,6 +108,7 @@
                     </child>
                     <child>
                       <object class="GtkImage">
+                        <property name="visible">1</property>
                         <property name="pixel-size">500</property>
                         <property name="resource">/org/gnome/shell/extensions/task-widget/donate-bitcoin-cash.svg</property>
                       </object>
@@ -110,10 +120,12 @@
                 </child>
                 <child>
                   <object class="GtkBox">
+                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
                       <object class="GtkEntry">
+                        <property name="visible">1</property>
                         <property name="editable">0</property>
                         <property name="width-chars">42</property>
                         <property name="text">0x25dED85f686767399C0A4346c96D08088c9C494B</property>
@@ -121,6 +133,7 @@
                     </child>
                     <child>
                       <object class="GtkImage">
+                        <property name="visible">1</property>
                         <property name="pixel-size">500</property>
                         <property name="resource">/org/gnome/shell/extensions/task-widget/donate-ethereum.svg</property>
                       </object>

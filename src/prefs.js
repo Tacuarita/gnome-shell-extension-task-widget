@@ -849,7 +849,7 @@ const TaskListPropertiesDialog = GObject.registerClass({
     _init(window, source) {
         super._init();
         this.set_transient_for(window);
-        this.set_title(`${this.get_title()} — ${source.display_name}`);
+        this.set_title(`${this.get_title()} \u2014 ${source.display_name}`);
         this._source = source;
 
         this._extension = source.get_extension(
@@ -984,11 +984,7 @@ const SettingsMenuButton = GObject.registerClass({
 
         actionGroup.add_action(action);
         action = new Gio.SimpleAction({name: 'about'});
-
-        action.connect('activate', () => {
-            this._aboutDialog.present();
-        });
-
+        action.connect('activate', () => this._aboutDialog.present());
         actionGroup.add_action(action);
         this.insert_action_group('settings-menu', actionGroup);
 
@@ -1164,11 +1160,7 @@ const DonateMenuButton = GObject.registerClass({
 
         action.connect('activate', () => {
             this._donateCrypto.set_transient_for(window);
-
-            if (Utils.shellVersionAtLeast_(40))
-                this._donateCrypto.show();
-            else
-                this._donateCrypto.show_all();
+            this._donateCrypto.present();
         });
 
         actionGroup.add_action(action);
