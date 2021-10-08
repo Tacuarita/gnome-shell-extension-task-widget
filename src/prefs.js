@@ -436,12 +436,10 @@ const TaskWidgetSettings = GObject.registerClass({
                         this._sourceRegistry, client.check_refresh_supported(),
                         this._settings, this._window);
 
-                    if (Utils.shellVersionAtLeast_(40)) {
+                    if (Utils.shellVersionAtLeast_(40))
                         this._taskListBox.append(taskListRow);
-                    } else {
+                    else
                         this._taskListBox.add(taskListRow);
-                        taskListRow.show_all();
-                    }
 
                     break;
                 }
@@ -548,6 +546,7 @@ const TaskListRow = GObject.registerClass({
         'dragBox',
         'taskListOptionsButton',
         'taskListOptionsSpinner',
+        'taskListGrid',
     ],
 }, class TaskListRow extends Gtk.ListBoxRow {
     /**
@@ -618,8 +617,8 @@ const TaskListRow = GObject.registerClass({
         this._taskListSwitch.connect('state-set', this._setTaskListState.bind(
             this, source));
 
-        // Enable drag and drop operations:
         if (Utils.shellVersionAtLeast_(40)) {
+            // Enable drag and drop operations:
             const dragSource = new Gtk.DragSource({
                 actions: Gdk.DragAction.MOVE,
             });
@@ -671,6 +670,20 @@ const TaskListRow = GObject.registerClass({
 
                 return true;
             });
+
+            // Set appropriate cursor to denote draggability:
+            const tlgController = new Gtk.EventControllerMotion();
+            const tlsController = new Gtk.EventControllerMotion();
+            const tlobController = new Gtk.EventControllerMotion();
+            tlgController.connect('enter', this._onMotionEvent.bind(this, 1));
+            tlgController.connect('leave', this._onMotionEvent.bind(this, 0));
+            tlsController.connect('enter', this._onMotionEvent.bind(this, 0));
+            tlsController.connect('leave', this._onMotionEvent.bind(this, 1));
+            tlobController.connect('enter', this._onMotionEvent.bind(this, 0));
+            tlobController.connect('leave', this._onMotionEvent.bind(this, 1));
+            this._taskListGrid.add_controller(tlgController);
+            this._taskListSwitch.add_controller(tlsController);
+            this._taskListOptionsButton.add_controller(tlobController);
         } else {
             this.drag_dest_set(Gtk.DestDefaults.ALL, [Gtk.TargetEntry.new(
                 'Gtk.ListBoxRow', Gtk.TargetFlags.SAME_APP, 0)],
@@ -686,7 +699,37 @@ const TaskListRow = GObject.registerClass({
 
             this._dragBox.connect('drag-begin', this._dragBegin.bind(this));
             this._dragBox.connect('drag-end', this._dragEnd.bind(this));
+
+            this._dragBox.connect('enter-notify-event',
+                this._onMotionEvent.bind(this, 1));
+
+            this._dragBox.connect('leave-notify-event',
+                this._onMotionEvent.bind(this, 0));
+
+            this._taskListSwitch.connect('enter-notify-event',
+                this._onMotionEvent.bind(this, 0));
+
+            this._taskListSwitch.connect('leave-notify-event',
+                this._onMotionEvent.bind(this, 1));
+
+            this._taskListOptionsButton.connect('enter-notify-event',
+                this._onMotionEvent.bind(this, 0));
+
+            this._taskListOptionsButton.connect('leave-notify-event',
+                this._onMotionEvent.bind(this, 1));
         }
+    }
+
+    _onMotionEvent(grab) {
+        const cursor = grab === 1 ? 'grab' : 'default';
+
+        if (Utils.shellVersionAtLeast_(40)) {
+            this.get_root().set_cursor(Gdk.Cursor.new_from_name(cursor, null));
+        } else {
+            this.get_window().set_cursor(Gdk.Cursor.new_from_name(
+                this.get_window().get_display(), cursor));
+        }
+
     }
 
     /**
@@ -1042,7 +1085,7 @@ const SettingsMenuButton = GObject.registerClass({
                 if (!shellTheme)
                     throw new Error();
             } catch (e) {
-                shellTheme = 'Default';
+                shellTheme = 'Default / Unknown';
             }
 
             const monitors = Utils.shellVersionAtLeast_(40)

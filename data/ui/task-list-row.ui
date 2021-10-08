@@ -19,7 +19,7 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
           <child>
-            <object class="GtkGrid">
+            <object class="GtkGrid" id="taskListGrid">
               <property name="margin-start">12</property>
               <property name="margin-end">12</property>
               <property name="margin-top">5</property>
