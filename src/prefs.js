@@ -671,7 +671,7 @@ const TaskListRow = GObject.registerClass({
                 return true;
             });
 
-            // Set appropriate cursor to denote draggability:
+            // Set appropriate cursors for draggable row elements:
             const tlgController = new Gtk.EventControllerMotion();
             const tlsController = new Gtk.EventControllerMotion();
             const tlobController = new Gtk.EventControllerMotion();
@@ -720,6 +720,11 @@ const TaskListRow = GObject.registerClass({
         }
     }
 
+    /**
+     * Sets cursor to either `grab` or `default` to denote draggability.
+     *
+     * @param {int} grab - Change cursor to `grab` (1) or `default` (0).
+     */
     _onMotionEvent(grab) {
         const cursor = grab === 1 ? 'grab' : 'default';
 
