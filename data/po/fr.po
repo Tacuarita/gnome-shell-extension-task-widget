@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 09:18+0200\n"
-"PO-Revision-Date: 2021-09-27 08:15\n"
+"PO-Revision-Date: 2021-10-10 10:29\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -193,7 +193,7 @@ msgstr "Menu"
 
 #: data/ui/settings-menu.ui:31
 msgid "Copyright © 2020-2021 Juozas Miškinis"
-msgstr ""
+msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
@@ -292,13 +292,13 @@ msgstr "Options de la liste des tâches"
 
 #: data/ui/donate-menu.ui:19
 msgid "Cryptocurrencies"
-msgstr ""
+msgstr "Cryptomonnaies"
 
 #: data/ui/donate-menu.ui:30
 msgid "Donate"
-msgstr ""
+msgstr "Faire un don"
 
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
-msgstr ""
+msgstr "Faire un don en cryptomonnaie"
 
