@@ -19,6 +19,8 @@ const TaskWidget = GObject.registerClass(
 class TaskWidget extends St.BoxLayout {
     /**
      * Initializes the widget.
+     *
+     * @todo gjs >= 1.65.90 supports ?? and .? operators
      */
     _init() {
         super._init({
@@ -394,7 +396,7 @@ class TaskWidget extends St.BoxLayout {
                 // Since `source` is only a descriptor of a data source, we
                 // need an `ECal.Client` - interface to access the data itself:
                 client = await Utils.getECalClient_(source,
-                    ECal.ClientSourceType.TASKS, 1);
+                    ECal.ClientSourceType.TASKS, 15);
 
                 // `ECal.ClientView` allows to receive change notifications on
                 // task lists, specifically task additions, removals and
@@ -420,6 +422,10 @@ class TaskWidget extends St.BoxLayout {
             }
 
             if (!await this._filterTasks(client))
+                return;
+            
+            // Duplication - still a mystery; check issue #27 @ GitLab
+            if (this._taskLists.map(i => i.uid).indexOf(source.uid) !== -1)
                 return;
 
             this._taskLists.push({
