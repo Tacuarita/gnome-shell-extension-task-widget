@@ -723,7 +723,7 @@ const TaskListRow = GObject.registerClass({
     /**
      * Sets cursor to either `grab` or `default` to denote draggability.
      *
-     * @param {int} grab - Change cursor to `grab` (1) or `default` (0).
+     * @param {number} grab - Change cursor to `grab` (1) or `default` (0).
      */
     _onMotionEvent(grab) {
         const cursor = grab === 1 ? 'grab' : 'default';
@@ -1177,6 +1177,7 @@ const DonateMenuButton = GObject.registerClass({
      */
     _init(window) {
         super._init();
+        this._donateCrypto.set_transient_for(window);
         const actionGroup = new Gio.SimpleActionGroup();
         let action = new Gio.SimpleAction({name: 'coffee'});
 
@@ -1203,12 +1204,7 @@ const DonateMenuButton = GObject.registerClass({
 
         actionGroup.add_action(action);
         action = new Gio.SimpleAction({name: 'crypto'});
-
-        action.connect('activate', () => {
-            this._donateCrypto.set_transient_for(window);
-            this._donateCrypto.present();
-        });
-
+        action.connect('activate', () => this._donateCrypto.present());
         actionGroup.add_action(action);
         this.insert_action_group('donate-menu', actionGroup);
 
