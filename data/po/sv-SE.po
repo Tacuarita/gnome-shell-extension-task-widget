@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 09:18+0200\n"
-"PO-Revision-Date: 2021-09-27 08:15\n"
+"PO-Revision-Date: 2021-10-13 18:09\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "Language: sv_SE\n"
@@ -20,47 +20,47 @@ msgstr ""
 #. Translators: without the ellipsis as it's appended automatically.
 #: src/extension.js:86
 msgid "Loading"
-msgstr ""
+msgstr "Laddar"
 
 #: src/extension.js:196
 msgid "Previous task list"
-msgstr ""
+msgstr "Föregående uppgiftslista"
 
 #: src/extension.js:228
 msgid "Select task list"
-msgstr ""
+msgstr "Välj uppgiftslista"
 
 #: src/extension.js:269 src/extension.js:1174
 msgid "All Tasks"
-msgstr ""
+msgstr "Alla uppgifter"
 
 #: src/extension.js:298
 msgid "Next task list"
-msgstr ""
+msgstr "Nästa uppgiftslista"
 
 #: src/extension.js:716
 msgid "Beginning of a subtask list"
-msgstr ""
+msgstr "Början av en underuppgiftslista"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
 #: src/extension.js:762
 msgid "Orphan task"
-msgstr ""
+msgstr "Övergiven uppgift"
 
 #: src/extension.js:781
 msgid "No due date"
-msgstr ""
+msgstr "Inget förfallodatum"
 
 #: src/extension.js:783
 msgid "Today"
-msgstr ""
+msgstr "Idag"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
 #: src/extension.js:788
 msgid "Past"
-msgstr ""
+msgstr "Tidigare"
 
 #. Translators: %A is the weekday name (e.g. Friday)
 #. %B is the name of the month (e.g. February)
@@ -78,97 +78,97 @@ msgstr ""
 #: src/extension.js:807
 msgctxt "task due date"
 msgid "%A, %B %-d"
-msgstr ""
+msgstr "%a %-d %b"
 
 #: src/extension.js:808
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
-msgstr ""
+msgstr "%a %-d %b, %Y"
 
 #: src/extension.js:1209
 msgid "No Tasks"
-msgstr ""
+msgstr "Inga uppgifter"
 
 #: src/extension.js:1215 src/prefs.js:88
 msgid "Error: Missing Dependencies"
-msgstr ""
+msgstr "Fel: Obligatoriska beroenden saknas"
 
 #: src/prefs.js:89
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
+msgstr "Vänligen installera Evolution Data Server för att använda detta tillägg."
 
 #: src/prefs.js:93 data/ui/settings-menu.ui:26
 msgid "Help"
-msgstr ""
+msgstr "Hjälp"
 
 #: src/prefs.js:245
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "sekund"
+msgstr[1] "sekunder"
 
 #: src/prefs.js:247
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minut"
+msgstr[1] "minuter"
 
 #: src/prefs.js:248
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "timme"
+msgstr[1] "timmar"
 
 #: src/prefs.js:250
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dag"
+msgstr[1] "dagar"
 
 #: src/prefs.js:325
 msgid "No remote task lists found"
-msgstr ""
+msgstr "Inga uppgiftslistor hittade"
 
 #: src/prefs.js:333 data/ui/settings-window.ui:322
 msgid "Refresh the list of account task lists"
-msgstr ""
+msgstr "Uppdatera listan över kontouppgiftslistor"
 
 #: src/prefs.js:401
 msgid "Refresh in progress"
-msgstr ""
+msgstr "Uppdatering pågår"
 
 #: src/prefs.js:596
 msgid "Refresh Tasks"
-msgstr ""
+msgstr "Uppdatera uppgifter"
 
 #: src/prefs.js:604
 msgid "Properties"
-msgstr ""
+msgstr "Egenskaper"
 
 #: src/prefs.js:887
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minut"
+msgstr[1] "minuter"
 
 #: src/prefs.js:889
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "timme"
+msgstr[1] "timmar"
 
 #: src/prefs.js:891
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dag"
+msgstr[1] "dagar"
 
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
@@ -176,129 +176,129 @@ msgstr[1] ""
 #: src/prefs.js:959
 msgctxt "translator name <email>"
 msgid "translator-credits"
-msgstr ""
+msgstr "Pål Bergström"
 
 #: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:37
 msgid "Support Log"
-msgstr ""
+msgstr "Support Logg"
 
 #: data/ui/settings-menu.ui:15
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: data/ui/settings-menu.ui:24 data/ui/settings-window.ui:319
 #: data/ui/donate-menu.ui:28
 msgid "menu"
-msgstr ""
+msgstr "meny"
 
 #: data/ui/settings-menu.ui:31
 msgid "Copyright © 2020-2021 Juozas Miškinis"
-msgstr ""
+msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr ""
+msgstr "Felsökningsmeddelanden loggas. Ta några åtgärder som krävs för att återskapa ett problem, granska sedan loggen. Du bör ta bort eller censurera all information som du anser vara privat."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: data/ui/settings-menu.ui:46
 msgid "Review Log"
-msgstr ""
+msgstr "Granska logg"
 
 #: data/ui/settings-window.ui:29
 msgid "Settings"
-msgstr ""
+msgstr "Inställningar"
 
 #: data/ui/settings-window.ui:56
 msgid "Merge task lists"
-msgstr ""
+msgstr "Sammanfoga uppgiftslistor"
 
 #: data/ui/settings-window.ui:86
 msgid "Group past tasks"
-msgstr ""
+msgstr "Gruppera tidigare uppgifter"
 
 #: data/ui/settings-window.ui:116
 msgid "Hide header for singular tasks lists"
-msgstr ""
+msgstr "Dölj sidhuvud för singulära uppgiftslistor"
 
 #: data/ui/settings-window.ui:146
 msgid "Hide empty and completed task lists"
-msgstr ""
+msgstr "Dölj tomma och slutförda uppgiftslistor"
 
 #: data/ui/settings-window.ui:176
 msgid "Hide completed tasks"
-msgstr ""
+msgstr "Dölj slutförda uppgifter"
 
 #: data/ui/settings-window.ui:182
 msgid "Never"
-msgstr ""
+msgstr "Aldrig"
 
 #: data/ui/settings-window.ui:183
 msgid "Immediately"
-msgstr ""
+msgstr "Omedelbart"
 
 #: data/ui/settings-window.ui:184
 msgid "After a period of time after completion"
-msgstr ""
+msgstr "En tid efter avslutad"
 
 #: data/ui/settings-window.ui:185
 msgid "After a specific time of the day"
-msgstr ""
+msgstr "Efter en viss tid på dagen"
 
 #: data/ui/settings-window.ui:209
 msgctxt "e.g. After 5 minutes"
 msgid "After"
-msgstr ""
+msgstr "Efter"
 
 #: data/ui/settings-window.ui:239
 msgctxt "e.g. After 9:00"
 msgid "After"
-msgstr ""
+msgstr "Efter"
 
 #: data/ui/settings-window.ui:287
 msgid "Task Lists"
-msgstr ""
+msgstr "Uppgiftslistor"
 
 #: data/ui/settings-window.ui:297
 msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
+msgstr "Du kan dra och släppa rader för att ändra ordningen på uppgiftslistor i widgeten."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
-msgstr ""
+msgstr "Egenskaper för uppgiftslista"
 
 #. Translators: e.g. "Refresh every 10 minutes".
 #: data/ui/task-list-properties-dialog.ui:26
 msgid "Refresh every"
-msgstr ""
+msgstr "Uppdatera varje"
 
 #: data/ui/task-list-properties-dialog.ui:52
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: data/ui/task-list-row.ui:6
 msgid "Move Up"
-msgstr ""
+msgstr "Flytta upp"
 
 #: data/ui/task-list-row.ui:10
 msgid "Move Down"
-msgstr ""
+msgstr "Flytta ned"
 
 #: data/ui/task-list-row.ui:58
 msgid "Task list options"
-msgstr ""
+msgstr "Alternativ för uppgiftslista"
 
 #: data/ui/donate-menu.ui:19
 msgid "Cryptocurrencies"
-msgstr ""
+msgstr "Kyptovalutor"
 
 #: data/ui/donate-menu.ui:30
 msgid "Donate"
-msgstr ""
+msgstr "Donera"
 
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
-msgstr ""
+msgstr "Donera kryptovalutor"
 
