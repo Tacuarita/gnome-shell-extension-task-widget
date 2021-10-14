@@ -14,8 +14,8 @@ build:
       apt-get -qq install -y python3-pip ninja-build libglib2.0-dev
       libxml2-utils npm zip gettext
     - pip3 install meson
-    - npm install -g eslint
-    - npm install -g eslint-plugin-jsdoc
+    - npm install eslint
+    - npm install eslint-plugin-jsdoc
   script:
     - meson _build -Dper_user=true -Dbuild_zip=true
     - meson test -C _build
