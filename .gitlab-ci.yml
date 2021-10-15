@@ -1,5 +1,5 @@
 default:
-  image: ubuntu:20.10
+  image: ubuntu:latest
 
 stages:
   - build
@@ -12,8 +12,11 @@ build:
     - apt-get -qq update
     - > 
       apt-get -qq install -y python3-pip ninja-build libglib2.0-dev
-      libxml2-utils npm zip gettext
+      libxml2-utils zip gettext
     - pip3 install meson
+    - wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    - nvm install node
+    - nvm install-latest-npm
     - npm install eslint
     - npm install eslint-plugin-jsdoc
   script:
