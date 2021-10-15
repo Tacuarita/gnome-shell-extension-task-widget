@@ -14,7 +14,7 @@ build:
       apt-get -qq install -y python3-pip ninja-build libglib2.0-dev
       libxml2-utils zip gettext
     - pip3 install meson
-    - wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
     - nvm install node
     - nvm install-latest-npm
     - npm install eslint
