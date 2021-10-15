@@ -1,6 +1,5 @@
 env:
-  es6: true
-  es2020: true
+  es2021: true
 extends: 'eslint:recommended'
 plugins:
   - jsdoc
@@ -256,5 +255,6 @@ globals:
   window: readonly
   TextEncoder: readonly
   TextDecoder: readonly
+  console: readonly
 parserOptions:
-  ecmaVersion: 2020
+  ecmaVersion: 2022
