@@ -15,11 +15,11 @@ build:
       libxml2-utils zip gettext
     - pip3 install meson
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-    - export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" --no-use
+    - export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
     - nvm install node
-    - nvm install-latest-npm
-    - npm install -g eslint@7
-    - npm install -g eslint-plugin-jsdoc
+    - npm install eslint@7
+    - npm install eslint-plugin-jsdoc
+    - ls -l
   script:
     - meson _build -Dper_user=true -Dbuild_zip=true
     - meson test -C _build
