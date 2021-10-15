@@ -18,7 +18,7 @@ build:
     - export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" --no-use
     - nvm install node
     - nvm install-latest-npm
-    - npm install eslint
+    - npm install eslint@7
     - npm install eslint-plugin-jsdoc
   script:
     - meson _build -Dper_user=true -Dbuild_zip=true
