@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 09:18+0200\n"
-"PO-Revision-Date: 2021-09-27 08:15\n"
+"PO-Revision-Date: 2021-10-29 14:40\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -20,47 +20,47 @@ msgstr ""
 #. Translators: without the ellipsis as it's appended automatically.
 #: src/extension.js:86
 msgid "Loading"
-msgstr ""
+msgstr "Carregando"
 
 #: src/extension.js:196
 msgid "Previous task list"
-msgstr ""
+msgstr "Lista de tarefas anterior"
 
 #: src/extension.js:228
 msgid "Select task list"
-msgstr ""
+msgstr "Selecione uma lista de tarefas"
 
 #: src/extension.js:269 src/extension.js:1174
 msgid "All Tasks"
-msgstr ""
+msgstr "Todas Tarefas"
 
 #: src/extension.js:298
 msgid "Next task list"
-msgstr ""
+msgstr "Próxima lista de tarefas"
 
 #: src/extension.js:716
 msgid "Beginning of a subtask list"
-msgstr ""
+msgstr "Início de uma lista de subtarefas"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
 #: src/extension.js:762
 msgid "Orphan task"
-msgstr ""
+msgstr "Tarefa órfã"
 
 #: src/extension.js:781
 msgid "No due date"
-msgstr ""
+msgstr "Sem prazo"
 
 #: src/extension.js:783
 msgid "Today"
-msgstr ""
+msgstr "Hoje"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
 #: src/extension.js:788
 msgid "Past"
-msgstr ""
+msgstr "Passadas"
 
 #. Translators: %A is the weekday name (e.g. Friday)
 #. %B is the name of the month (e.g. February)
@@ -78,97 +78,97 @@ msgstr ""
 #: src/extension.js:807
 msgctxt "task due date"
 msgid "%A, %B %-d"
-msgstr ""
+msgstr "%-d de %B, %A"
 
 #: src/extension.js:808
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
-msgstr ""
+msgstr "%-d de %B de %Y, %A"
 
 #: src/extension.js:1209
 msgid "No Tasks"
-msgstr ""
+msgstr "Sem Tarefas"
 
 #: src/extension.js:1215 src/prefs.js:88
 msgid "Error: Missing Dependencies"
-msgstr ""
+msgstr "Erro: Dependências Faltando"
 
 #: src/prefs.js:89
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
+msgstr "Por favor instale o Servidor de Dados do Evolution para usar esta extensão."
 
 #: src/prefs.js:93 data/ui/settings-menu.ui:26
 msgid "Help"
-msgstr ""
+msgstr "Ajuda"
 
 #: src/prefs.js:245
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "segundo"
+msgstr[1] "segundos"
 
 #: src/prefs.js:247
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minuto"
+msgstr[1] "minutos"
 
 #: src/prefs.js:248
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "hora"
+msgstr[1] "horas"
 
 #: src/prefs.js:250
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dia"
+msgstr[1] "dias"
 
 #: src/prefs.js:325
 msgid "No remote task lists found"
-msgstr ""
+msgstr "Nenhuma lista de tarefas remota encontrada"
 
 #: src/prefs.js:333 data/ui/settings-window.ui:322
 msgid "Refresh the list of account task lists"
-msgstr ""
+msgstr "Atualizar a lista de listas de tarefas da conta"
 
 #: src/prefs.js:401
 msgid "Refresh in progress"
-msgstr ""
+msgstr "Atualização em progresso"
 
 #: src/prefs.js:596
 msgid "Refresh Tasks"
-msgstr ""
+msgstr "Atualizar Tarefas"
 
 #: src/prefs.js:604
 msgid "Properties"
-msgstr ""
+msgstr "Propriedades"
 
 #: src/prefs.js:887
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minuto"
+msgstr[1] "minutos"
 
 #: src/prefs.js:889
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "hora"
+msgstr[1] "horas"
 
 #: src/prefs.js:891
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dia"
+msgstr[1] "dias"
 
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
@@ -176,129 +176,129 @@ msgstr[1] ""
 #: src/prefs.js:959
 msgctxt "translator name <email>"
 msgid "translator-credits"
-msgstr ""
+msgstr "Cap <caapppp@outlook.com>"
 
 #: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:37
 msgid "Support Log"
-msgstr ""
+msgstr "Log de Suporte"
 
 #: data/ui/settings-menu.ui:15
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: data/ui/settings-menu.ui:24 data/ui/settings-window.ui:319
 #: data/ui/donate-menu.ui:28
 msgid "menu"
-msgstr ""
+msgstr "menu"
 
 #: data/ui/settings-menu.ui:31
 msgid "Copyright © 2020-2021 Juozas Miškinis"
-msgstr ""
+msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr ""
+msgstr "Mensagens de depuração estão sendo registradas. Faça qualquer passo necessário para reproduzir um problema, e então revise o log. Você deve remover ou censurar qualquer informação que considere privada."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: data/ui/settings-menu.ui:46
 msgid "Review Log"
-msgstr ""
+msgstr "Consultar log"
 
 #: data/ui/settings-window.ui:29
 msgid "Settings"
-msgstr ""
+msgstr "Configurações"
 
 #: data/ui/settings-window.ui:56
 msgid "Merge task lists"
-msgstr ""
+msgstr "Mesclar listas de tarefas"
 
 #: data/ui/settings-window.ui:86
 msgid "Group past tasks"
-msgstr ""
+msgstr "Agrupar tarefas anteriores"
 
 #: data/ui/settings-window.ui:116
 msgid "Hide header for singular tasks lists"
-msgstr ""
+msgstr "Ocultar cabeçalho para listas de tarefas singulares"
 
 #: data/ui/settings-window.ui:146
 msgid "Hide empty and completed task lists"
-msgstr ""
+msgstr "Ocultar listas de tarefas vazias e concluídas"
 
 #: data/ui/settings-window.ui:176
 msgid "Hide completed tasks"
-msgstr ""
+msgstr "Ocultar tarefas concluídas"
 
 #: data/ui/settings-window.ui:182
 msgid "Never"
-msgstr ""
+msgstr "Nunca"
 
 #: data/ui/settings-window.ui:183
 msgid "Immediately"
-msgstr ""
+msgstr "Imediatamente"
 
 #: data/ui/settings-window.ui:184
 msgid "After a period of time after completion"
-msgstr ""
+msgstr "Após um período de tempo depois da conclusão"
 
 #: data/ui/settings-window.ui:185
 msgid "After a specific time of the day"
-msgstr ""
+msgstr "Após uma hora específica do dia"
 
 #: data/ui/settings-window.ui:209
 msgctxt "e.g. After 5 minutes"
 msgid "After"
-msgstr ""
+msgstr "Depois de"
 
 #: data/ui/settings-window.ui:239
 msgctxt "e.g. After 9:00"
 msgid "After"
-msgstr ""
+msgstr "Depois de"
 
 #: data/ui/settings-window.ui:287
 msgid "Task Lists"
-msgstr ""
+msgstr "Listas de Tarefas"
 
 #: data/ui/settings-window.ui:297
 msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
+msgstr "Você pode arrastar e soltar as linhas para alterar a ordem das listas de tarefas no widget."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
-msgstr ""
+msgstr "Propriedades da Lista de Tarefas"
 
 #. Translators: e.g. "Refresh every 10 minutes".
 #: data/ui/task-list-properties-dialog.ui:26
 msgid "Refresh every"
-msgstr ""
+msgstr "Atuaizar a cada"
 
 #: data/ui/task-list-properties-dialog.ui:52
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: data/ui/task-list-row.ui:6
 msgid "Move Up"
-msgstr ""
+msgstr "Mover para Cima"
 
 #: data/ui/task-list-row.ui:10
 msgid "Move Down"
-msgstr ""
+msgstr "Mover para Baixo"
 
 #: data/ui/task-list-row.ui:58
 msgid "Task list options"
-msgstr ""
+msgstr "Opções da lista de tarefas"
 
 #: data/ui/donate-menu.ui:19
 msgid "Cryptocurrencies"
-msgstr ""
+msgstr "Criptomoedas"
 
 #: data/ui/donate-menu.ui:30
 msgid "Donate"
-msgstr ""
+msgstr "Doar"
 
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
-msgstr ""
+msgstr "Doar Criptomoedas"
 
