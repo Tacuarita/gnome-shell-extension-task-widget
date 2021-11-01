@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-01 15:27+0100\n"
-"PO-Revision-Date: 2021-10-29 14:40\n"
+"PO-Revision-Date: 2021-11-01 14:29\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -95,8 +95,7 @@ msgstr "Erro: Dependências Faltando"
 
 #: src/prefs.js:90
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Por favor instale o Servidor de Dados do Evolution para usar esta extensão."
+msgstr "Por favor instale o Servidor de Dados do Evolution para usar esta extensão."
 
 #: src/prefs.js:94 data/ui/settings-menu.ui:26
 msgid "Help"
@@ -192,14 +191,8 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:39
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Mensagens de depuração estão sendo registradas. Faça qualquer passo "
-"necessário para reproduzir um problema, e então revise o log. Você deve "
-"remover ou censurar qualquer informação que considere privada."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Mensagens de depuração estão sendo registradas. Faça qualquer passo necessário para reproduzir um problema, e então revise o log. Você deve remover ou censurar qualquer informação que considere privada."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -222,9 +215,8 @@ msgid "Group past tasks"
 msgstr "Agrupar tarefas anteriores"
 
 #: data/ui/settings-window.ui:116
-#, fuzzy
 msgid "Hide header for singular task lists"
-msgstr "Ocultar cabeçalho para listas de tarefas singulares"
+msgstr ""
 
 #: data/ui/settings-window.ui:146
 msgid "Hide empty and completed task lists"
@@ -239,9 +231,8 @@ msgid "Tasks that were due yesterday or ealier"
 msgstr ""
 
 #: data/ui/settings-window.ui:207
-#, fuzzy
 msgid "Due Today"
-msgstr "Hoje"
+msgstr ""
 
 #: data/ui/settings-window.ui:213
 msgid "Due Tomorrow"
@@ -265,10 +256,9 @@ msgid "Tasks that have a due date"
 msgstr ""
 
 #: data/ui/settings-window.ui:238
-#, fuzzy
 msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
-msgstr "Cancelar"
+msgstr ""
 
 #: data/ui/settings-window.ui:249
 msgctxt "used in Started Tasks"
@@ -276,9 +266,7 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:250
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:280
@@ -316,11 +304,8 @@ msgid "Task Lists"
 msgstr "Listas de Tarefas"
 
 #: data/ui/settings-window.ui:401
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Você pode arrastar e soltar as linhas para alterar a ordem das listas de "
-"tarefas no widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Você pode arrastar e soltar as linhas para alterar a ordem das listas de tarefas no widget."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -359,5 +344,3 @@ msgstr "Doar"
 msgid "Donate Cryptocurrencies"
 msgstr "Doar Criptomoedas"
 
-#~ msgid "menu"
-#~ msgstr "menu"
