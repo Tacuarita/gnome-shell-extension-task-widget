@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-01 15:27+0100\n"
-"PO-Revision-Date: 2021-09-27 08:15\n"
+"PO-Revision-Date: 2021-11-01 14:29\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -191,14 +191,8 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr ""
 
 #: data/ui/settings-menu.ui:39
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"I messaggi di debug stanno venendo registrati. Prendi tutte le misure "
-"necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti "
-"rimuovere o censurare qualsiasi informazione che ritieni privata."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "I messaggi di debug stanno venendo registrati. Prendi tutte le misure necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti rimuovere o censurare qualsiasi informazione che ritieni privata."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -221,9 +215,8 @@ msgid "Group past tasks"
 msgstr "Raggruppa attività passate"
 
 #: data/ui/settings-window.ui:116
-#, fuzzy
 msgid "Hide header for singular task lists"
-msgstr "Nascondi intestazione per elenchi di attività singoli"
+msgstr ""
 
 #: data/ui/settings-window.ui:146
 msgid "Hide empty and completed task lists"
@@ -238,9 +231,8 @@ msgid "Tasks that were due yesterday or ealier"
 msgstr ""
 
 #: data/ui/settings-window.ui:207
-#, fuzzy
 msgid "Due Today"
-msgstr "Oggi"
+msgstr ""
 
 #: data/ui/settings-window.ui:213
 msgid "Due Tomorrow"
@@ -264,10 +256,9 @@ msgid "Tasks that have a due date"
 msgstr ""
 
 #: data/ui/settings-window.ui:238
-#, fuzzy
 msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
-msgstr "Annulla"
+msgstr ""
 
 #: data/ui/settings-window.ui:249
 msgctxt "used in Started Tasks"
@@ -275,9 +266,7 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:250
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:280
@@ -315,11 +304,8 @@ msgid "Task Lists"
 msgstr "Elenco attività"
 
 #: data/ui/settings-window.ui:401
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"È possibile trascinare le righe per modificare l'ordine degli elenchi di "
-"attività nel widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "È possibile trascinare le righe per modificare l'ordine degli elenchi di attività nel widget."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -358,5 +344,3 @@ msgstr ""
 msgid "Donate Cryptocurrencies"
 msgstr ""
 
-#~ msgid "menu"
-#~ msgstr "menu"
