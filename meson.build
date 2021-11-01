@@ -1,6 +1,6 @@
 project('task-widget', 'c',
   version: '8',
-  meson_version: '>= 0.55.1'
+  meson_version: '>= 0.60.0'
 )
 
 ext_uuid = 'task-widget@juozasmiskinis.gitlab.io'
@@ -14,7 +14,7 @@ prefix = get_option('prefix')
 data_dir = join_paths(prefix, get_option('datadir'))
 ext_dir = join_paths(data_dir, 'gnome-shell', 'extensions', ext_uuid)
 locale_dir = join_paths(prefix, get_option('localedir'))
-tmp_dir = join_paths(meson.build_root(), ext_uuid)
+tmp_dir = join_paths(meson.project_build_root(), ext_uuid)
 
 if get_option('gschema_dir') != ''
   gschema_dir = get_option('gschema_dir')
@@ -53,12 +53,12 @@ meson.add_install_script('mv', tmp_dir, ext_dir)
 
 if (get_option('per_user') and get_option('build_zip'))
   zip = find_program('zip', required: true)
-  zip_file = join_paths(meson.build_root(), ext_uuid) + '.zip'
+  zip_file = join_paths(meson.project_build_root(), ext_uuid) + '.zip'
   meson.add_install_script('build-aux/zip.sh', ext_dir, zip_file)
 endif
 
 eslint = find_program('eslint', required: false)
 
 if eslint.found()
-  test('ESLint', eslint, args: join_paths(meson.source_root(), 'src'))
+  test('ESLint', eslint, args: join_paths(meson.project_source_root() , 'src'))
 endif
