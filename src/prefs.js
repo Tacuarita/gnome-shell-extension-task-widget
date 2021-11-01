@@ -118,6 +118,15 @@ const TaskWidgetSettings = GObject.registerClass({
         'gptSwitch',
         'hhfstlSwitch',
         'heactlSwitch',
+        'socSwitch',
+        'socSettingsRevealer',
+        'taskCategoryPast',
+        'taskCategoryToday',
+        'taskCategoryTomorrow',
+        'taskCategoryNextSevenDays',
+        'taskCategoryScheduled',
+        'taskCategoryNotCancelled',
+        'taskCategoryStarted',
         'hctSettingsRevealer',
         'hctComboBox',
         'hctSettingsStack',
@@ -159,27 +168,6 @@ const TaskWidgetSettings = GObject.registerClass({
             settings_schema: gschema.lookup(Me.metadata.base, true),
         });
 
-        this._hctComboBox.connect('changed', option => {
-            switch (option.active) {
-                case Utils.HIDE_COMPLETED_TASKS_['never']:
-                case Utils.HIDE_COMPLETED_TASKS_['immediately']:
-                    this._hctSettingsRevealer.set_reveal_child(false);
-                    break;
-                case Utils.HIDE_COMPLETED_TASKS_['after-time-period']:
-                    this._hctSettingsRevealer.set_reveal_child(true);
-
-                    this._hctSettingsStack.set_visible_child_name(
-                        'hctApotacPage');
-
-                    break;
-                case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']:
-                    this._hctSettingsRevealer.set_reveal_child(true);
-
-                    this._hctSettingsStack.set_visible_child_name(
-                        'hctAstodPage');
-            }
-        });
-
         this._settings.bind('merge-task-lists', this._mtlSwitch, 'active',
             Gio.SettingsBindFlags.DEFAULT);
 
@@ -194,6 +182,13 @@ const TaskWidgetSettings = GObject.registerClass({
 
         this._settings.bind('hide-completed-tasks', this._hctComboBox,
             'active', Gio.SettingsBindFlags.DEFAULT);
+
+        this._settings.bind('show-only-selected-categories', this._socSwitch,
+            'active', Gio.SettingsBindFlags.DEFAULT);
+
+        this._settings.bind('show-only-selected-categories',
+            this._socSettingsRevealer, 'reveal-child',
+            Gio.SettingsBindFlags.DEFAULT);
 
         this._settings.bind('hct-apotac-value', this._hctApotacSpinButton,
             'value', Gio.SettingsBindFlags.DEFAULT);
@@ -219,6 +214,89 @@ const TaskWidgetSettings = GObject.registerClass({
         this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
             .bind(this));
 
+        this._hctComboBox.connect('changed', option => {
+            switch (option.active) {
+                case Utils.HIDE_COMPLETED_TASKS_['never']:
+                case Utils.HIDE_COMPLETED_TASKS_['immediately']:
+                    this._hctSettingsRevealer.set_reveal_child(false);
+                    break;
+                case Utils.HIDE_COMPLETED_TASKS_['after-time-period']:
+                    this._hctSettingsRevealer.set_reveal_child(true);
+
+                    this._hctSettingsStack.set_visible_child_name(
+                        'hctApotacPage');
+
+                    break;
+                case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']:
+                    this._hctSettingsRevealer.set_reveal_child(true);
+
+                    this._hctSettingsStack.set_visible_child_name(
+                        'hctAstodPage');
+            }
+        });
+
+        for (const category of this._settings.get_strv(
+            'selected-task-categories')) {
+            switch (category) {
+                case 'past':
+                    this._taskCategoryPast.set_active(true);
+                    break;
+                case 'today':
+                    this._taskCategoryToday.set_active(true);
+                    break;
+                case 'tomorrow':
+                    this._taskCategoryTomorrow.set_active(true);
+                    break;
+                case 'next-seven-days':
+                    this._taskCategoryNextSevenDays.set_active(true);
+                    break;
+                case 'scheduled':
+                    this._taskCategoryScheduled.set_active(true);
+                    break;
+                case 'not-cancelled':
+                    this._taskCategoryNotCancelled.set_active(true);
+                    break;
+                case 'started':
+                    this._taskCategoryStarted.set_active(true);
+            }
+        }
+
+        const checkbuttons = [
+            [this._taskCategoryPast, 'past'],
+            [this._taskCategoryToday, 'today'],
+            [this._taskCategoryTomorrow, 'tomorrow'],
+            [this._taskCategoryNextSevenDays, 'next-seven-days'],
+            [this._taskCategoryScheduled, 'scheduled'],
+            [this._taskCategoryNotCancelled, 'not-cancelled'],
+            [this._taskCategoryStarted, 'started'],
+        ];
+
+        checkbuttons.map(([box, category]) =>
+            box.connect('toggled', this._toggleTaskCategory.bind(
+                this, category)));
+
+        const invert = [
+            [this._taskCategoryPast, this._taskCategoryScheduled],
+            [this._taskCategoryToday, this._taskCategoryNextSevenDays],
+            [this._taskCategoryToday, this._taskCategoryScheduled],
+            [this._taskCategoryTomorrow, this._taskCategoryNextSevenDays],
+            [this._taskCategoryTomorrow, this._taskCategoryScheduled],
+            [this._taskCategoryNextSevenDays, this._taskCategoryScheduled],
+        ];
+
+        invert.map(([source, target]) =>
+            source.bind_property_full('active', target, 'active',
+                GObject.BindingFlags.BIDIRECTIONAL,
+                value => {
+                    if (value.source.active)
+                        value.target.set_active(false);
+                },
+                value => {
+                    if (value.target.active)
+                        value.source.set_active(false);
+                })
+        );
+
         if (!Utils.shellVersionAtLeast_(40)) {
             this._taskListBox.set_header_func((row, before) => {
                 if (!before || row.get_header())
@@ -228,9 +306,29 @@ const TaskWidgetSettings = GObject.registerClass({
                     orientation: Gtk.Orientation.HORIZONTAL,
                 }));
             });
+
+            this._taskCategoryScheduled.set_sensitive(false);
+            this._taskCategoryStarted.set_sensitive(false);
         }
 
         this._listTaskListsAndAccounts(false, true);
+    }
+
+    /**
+     * Handles click events for task category checkbuttons.
+     *
+     * @param {string} category - Task category.
+     * @param {Gtk.CheckButton} button - Corresponding checkbutton.
+     */
+    _toggleTaskCategory(category, button) {
+        const selection = this._settings.get_strv('selected-task-categories');
+
+        if (button.active)
+            selection.push(category);
+        else
+            selection.splice(selection.indexOf(category), 1);
+
+        this._settings.set_strv('selected-task-categories', selection);
     }
 
     /**
@@ -734,7 +832,6 @@ const TaskListRow = GObject.registerClass({
             this.get_window().set_cursor(Gdk.Cursor.new_from_name(
                 this.get_window().get_display(), cursor));
         }
-
     }
 
     /**

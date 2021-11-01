@@ -38,5 +38,11 @@
     <key name="disabled-task-lists" type="as">
       <default>[]</default>
     </key>
+    <key name="show-only-selected-categories" type="b">
+      <default>false</default>
+    </key>
+    <key name="selected-task-categories" type="as">
+      <default>[]</default>
+    </key>
   </schema>
 </schemalist>

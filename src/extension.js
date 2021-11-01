@@ -385,6 +385,8 @@ class TaskWidget extends St.BoxLayout {
      * Handles task list addition events and connects signal handlers to
      * monitor for its task additions, removals and changes.
      *
+     * @todo gitlab.com/jmiskinis/gnome-shell-extension-task-widget/-/issues/27
+     *
      * @param {EDataServer.SourceRegistry|null} registry - Source registry.
      * @param {EDataServer.Source} source - Task list that got added.
      */
@@ -396,7 +398,7 @@ class TaskWidget extends St.BoxLayout {
                 // Since `source` is only a descriptor of a data source, we
                 // need an `ECal.Client` - interface to access the data itself:
                 client = await Utils.getECalClient_(source,
-                    ECal.ClientSourceType.TASKS, 15);
+                    ECal.ClientSourceType.TASKS, 10);
 
                 // `ECal.ClientView` allows to receive change notifications on
                 // task lists, specifically task additions, removals and
@@ -423,8 +425,7 @@ class TaskWidget extends St.BoxLayout {
 
             if (!await this._filterTasks(client))
                 return;
-            
-            // Duplication - still a mystery; check issue #27 @ GitLab
+
             if (this._taskLists.map(i => i.uid).indexOf(source.uid) !== -1)
                 return;
 
@@ -622,6 +623,7 @@ class TaskWidget extends St.BoxLayout {
      * them under appropriate group labels in the widget.
      *
      * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/3100
+     * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2811
      *
      * @param {string} uid - Unique task list identifier.
      * @param {boolean} merge - Task lists will be merged into one.
@@ -647,8 +649,9 @@ class TaskWidget extends St.BoxLayout {
 
                     for (const taskList of taskLists) {
                         for (let i = 0; i < taskList.length; i++) {
-                            if (taskList[i].get_status() !==
-                                ICalGLib.PropertyStatus.COMPLETED) {
+                            if (![ICalGLib.PropertyStatus.COMPLETED,
+                                ICalGLib.PropertyStatus.CANCELLED].includes(
+                                taskList[i].get_status())) {
                                 allCompleted = false;
                                 break;
                             }
@@ -707,8 +710,17 @@ class TaskWidget extends St.BoxLayout {
                 checkbox.getLabelActor().clutter_text.line_wrap_mode =
                     Pango.WrapMode.WORD_CHAR;
 
-                checkbox.connect('clicked', () => this._taskClicked(checkbox,
-                    this._clientViews.get(task._tasklist).client));
+                if (task.get_status() === ICalGLib.PropertyStatus.CANCELLED) {
+                    checkbox.set_opacity(100);
+                    checkbox.set_toggle_mode(false);
+
+                    checkbox.getLabelActor().add_style_class_name(
+                        'task-cancelled');
+                } else {
+                    checkbox.connect('clicked', () => this._taskClicked(
+                        checkbox, this._clientViews.get(
+                            task._tasklist).client));
+                }
 
                 if (task._orphan)
                     return styleOrphanTaskCheckbox(checkbox);
@@ -994,10 +1006,116 @@ class TaskWidget extends St.BoxLayout {
      */
     async _filterTasks(client) {
         try {
-            // (User-defined) Hide completed tasks:
-            const tasks = this._settings.get_int('hide-completed-tasks')
-                ? await Utils.getTasks_(client, this._hideCompletedTasks())
-                : await Utils.getTasks_(client, '#t');
+            let query = '';
+
+            const selected = this._settings.get_strv(
+                'selected-task-categories');
+
+            // (User-defined) Show only selected task categories:
+            if (this._settings.get_boolean('show-only-selected-categories') &&
+                selected.length) {
+                const currentTime = ICalGLib.Time.new_current_with_zone(
+                    ICalGLib.Timezone.get_utc_timezone());
+
+                const today = ECal.time_day_begin(currentTime.as_timet());
+                const yesterday = ECal.time_add_day(today, -1);
+                const tomorrow = ECal.time_add_day(today, 1);
+                const nextSevenDays = ECal.time_add_day(today, 7);
+
+                if (['past', 'today', 'tomorrow'].every(category =>
+                    selected.includes(category))) {
+                    const start = ECal.isodate_from_time_t(0);
+                    const endOfTomorrow = ECal.time_day_end(tomorrow);
+                    const end = ECal.isodate_from_time_t(endOfTomorrow);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (['past', 'today'].every(category =>
+                    selected.includes(category))) {
+                    const start = ECal.isodate_from_time_t(0);
+                    const endOfToday = ECal.time_day_end(today);
+                    const end = ECal.isodate_from_time_t(endOfToday);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (['past', 'tomorrow'].every(category =>
+                    selected.includes(category))) {
+                    const start = ECal.isodate_from_time_t(0);
+                    const endOfTomorrow = ECal.time_day_end(tomorrow);
+                    const end = ECal.isodate_from_time_t(endOfTomorrow);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (['today', 'tomorrow'].every(category =>
+                    selected.includes(category))) {
+                    const start = ECal.isodate_from_time_t(today);
+                    const endOfTomorrow = ECal.time_day_end(tomorrow);
+                    const end = ECal.isodate_from_time_t(endOfTomorrow);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (['past', 'next-seven-days'].every(category =>
+                    selected.includes(category))) {
+                    const start = ECal.isodate_from_time_t(0);
+                    const endOfNextSevenDays = ECal.time_day_end(nextSevenDays);
+                    const end = ECal.isodate_from_time_t(endOfNextSevenDays);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (selected.includes('past')) {
+                    const start = ECal.isodate_from_time_t(0);
+                    const endOfYesterday = ECal.time_day_end(yesterday);
+                    const end = ECal.isodate_from_time_t(endOfYesterday);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (selected.includes('today')) {
+                    const startOfToday = ECal.time_day_begin(today);
+                    const start = ECal.isodate_from_time_t(startOfToday);
+                    const endOfToday = ECal.time_day_end(startOfToday);
+                    const end = ECal.isodate_from_time_t(endOfToday);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (selected.includes('tomorrow')) {
+                    const startOfTomorrow = ECal.time_day_begin(tomorrow);
+                    const start = ECal.isodate_from_time_t(startOfTomorrow);
+                    const endOfTomorrow = ECal.time_day_end(tomorrow);
+                    const end = ECal.isodate_from_time_t(endOfTomorrow);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                } else if (selected.includes('next-seven-days')) {
+                    const start = ECal.isodate_from_time_t(today);
+                    const endOfNextSevenDays = ECal.time_day_end(nextSevenDays);
+                    const end = ECal.isodate_from_time_t(endOfNextSevenDays);
+
+                    query = '(due-in-time-range? (make-time "' + start + '") ' +
+                            '(make-time "' + end + '"))';
+                }
+
+                if (selected.includes('scheduled'))
+                    query = '(and ' + query + ' (has-due?))';
+
+                if (selected.includes('started')) {
+                    query = '(or (and ' + query + ' (starts-before? ' +
+                            '(time-now))) (not (has-start?)))';
+                }
+
+                if (selected.includes('not-cancelled')) {
+                    query = '(and ' + query + ' (not (contains? "status" ' +
+                            '"CANCELLED")))';
+                }
+            }
+
+            if (this._settings.get_int('hide-completed-tasks')) {
+                query = '(and ' + this._hideCompletedTasks() + ' ' +
+                        query + ')';
+            } else if (query === '') {
+                query = '#t';
+            }
+
+            const tasks = await Utils.getTasks_(client, query);
 
             // (User-defined) Hide empty and completed task lists:
             if (this._settings.get_boolean('hide-empty-completed-task-lists') &&
@@ -1006,7 +1124,10 @@ class TaskWidget extends St.BoxLayout {
                     return;
 
                 for (const task of tasks) {
-                    if (task.get_status() !== ICalGLib.PropertyStatus.COMPLETED)
+                    const status = task.get_status();
+
+                    if (![ICalGLib.PropertyStatus.COMPLETED,
+                        ICalGLib.PropertyStatus.CANCELLED].includes(status))
                         return tasks;
                 }
 

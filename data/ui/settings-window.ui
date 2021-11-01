@@ -113,7 +113,7 @@
                       <object class="GtkLabel">
                         <property name="xalign">0</property>
                         <property name="hexpand">1</property>
-                        <property name="label" translatable="yes">Hide header for singular tasks lists</property>
+                        <property name="label" translatable="yes">Hide header for singular task lists</property>
                       </object>
                     </child>
                     <child>
@@ -166,8 +166,112 @@
                   <object class="GtkGrid">
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="xalign">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="label" translatable="yes">Show only selected task categories</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSwitch" id="socSwitch">
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRevealer" id="socSettingsRevealer">
+                    <property name="child">
+                      <object class="GtkGrid">
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                        <property name="column-spacing">12</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkCheckButton" id="taskCategoryPast">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Past</property>
+                                <property name="tooltip-text" translatable="yes">Tasks that were due yesterday or ealier</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="taskCategoryToday">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Due Today</property>
+                              </object>
+                            </child>
+                             <child>
+                              <object class="GtkCheckButton" id="taskCategoryTomorrow">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Due Tomorrow</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkCheckButton" id="taskCategoryNextSevenDays">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Due in the Next 7 Days</property>
+                                <property name="tooltip-text" translatable="yes">Tasks that are due in the next seven days including today</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="taskCategoryScheduled">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Scheduled</property>
+                                <property name="tooltip-text" translatable="yes">Tasks that have a due date</property>
+                              </object>
+                            </child>
+                             <child>
+                              <object class="GtkCheckButton" id="taskCategoryNotCancelled">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Not Cancelled</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkCheckButton" id="taskCategoryStarted">
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes">Started</property>
+                                <property name="tooltip-text" translatable="yes">Tasks that either do not have a start date or the start date is earlier than current time</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="activatable">0</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkLabel">
