@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-01 15:27+0100\n"
-"PO-Revision-Date: 2021-11-01 14:29\n"
+"PO-Revision-Date: 2021-11-01 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
 "Language: lt_LT\n"
@@ -230,7 +230,7 @@ msgstr "Grupuoti praeities užduotis"
 
 #: data/ui/settings-window.ui:116
 msgid "Hide header for singular task lists"
-msgstr ""
+msgstr "Slėpti vienintelių užduočių sąrašų pavadinimą"
 
 #: data/ui/settings-window.ui:146
 msgid "Hide empty and completed task lists"
@@ -238,50 +238,50 @@ msgstr "Slėpti tuščius ir užbaigtus užduočių sąrašus"
 
 #: data/ui/settings-window.ui:176
 msgid "Show only selected task categories"
-msgstr ""
+msgstr "Rodyti tik pasirinktas užduočių kategorijas"
 
 #: data/ui/settings-window.ui:201
 msgid "Tasks that were due yesterday or ealier"
-msgstr ""
+msgstr "Užduotys, kurių terminas buvo vakar arba anksčiau"
 
 #: data/ui/settings-window.ui:207
 msgid "Due Today"
-msgstr ""
+msgstr "Terminas šiandien"
 
 #: data/ui/settings-window.ui:213
 msgid "Due Tomorrow"
-msgstr ""
+msgstr "Terminas rytoj"
 
 #: data/ui/settings-window.ui:224
 msgid "Due in the Next 7 Days"
-msgstr ""
+msgstr "Terminas per ateinančią savaitę"
 
 #: data/ui/settings-window.ui:225
 msgid "Tasks that are due in the next seven days including today"
-msgstr ""
+msgstr "Užduotys, kurių terminas yra per ateinančias septynias dienas, įskaitant šiandien"
 
 #: data/ui/settings-window.ui:231
 msgctxt "used in Scheduled Tasks"
 msgid "Scheduled"
-msgstr ""
+msgstr "Su terminu"
 
 #: data/ui/settings-window.ui:232
 msgid "Tasks that have a due date"
-msgstr ""
+msgstr "Užduotys, kurios turi terminą"
 
 #: data/ui/settings-window.ui:238
 msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
-msgstr ""
+msgstr "Neatšauktos"
 
 #: data/ui/settings-window.ui:249
 msgctxt "used in Started Tasks"
 msgid "Started"
-msgstr ""
+msgstr "Pradėtos"
 
 #: data/ui/settings-window.ui:250
 msgid "Tasks that either do not have a start date or the start date is earlier than current time"
-msgstr ""
+msgstr "Užduotys, kurios arba neturi pradžios datos, arba kurių pradžios data yra anksčiau nei dabartinis laikas"
 
 #: data/ui/settings-window.ui:280
 msgid "Hide completed tasks"
