@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 14:07+0100\n"
+"POT-Creation-Date: 2021-11-01 15:27+0100\n"
 "PO-Revision-Date: 2021-10-13 18:09\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
@@ -256,6 +256,7 @@ msgid "Tasks that are due in the next seven days including today"
 msgstr ""
 
 #: data/ui/settings-window.ui:231
+msgctxt "used in Scheduled Tasks"
 msgid "Scheduled"
 msgstr ""
 
@@ -265,10 +266,12 @@ msgstr ""
 
 #: data/ui/settings-window.ui:238
 #, fuzzy
+msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
 msgstr "Avbryt"
 
 #: data/ui/settings-window.ui:249
+msgctxt "used in Started Tasks"
 msgid "Started"
 msgstr ""
 

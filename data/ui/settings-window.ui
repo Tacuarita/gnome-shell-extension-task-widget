@@ -228,14 +228,14 @@
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryScheduled">
                                 <property name="hexpand">1</property>
-                                <property name="label" translatable="yes">Scheduled</property>
+                                <property name="label" translatable="yes" context="used in Scheduled Tasks">Scheduled</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that have a due date</property>
                               </object>
                             </child>
                              <child>
                               <object class="GtkCheckButton" id="taskCategoryNotCancelled">
                                 <property name="hexpand">1</property>
-                                <property name="label" translatable="yes">Not Cancelled</property>
+                                <property name="label" translatable="yes" context="used in Not Cancelled Tasks">Not Cancelled</property>
                               </object>
                             </child>
                           </object>
@@ -246,7 +246,7 @@
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryStarted">
                                 <property name="hexpand">1</property>
-                                <property name="label" translatable="yes">Started</property>
+                                <property name="label" translatable="yes" context="used in Started Tasks">Started</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that either do not have a start date or the start date is earlier than current time</property>
                               </object>
                             </child>

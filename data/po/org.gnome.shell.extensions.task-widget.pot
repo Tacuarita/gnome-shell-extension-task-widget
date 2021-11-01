@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 14:07+0100\n"
+"POT-Creation-Date: 2021-11-01 15:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,6 +251,7 @@ msgid "Tasks that are due in the next seven days including today"
 msgstr ""
 
 #: data/ui/settings-window.ui:231
+msgctxt "used in Scheduled Tasks"
 msgid "Scheduled"
 msgstr ""
 
@@ -259,10 +260,12 @@ msgid "Tasks that have a due date"
 msgstr ""
 
 #: data/ui/settings-window.ui:238
+msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
 msgstr ""
 
 #: data/ui/settings-window.ui:249
+msgctxt "used in Started Tasks"
 msgid "Started"
 msgstr ""
 
