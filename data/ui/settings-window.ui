@@ -198,7 +198,7 @@
                               <object class="GtkCheckButton" id="taskCategoryPast">
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes">Past</property>
-                                <property name="tooltip-text" translatable="yes">Tasks that were due yesterday or ealier</property>
+                                <property name="tooltip-text" translatable="yes">Tasks that were due yesterday or earlier</property>
                               </object>
                             </child>
                             <child>
