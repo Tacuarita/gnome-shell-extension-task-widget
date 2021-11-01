@@ -63,4 +63,6 @@ modules = run_command('npm', 'root', '-g')
 if eslint.found()
   test('ESLint', eslint, args: [join_paths(meson.project_source_root() , 'src'),
     '--resolve-plugins-relative-to=' + modules.stdout().strip()])
+  r = run_command('cat', '/builds/jmiskinis/gnome-shell-extension-task-widget/_build/meson-logs/testlog.txt')
+  message(r.stout().strip())
 endif
