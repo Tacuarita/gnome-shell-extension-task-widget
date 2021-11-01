@@ -20,7 +20,6 @@ build:
     - npm install -g eslint@7 eslint-plugin-jsdoc
   script:
     - meson _build -Dper_user=true -Dbuild_zip=true
-    - npm root -g
     - meson test -C _build
     - meson install -C _build
 # https://gitlab.com/gitlab-org/gitlab/-/issues/17838
