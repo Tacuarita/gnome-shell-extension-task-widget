@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 15:27+0100\n"
+"POT-Creation-Date: 2021-11-01 16:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,7 +231,7 @@ msgid "Show only selected task categories"
 msgstr ""
 
 #: data/ui/settings-window.ui:201
-msgid "Tasks that were due yesterday or ealier"
+msgid "Tasks that were due yesterday or earlier"
 msgstr ""
 
 #: data/ui/settings-window.ui:207

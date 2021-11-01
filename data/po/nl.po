@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 15:27+0100\n"
+"POT-Creation-Date: 2021-11-01 16:32+0100\n"
 "PO-Revision-Date: 2021-11-01 14:29\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
@@ -95,7 +95,8 @@ msgstr "Fout: ontbrekende afhankelijkheden"
 
 #: src/prefs.js:90
 msgid "Please install Evolution Data Server to use this extension."
-msgstr "Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
+msgstr ""
+"Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
 
 #: src/prefs.js:94 data/ui/settings-menu.ui:26
 msgid "Help"
@@ -191,8 +192,14 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr ""
 
 #: data/ui/settings-menu.ui:39
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-informatie."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het "
+"probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-"
+"informatie."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -227,7 +234,7 @@ msgid "Show only selected task categories"
 msgstr ""
 
 #: data/ui/settings-window.ui:201
-msgid "Tasks that were due yesterday or ealier"
+msgid "Tasks that were due yesterday or earlier"
 msgstr ""
 
 #: data/ui/settings-window.ui:207
@@ -266,7 +273,9 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:250
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:280
@@ -304,7 +313,8 @@ msgid "Task Lists"
 msgstr "Takenlijsten"
 
 #: data/ui/settings-window.ui:401
-msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Je kunt rijen op de widget verslepen om de volgorde aan te passen."
 
 #: data/ui/task-list-properties-dialog.ui:11
@@ -343,4 +353,3 @@ msgstr ""
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr ""
-
