@@ -20,6 +20,10 @@
   margin-top: 10px;
 }
 
+.task-widget-column .task-cancelled {
+  text-decoration: line-through;
+}
+
 /**
  * HACK: some of the overriden properties below are there to normalize looks in
  * custom Shell themes.
