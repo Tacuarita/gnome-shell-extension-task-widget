@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 15:27+0100\n"
-"PO-Revision-Date: 2021-11-01 14:29\n"
+"POT-Creation-Date: 2021-11-01 16:32+0100\n"
+"PO-Revision-Date: 2021-11-01 15:35\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -220,7 +220,7 @@ msgid "Show only selected task categories"
 msgstr ""
 
 #: data/ui/settings-window.ui:201
-msgid "Tasks that were due yesterday or ealier"
+msgid "Tasks that were due yesterday or earlier"
 msgstr ""
 
 #: data/ui/settings-window.ui:207
