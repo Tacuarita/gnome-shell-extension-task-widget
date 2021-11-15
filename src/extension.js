@@ -129,7 +129,7 @@ class TaskWidget extends St.BoxLayout {
             this._buildHeader();
 
             this._scrollView = new St.ScrollView({
-                style_class: 'vfade scroll-view',
+                style_class: 'vfade',
                 clip_to_allocation: true,
             });
 
@@ -188,13 +188,14 @@ class TaskWidget extends St.BoxLayout {
         this._headerBox = new St.BoxLayout({
             reactive: true,
             x_expand: true,
+            style_class: 'header',
         });
 
         this._headerBox.connect('scroll-event',
             this._onHeaderScrolled.bind(this));
 
         this._backButton = new St.Button({
-            style_class: 'calendar-change-month-back pager-button',
+            style_class: 'calendar-change-month-back pager-button pager',
             accessible_name: _('Previous task list'),
             can_focus: true,
         });
@@ -222,7 +223,7 @@ class TaskWidget extends St.BoxLayout {
         taskListNameBox.add_child(this._taskListNameArrow);
 
         this._taskListNameButton = new St.Button({
-            style_class: 'button task-list-name-button',
+            style_class: 'task-list-name-button',
             reactive: true,
             track_hover: true,
             can_focus: true,
@@ -296,7 +297,7 @@ class TaskWidget extends St.BoxLayout {
         manager.addMenu(this._taskListMenu);
 
         this._forwardButton = new St.Button({
-            style_class: 'calendar-change-month-forward pager-button',
+            style_class: 'calendar-change-month-forward pager-button pager',
             accessible_name: _('Next task list'),
             can_focus: true,
         });

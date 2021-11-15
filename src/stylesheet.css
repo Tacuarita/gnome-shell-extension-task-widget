@@ -16,12 +16,12 @@
   height: 52px;
 }
 
-.task-widget-column .scroll-view {
-  margin-top: 10px;
-}
-
 .task-widget-column .task-cancelled {
   text-decoration: line-through;
+}
+
+.task-widget-column .header {
+  margin-bottom: 10px;
 }
 
 /**
@@ -29,8 +29,12 @@
  * custom Shell themes.
 */
 
-.task-widget-column .task-list-name {
+.task-widget-column .header .pager {
   padding: 0;
+}
+
+.task-widget-column .task-list-name {
+  padding: 0 5px 0 0;
   margin: 0;
   height: auto;
 }
@@ -50,6 +54,6 @@
   min-height: auto;
 }
 
-.task-widget-column .check-box StLabel.task-summary {
+.task-widget-column .check-box .task-summary {
   color: inherit;
 }
