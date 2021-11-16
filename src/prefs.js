@@ -235,8 +235,9 @@ const TaskWidgetSettings = GObject.registerClass({
             }
         });
 
-        for (const category of this._settings.get_strv(
-            'selected-task-categories')) {
+        const categories = this._settings.get_strv('selected-task-categories');
+
+        categories.forEach(category => {
             switch (category) {
                 case 'past':
                     this._taskCategoryPast.set_active(true);
@@ -259,9 +260,9 @@ const TaskWidgetSettings = GObject.registerClass({
                 case 'started':
                     this._taskCategoryStarted.set_active(true);
             }
-        }
+        });
 
-        const checkbuttons = [
+        [
             [this._taskCategoryPast, 'past'],
             [this._taskCategoryToday, 'today'],
             [this._taskCategoryTomorrow, 'tomorrow'],
@@ -269,32 +270,28 @@ const TaskWidgetSettings = GObject.registerClass({
             [this._taskCategoryScheduled, 'scheduled'],
             [this._taskCategoryNotCancelled, 'not-cancelled'],
             [this._taskCategoryStarted, 'started'],
-        ];
-
-        checkbuttons.map(([box, category]) =>
+        ].map(([box, category]) =>
             box.connect('toggled', this._toggleTaskCategory.bind(
                 this, category)));
 
-        const invert = [
+        [
             [this._taskCategoryPast, this._taskCategoryScheduled],
             [this._taskCategoryToday, this._taskCategoryNextSevenDays],
             [this._taskCategoryToday, this._taskCategoryScheduled],
             [this._taskCategoryTomorrow, this._taskCategoryNextSevenDays],
             [this._taskCategoryTomorrow, this._taskCategoryScheduled],
             [this._taskCategoryNextSevenDays, this._taskCategoryScheduled],
-        ];
-
-        invert.map(([source, target]) =>
+        ].map(([source, target]) =>
             source.bind_property_full('active', target, 'active',
                 GObject.BindingFlags.BIDIRECTIONAL,
-                value => {
+                value => [() => {
                     if (value.source.active)
                         value.target.set_active(false);
-                },
-                value => {
+                }],
+                value => [() => {
                     if (value.target.active)
                         value.source.set_active(false);
-                })
+                }])
         );
 
         if (!Utils.shellVersionAtLeast_(40)) {
