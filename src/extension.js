@@ -137,9 +137,12 @@ class TaskWidget extends St.BoxLayout {
                 Utils.debounce_(this._onTaskListScrolled.bind(this), 'vscroll',
                     100, false));
 
+            const spacing = this._messageList._placeholder.get_theme_node()
+                .get_length('spacing');
+
             this._taskBox = new St.BoxLayout({
-                style_class: 'message-list-placeholder',
                 vertical: true,
+                style: `spacing: ${spacing}px`,
             });
 
             this._scrollView.add_actor(this._taskBox);
