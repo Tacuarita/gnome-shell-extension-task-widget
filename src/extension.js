@@ -698,8 +698,6 @@ class TaskWidget extends St.BoxLayout {
                 const checkbox = new CheckBox.CheckBox(task.get_summary()
                     .get_value());
 
-                checkbox.getLabelActor().add_style_class_name('task-summary');
-
                 if (task.get_status() === ICalGLib.PropertyStatus.COMPLETED) {
                     checkbox.checked = true;
                     checkbox.getLabelActor().set_opacity(100);
