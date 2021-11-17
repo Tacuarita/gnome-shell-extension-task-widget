@@ -67,6 +67,9 @@ class BeGoneWidget extends Gtk.Box {
      * Shows a message dialog if required dependencies are not installed on the
      * system. Also, closes the settings window if there's another instance of
      * it already opened (only X11 sessions are affected by this).
+     *
+     * @todo Duplicate window check is not necessary anymore since GNOME 40.6:
+     * g-g-o/GNOME/gnome-shell/-/commit/b93342f72e871dc8472a9e92b23b45e0e7ded282
      */
     _init() {
         super._init();
