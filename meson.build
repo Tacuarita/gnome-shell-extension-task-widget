@@ -1,5 +1,5 @@
 project('task-widget', 'c',
-  version: '8',
+  version: '9',
   meson_version: '>= 0.60.0'
 )
 
