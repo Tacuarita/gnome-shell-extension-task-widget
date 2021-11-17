@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 16:32+0100\n"
-"PO-Revision-Date: 2021-11-01 15:36\n"
+"POT-Creation-Date: 2021-11-17 18:32+0100\n"
+"PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -22,43 +22,43 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: src/extension.js:198
+#: src/extension.js:202
 msgid "Previous task list"
 msgstr ""
 
-#: src/extension.js:230
+#: src/extension.js:234
 msgid "Select task list"
 msgstr ""
 
-#: src/extension.js:271 src/extension.js:1301
+#: src/extension.js:275 src/extension.js:1303
 msgid "All Tasks"
 msgstr ""
 
-#: src/extension.js:300
+#: src/extension.js:304
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:734
+#: src/extension.js:736
 msgid "Beginning of a subtask list"
 msgstr ""
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:780
+#: src/extension.js:782
 msgid "Orphan task"
 msgstr ""
 
-#: src/extension.js:799
+#: src/extension.js:801
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:801
+#: src/extension.js:803
 msgid "Today"
 msgstr ""
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:806 data/ui/settings-window.ui:200
+#: src/extension.js:808 data/ui/settings-window.ui:200
 msgid "Past"
 msgstr ""
 
@@ -75,29 +75,29 @@ msgstr ""
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:825
+#: src/extension.js:827
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:826
+#: src/extension.js:828
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:1336
+#: src/extension.js:1338
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:1342 src/prefs.js:89
+#: src/extension.js:1344 src/prefs.js:92
 msgid "Error: Missing Dependencies"
 msgstr ""
 
-#: src/prefs.js:90
+#: src/prefs.js:93
 msgid "Please install Evolution Data Server to use this extension."
 msgstr ""
 
-#: src/prefs.js:94 data/ui/settings-menu.ui:26
+#: src/prefs.js:97 data/ui/settings-menu.ui:26
 msgid "Help"
 msgstr ""
 
