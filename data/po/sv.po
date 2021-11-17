@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 16:32+0100\n"
+"POT-Creation-Date: 2021-11-17 18:32+0100\n"
 "PO-Revision-Date: 2021-11-01 15:35\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
@@ -22,43 +22,43 @@ msgstr ""
 msgid "Loading"
 msgstr "Laddar"
 
-#: src/extension.js:198
+#: src/extension.js:202
 msgid "Previous task list"
 msgstr "Föregående uppgiftslista"
 
-#: src/extension.js:230
+#: src/extension.js:234
 msgid "Select task list"
 msgstr "Välj uppgiftslista"
 
-#: src/extension.js:271 src/extension.js:1301
+#: src/extension.js:275 src/extension.js:1303
 msgid "All Tasks"
 msgstr "Alla uppgifter"
 
-#: src/extension.js:300
+#: src/extension.js:304
 msgid "Next task list"
 msgstr "Nästa uppgiftslista"
 
-#: src/extension.js:734
+#: src/extension.js:736
 msgid "Beginning of a subtask list"
 msgstr "Början av en underuppgiftslista"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:780
+#: src/extension.js:782
 msgid "Orphan task"
 msgstr "Övergiven uppgift"
 
-#: src/extension.js:799
+#: src/extension.js:801
 msgid "No due date"
 msgstr "Inget förfallodatum"
 
-#: src/extension.js:801
+#: src/extension.js:803
 msgid "Today"
 msgstr "Idag"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:806 data/ui/settings-window.ui:200
+#: src/extension.js:808 data/ui/settings-window.ui:200
 msgid "Past"
 msgstr "Tidigare"
 
@@ -75,29 +75,30 @@ msgstr "Tidigare"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:825
+#: src/extension.js:827
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%a %-d %b"
 
-#: src/extension.js:826
+#: src/extension.js:828
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%a %-d %b, %Y"
 
-#: src/extension.js:1336
+#: src/extension.js:1338
 msgid "No Tasks"
 msgstr "Inga uppgifter"
 
-#: src/extension.js:1342 src/prefs.js:89
+#: src/extension.js:1344 src/prefs.js:92
 msgid "Error: Missing Dependencies"
 msgstr "Fel: Obligatoriska beroenden saknas"
 
-#: src/prefs.js:90
+#: src/prefs.js:93
 msgid "Please install Evolution Data Server to use this extension."
-msgstr "Vänligen installera Evolution Data Server för att använda detta tillägg."
+msgstr ""
+"Vänligen installera Evolution Data Server för att använda detta tillägg."
 
-#: src/prefs.js:94 data/ui/settings-menu.ui:26
+#: src/prefs.js:97 data/ui/settings-menu.ui:26
 msgid "Help"
 msgstr "Hjälp"
 
@@ -191,8 +192,14 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:39
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Felsökningsmeddelanden loggas. Ta några åtgärder som krävs för att återskapa ett problem, granska sedan loggen. Du bör ta bort eller censurera all information som du anser vara privat."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Felsökningsmeddelanden loggas. Ta några åtgärder som krävs för att återskapa "
+"ett problem, granska sedan loggen. Du bör ta bort eller censurera all "
+"information som du anser vara privat."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:47
 msgid "Cancel"
@@ -266,7 +273,9 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:250
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:280
@@ -304,8 +313,11 @@ msgid "Task Lists"
 msgstr "Uppgiftslistor"
 
 #: data/ui/settings-window.ui:401
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "Du kan dra och släppa rader för att ändra ordningen på uppgiftslistor i widgeten."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"Du kan dra och släppa rader för att ändra ordningen på uppgiftslistor i "
+"widgeten."
 
 #: data/ui/task-list-properties-dialog.ui:11
 msgid "Task List Properties"
@@ -343,4 +355,3 @@ msgstr "Donera"
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr "Donera kryptovalutor"
-
