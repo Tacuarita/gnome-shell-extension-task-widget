@@ -2,9 +2,6 @@
 
 ![gnome-shell-extension-task-widget-screenshot](https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/uploads/7c929a01cc629f11f555b0df1d1bb374/task-widget-screenshot.png)
 
-
-![gnome-shell-extension-task-widget-screenshot](uploads/7c929a01cc629f11f555b0df1d1bb374/task-widget-screenshot.png)
-
 Task Widget is an extension for GNOME that displays tasks next to the calendar widget. It integrates seamlessly with [GNOME Online Accounts](https://wiki.gnome.org/Projects/GnomeOnlineAccounts) and a number of GNOME applications, such as [Evolution](https://wiki.gnome.org/Apps/Evolution) and [To Do](https://wiki.gnome.org/Apps/Todo). With Task Widget you can:
 - Easily access your task lists in the top menu
 - Merge task lists
