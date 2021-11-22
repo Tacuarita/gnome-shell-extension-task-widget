@@ -900,7 +900,7 @@ class TaskWidget extends St.BoxLayout {
 
                 const {adjustment} = this._scrollView.vscroll;
                 const height = this._taskBox.get_allocation_box().get_height();
-                const limit = this._upperLimit + height;
+                const limit = this._upperLimit + height + Utils.LL_THRESHOLD_;
 
                 if (this._currentChild) {
                     const {allocation} = this._currentChild;
@@ -908,7 +908,8 @@ class TaskWidget extends St.BoxLayout {
                     // If task is not above the visible region:
                     if (allocation.y2 >= adjustment.value) {
                         // Quit when task is below the visible region:
-                        if (allocation.y1 > adjustment.value + height)
+                        if (allocation.y1 > adjustment.value + height +
+                            Utils.LL_THRESHOLD_)
                             return this._resetTaskBox();
 
                         // For tasks that are in the visible region:
@@ -926,7 +927,6 @@ class TaskWidget extends St.BoxLayout {
                             this._replaceTasksOnGoing = true;
                         } else {
                             this._replaceTasksOnGoing = false;
-
                             // Clean tasks below the visible region. These are
                             // leftover tasks from previous longer task lists:
                             while (this._currentChild.get_next_sibling())
@@ -1420,7 +1420,8 @@ class TaskWidget extends St.BoxLayout {
 
         const height = this._taskBox.allocation.get_height();
 
-        if (adjustment.upper - adjustment.value - height < 100) {
+        if (adjustment.upper - adjustment.value - height <
+            Utils.LL_THRESHOLD_) {
             this._upperLimit += height;
             this._showActiveTaskList(this._activeTaskList);
         }
