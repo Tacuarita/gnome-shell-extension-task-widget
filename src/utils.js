@@ -90,9 +90,9 @@ function getECalClient_(source, type, wait, cancellable = null) {
  */
 function getECalClientView_(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.get_view(query, cancellable, (cl, res) => {
+        client.get_view(query, cancellable, (self, res) => {
             try {
-                resolve(cl.get_view_finish(res)[1]);
+                resolve(self.get_view_finish(res)[1]);
             } catch (e) {
                 reject(e);
             }
@@ -112,9 +112,9 @@ function getECalClientView_(client, query, cancellable = null) {
  */
 function refreshBackend_(registry, uid, cancellable = null) {
     return new Promise((resolve, reject) => {
-        registry.refresh_backend(uid, cancellable, (reg, res) => {
+        registry.refresh_backend(uid, cancellable, (self, res) => {
             try {
-                resolve(reg.refresh_backend_finish(res));
+                resolve(self.refresh_backend_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -132,9 +132,9 @@ function refreshBackend_(registry, uid, cancellable = null) {
  */
 function refreshClient_(client, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.refresh(cancellable, (cl, res) => {
+        client.refresh(cancellable, (self, res) => {
             try {
-                resolve(cl.refresh_finish(res));
+                resolve(self.refresh_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -153,9 +153,9 @@ function refreshClient_(client, cancellable = null) {
  */
 function getTasks_(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.get_object_list_as_comps(query, cancellable, (cl, res) => {
+        client.get_object_list_as_comps(query, cancellable, (self, res) => {
             try {
-                resolve(cl.get_object_list_as_comps_finish(res)[1]);
+                resolve(self.get_object_list_as_comps_finish(res)[1]);
             } catch (e) {
                 reject(e);
             }
@@ -176,9 +176,9 @@ function getTasks_(client, query, cancellable = null) {
  */
 function modifyObjects_(client, obj, mod, flag, cancellable = null) {
     return new Promise((resolve, reject) => {
-        client.modify_objects(obj, mod, flag, cancellable, (cl, res) => {
+        client.modify_objects(obj, mod, flag, cancellable, (self, res) => {
             try {
-                resolve(cl.modify_objects_finish(res));
+                resolve(self.modify_objects_finish(res));
             } catch (e) {
                 reject(e);
             }
@@ -306,10 +306,10 @@ function writeBytesAsync_(output, bytes, priority, cancellable = null) {
  */
 function waitCheckAsync_(process, cancellable = null) {
     return new Promise((resolve, reject) => {
-        process.wait_check_async(cancellable, (proc, result) => {
+        process.wait_check_async(cancellable, (self, result) => {
             try {
-                if (!proc.wait_check_finish(result)) {
-                    const status = proc.get_exit_status();
+                if (!self.wait_check_finish(result)) {
+                    const status = self.get_exit_status();
 
                     throw new Gio.IOErrorEnum({
                         code: Gio.io_error_from_errno(status),

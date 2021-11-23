@@ -290,7 +290,7 @@ class TaskWidget extends St.BoxLayout {
             this._taskListMenu.toggle();
         });
 
-        this._taskListMenu.connect('open-state-changed', (_menu, isOpen) => {
+        this._taskListMenu.connect('open-state-changed', (self, isOpen) => {
             if (isOpen)
                 this._taskListNameButton.add_style_pseudo_class('active');
             else
@@ -332,23 +332,23 @@ class TaskWidget extends St.BoxLayout {
             this._sourceRegistry = await Utils.getSourceRegistry_();
 
             this._taskListAddedId = this._sourceRegistry.connect(
-                'source-added', (registry, source) => {
+                'source-added', (self, source) => {
                     if (source.has_extension(this._sourceType))
-                        this._onTaskListAdded(registry, source);
+                        this._onTaskListAdded(self, source);
                 }
             );
 
             this._taskListRemovedId = this._sourceRegistry.connect(
-                'source-removed', (registry, source) => {
+                'source-removed', (self, source) => {
                     if (source.has_extension(this._sourceType))
-                        this._onTaskListRemoved(registry, source);
+                        this._onTaskListRemoved(self, source);
                 }
             );
 
             this._taskListChangedId = this._sourceRegistry.connect(
-                'source-changed', (registry, source) => {
+                'source-changed', (self, source) => {
                     if (source.has_extension(this._sourceType))
-                        this._onTaskListChanged(registry, source);
+                        this._onTaskListChanged(self, source);
                 }
             );
         } catch (e) {
@@ -743,30 +743,30 @@ class TaskWidget extends St.BoxLayout {
                 checkbox._arrow = arrow;
                 checkbox.child.insert_child_at_index(arrow, 0);
 
-                checkbox.connect('show', widget => {
+                checkbox.connect('show', self => {
                     const scaleFactor = St.ThemeContext
                         .get_for_stage(global.stage).scale_factor;
 
-                    const boxWidth = widget._box.get_width() / scaleFactor;
+                    const boxWidth = self._box.get_width() / scaleFactor;
 
-                    const spacing = Math.floor(widget.child.get_theme_node()
+                    const spacing = Math.floor(self.child.get_theme_node()
                         .get_length('spacing') / scaleFactor);
 
                     if (this.text_direction === Clutter.TextDirection.RTL) {
-                        widget._arrow.set_text('\u21B2');
+                        self._arrow.set_text('\u21B2');
 
-                        widget._arrow.set_style(`padding-left: ${boxWidth -
-                            widget._arrow.get_width() / scaleFactor}px`);
+                        self._arrow.set_style(`padding-left: ${boxWidth -
+                            self._arrow.get_width() / scaleFactor}px`);
 
-                        widget.set_style(`margin-right: ${--depth *
+                        self.set_style(`margin-right: ${--depth *
                             (boxWidth + spacing)}px`);
                     } else {
-                        widget._arrow.set_text('\u21B3');
+                        self._arrow.set_text('\u21B3');
 
-                        widget._arrow.set_style(`padding-right: ${boxWidth -
-                            widget._arrow.get_width() / scaleFactor}px`);
+                        self._arrow.set_style(`padding-right: ${boxWidth -
+                            self._arrow.get_width() / scaleFactor}px`);
 
-                        widget.set_style(`margin-left: ${--depth *
+                        self.set_style(`margin-left: ${--depth *
                             (boxWidth + spacing)}px`);
                     }
                 });
@@ -1576,6 +1576,23 @@ class TaskWidget extends St.BoxLayout {
             delete this._orphanTasks;
             delete this._taskUids;
             this._resetTaskBox(true);
+
+            // // TODO: move to resetTaskBox
+            // // Because we closed the menu and reset the vertical adjustment,
+            // // checkboxes below the visible region can be freed from memory:
+            // let last = this._taskBox.get_last_child();
+            // const height = this._taskBox.get_allocation_box().get_height();
+
+            // GLib.idle_add(GLib.PRIORITY_LOW, () => {
+            //     if (last && last.allocation.y1 > height) {
+            //         const previous = last.get_previous_sibling();
+            //         last.destroy();
+            //         last = previous;
+            //         return GLib.SOURCE_CONTINUE;
+            //     }
+
+            //     return GLib.SOURCE_REMOVE;
+            // });
         }
     }
 

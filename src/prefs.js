@@ -452,21 +452,21 @@ const TaskWidgetSettings = GObject.registerClass({
                 return;
 
             this._taskListAddedId = this._sourceRegistry.connect(
-                'source-added', (_registry, source) => {
+                'source-added', (_self, source) => {
                     if (source.has_extension(this._sourceType))
                         this._onTaskListEvent('added', source);
                 }
             );
 
             this._taskListRemovedId = this._sourceRegistry.connect(
-                'source-removed', (_registry, source) => {
+                'source-removed', (_self, source) => {
                     if (source.has_extension(this._sourceType))
                         this._onTaskListEvent('removed', source);
                 }
             );
 
             this._taskListChangedId = this._sourceRegistry.connect(
-                'source-changed', (_registry, source) => {
+                'source-changed', (_self, source) => {
                     if (source.has_extension(this._sourceType))
                         this._onTaskListEvent('changed', source);
                 }
@@ -731,7 +731,7 @@ const TaskListRow = GObject.registerClass({
             dragSource.connect('drag-begin', this._dragBegin.bind(this));
             dragSource.connect('drag-end', this._dragEnd.bind(this));
 
-            dragSource.connect('prepare', (_sourceWidget, x, y) => {
+            dragSource.connect('prepare', (_self, x, y) => {
                 const taskListBox = this.get_parent();
                 taskListBox.dragX = x;
                 taskListBox.dragY = y;
@@ -746,7 +746,7 @@ const TaskListRow = GObject.registerClass({
                 this.get_parent().drag_unhighlight_row();
             });
 
-            dropTarget.connect('drop', (_targetWidget, gdkDrop) => {
+            dropTarget.connect('drop', (_self, gdkDrop) => {
                 const taskListBox = this.get_parent();
                 const index = this.get_index();
 
