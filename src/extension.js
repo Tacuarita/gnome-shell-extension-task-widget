@@ -723,9 +723,12 @@ class TaskWidget extends St.BoxLayout {
                     checkbox.getLabelActor().add_style_class_name(
                         'task-cancelled');
                 } else {
-                    checkbox.connect('clicked', () => this._taskClicked(
-                        checkbox, this._clientViews.get(
-                            task._tasklist).client));
+                    checkbox.connect('clicked', () => GLib.idle_add(
+                        GLib.PRIORITY_DEFAULT_IDLE, () => {
+                            this._taskClicked(checkbox, this._clientViews.get(
+                                task._tasklist).client);
+                        })
+                    );
                 }
 
                 if (task._orphan)
