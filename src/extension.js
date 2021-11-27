@@ -215,6 +215,7 @@ class TaskWidget extends St.BoxLayout {
 
         this._taskListName = new St.Label({
             style_class: 'calendar-month-label task-list-name',
+            text: 'placeholder',
         });
 
         this._taskListNameArrow = new St.Icon({
