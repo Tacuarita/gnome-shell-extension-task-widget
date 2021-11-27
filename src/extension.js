@@ -909,7 +909,7 @@ class TaskWidget extends St.BoxLayout {
                     if (allocation.y2 >= adjustment.value) {
                         // Quit when task is below the visible region:
                         if (allocation.y1 > adjustment.value + height +
-                            Utils.LL_THRESHOLD_)
+                            Utils.LL_THRESHOLD)
                             return this._resetTaskBox();
 
                         // For tasks that are in the visible region:
@@ -927,10 +927,13 @@ class TaskWidget extends St.BoxLayout {
                             this._replaceTasksOnGoing = true;
                         } else {
                             this._replaceTasksOnGoing = false;
+
                             // Clean tasks below the visible region. These are
                             // leftover tasks from previous longer task lists:
                             while (this._currentChild.get_next_sibling())
                                 this._currentChild.get_next_sibling().destroy();
+
+                            this._currentChild.destroy();
                         }
                     }
                 } else {
@@ -1016,88 +1019,120 @@ class TaskWidget extends St.BoxLayout {
             const selected = this._settings.get_strv(
                 'selected-task-categories');
 
+            const currentTime = ICalGLib.Time.new_current_with_zone(
+                ICalGLib.Timezone.get_utc_timezone());
+
+            // Builds an S-expression to facilitate task filtering:
+            const buildQuery = (start, end) => {
+                return '(due-in-time-range? (make-time "' + start + '") ' +
+                    '(make-time "' + end + '"))';
+            };
+
+            // Builds an S-expression to facilitate hiding of completed tasks:
+            const hideCompletedTasks = () => {
+                switch (this._settings.get_int('hide-completed-tasks')) {
+                    case Utils.HIDE_COMPLETED_TASKS_['immediately']:
+                        return '(not is-completed?)';
+                    case Utils.HIDE_COMPLETED_TASKS_['after-time-period']: {
+                        const adjust = this._settings.get_int(
+                            'hct-apotac-value');
+
+                        switch (this._settings.get_int('hct-apotac-unit')) {
+                            case Utils.TIME_UNITS_['seconds']:
+                                currentTime.adjust(0, 0, 0, -adjust);
+                                break;
+                            case Utils.TIME_UNITS_['minutes']:
+                                currentTime.adjust(0, 0, -adjust, 0);
+                                break;
+                            case Utils.TIME_UNITS_['hours']:
+                                currentTime.adjust(0, -adjust, 0, 0);
+                                break;
+                            case Utils.TIME_UNITS_['days']:
+                                currentTime.adjust(-adjust, 0, 0, 0);
+                        }
+
+                        return `(not (completed-before? (make-time "${
+                            ECal.isodate_from_time_t(
+                                currentTime.as_timet())}")))`;
+                    }
+
+                    case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']: {
+                        const start = ICalGLib.Time.new_current_with_zone(
+                            ECal.util_get_system_timezone());
+
+                        start.set_time(0, 0, 0);
+
+                        start.convert_timezone(ECal.util_get_system_timezone(),
+                            ICalGLib.Timezone.get_utc_timezone());
+
+                        const spec = ICalGLib.Time.new_current_with_zone(
+                            ECal.util_get_system_timezone());
+
+                        spec.set_time(this._settings.get_int('hct-astod-hour'),
+                            this._settings.get_int('hct-astod-minute'), 0);
+
+                        spec.convert_timezone(ECal.util_get_system_timezone(),
+                            ICalGLib.Timezone.get_utc_timezone());
+
+                        if (currentTime.compare(spec) === -1) {
+                            return `(not (completed-before? (make-time "${
+                                ECal.isodate_from_time_t(
+                                    start.as_timet())}")))`;
+                        } else {
+                            return '(not is-completed?)';
+                        }
+                    }
+                }
+            };
+
             // (User-defined) Show only selected task categories:
             if (this._settings.get_boolean('show-only-selected-categories') &&
                 selected.length) {
-                const currentTime = ICalGLib.Time.new_current_with_zone(
-                    ICalGLib.Timezone.get_utc_timezone());
-
                 const today = ECal.time_day_begin(currentTime.as_timet());
                 const yesterday = ECal.time_add_day(today, -1);
                 const tomorrow = ECal.time_add_day(today, 1);
                 const nextSevenDays = ECal.time_add_day(today, 7);
+                const startOfPast = ECal.isodate_from_time_t(0);
+                const startOfToday = ECal.isodate_from_time_t(today);
+
+                const startOfTomorrow = ECal.isodate_from_time_t(ECal
+                    .time_day_begin(tomorrow));
+
+                const endOfToday = ECal.isodate_from_time_t(
+                    ECal.time_day_end(today));
+
+                const endOfTomorrow = ECal.isodate_from_time_t(
+                    ECal.time_day_end(tomorrow));
+
+                const endOfNextSevenDays = ECal.isodate_from_time_t(
+                    ECal.time_day_end(nextSevenDays));
+
+                const endOfYesterday = ECal.isodate_from_time_t(
+                    ECal.time_day_end(yesterday));
 
                 if (['past', 'today', 'tomorrow'].every(category =>
-                    selected.includes(category))) {
-                    const start = ECal.isodate_from_time_t(0);
-                    const endOfTomorrow = ECal.time_day_end(tomorrow);
-                    const end = ECal.isodate_from_time_t(endOfTomorrow);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (['past', 'today'].every(category =>
-                    selected.includes(category))) {
-                    const start = ECal.isodate_from_time_t(0);
-                    const endOfToday = ECal.time_day_end(today);
-                    const end = ECal.isodate_from_time_t(endOfToday);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (['past', 'tomorrow'].every(category =>
-                    selected.includes(category))) {
-                    const start = ECal.isodate_from_time_t(0);
-                    const endOfTomorrow = ECal.time_day_end(tomorrow);
-                    const end = ECal.isodate_from_time_t(endOfTomorrow);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (['today', 'tomorrow'].every(category =>
-                    selected.includes(category))) {
-                    const start = ECal.isodate_from_time_t(today);
-                    const endOfTomorrow = ECal.time_day_end(tomorrow);
-                    const end = ECal.isodate_from_time_t(endOfTomorrow);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (['past', 'next-seven-days'].every(category =>
-                    selected.includes(category))) {
-                    const start = ECal.isodate_from_time_t(0);
-                    const endOfNextSevenDays = ECal.time_day_end(nextSevenDays);
-                    const end = ECal.isodate_from_time_t(endOfNextSevenDays);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (selected.includes('past')) {
-                    const start = ECal.isodate_from_time_t(0);
-                    const endOfYesterday = ECal.time_day_end(yesterday);
-                    const end = ECal.isodate_from_time_t(endOfYesterday);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (selected.includes('today')) {
-                    const startOfToday = ECal.time_day_begin(today);
-                    const start = ECal.isodate_from_time_t(startOfToday);
-                    const endOfToday = ECal.time_day_end(startOfToday);
-                    const end = ECal.isodate_from_time_t(endOfToday);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (selected.includes('tomorrow')) {
-                    const startOfTomorrow = ECal.time_day_begin(tomorrow);
-                    const start = ECal.isodate_from_time_t(startOfTomorrow);
-                    const endOfTomorrow = ECal.time_day_end(tomorrow);
-                    const end = ECal.isodate_from_time_t(endOfTomorrow);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                } else if (selected.includes('next-seven-days')) {
-                    const start = ECal.isodate_from_time_t(today);
-                    const endOfNextSevenDays = ECal.time_day_end(nextSevenDays);
-                    const end = ECal.isodate_from_time_t(endOfNextSevenDays);
-
-                    query = '(due-in-time-range? (make-time "' + start + '") ' +
-                            '(make-time "' + end + '"))';
-                }
+                    selected.includes(category)))
+                    query = buildQuery(startOfPast, endOfTomorrow);
+                else if (['past', 'today'].every(category =>
+                    selected.includes(category)))
+                    query = buildQuery(startOfPast, endOfToday);
+                else if (['past', 'tomorrow'].every(category =>
+                    selected.includes(category)))
+                    query = buildQuery(startOfPast, endOfTomorrow);
+                else if (['today', 'tomorrow'].every(category =>
+                    selected.includes(category)))
+                    query = buildQuery(startOfToday, endOfTomorrow);
+                else if (['past', 'next-seven-days'].every(category =>
+                    selected.includes(category)))
+                    query = buildQuery(startOfPast, endOfNextSevenDays);
+                else if (selected.includes('past'))
+                    query = buildQuery(startOfPast, endOfYesterday);
+                else if (selected.includes('today'))
+                    query = buildQuery(startOfToday, endOfToday);
+                else if (selected.includes('tomorrow'))
+                    query = buildQuery(startOfTomorrow, endOfTomorrow);
+                else if (selected.includes('next-seven-days'))
+                    query = buildQuery(startOfToday, endOfNextSevenDays);
 
                 if (selected.includes('scheduled'))
                     query = '(and ' + query + ' (has-due?))';
@@ -1113,12 +1148,11 @@ class TaskWidget extends St.BoxLayout {
                 }
             }
 
-            if (this._settings.get_int('hide-completed-tasks')) {
-                query = '(and ' + this._hideCompletedTasks() + ' ' +
-                        query + ')';
-            } else if (query === '') {
+            // (User-defined) Hide completed tasks:
+            if (this._settings.get_int('hide-completed-tasks'))
+                query = '(and ' + hideCompletedTasks() + ' ' +  query + ')';
+            else if (query === '')
                 query = '#t';
-            }
 
             const tasks = await Utils.getTasks_(client, query);
 
@@ -1146,67 +1180,6 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Builds an S-expression to query tasks based on user-defined settings.
-     *
-     * @returns {string} An S-expression representing the task query.
-     */
-    _hideCompletedTasks() {
-        const current = ICalGLib.Time.new_current_with_zone(
-            ICalGLib.Timezone.get_utc_timezone());
-
-        switch (this._settings.get_int('hide-completed-tasks')) {
-            case Utils.HIDE_COMPLETED_TASKS_['immediately']:
-                return '(not is-completed?)';
-            case Utils.HIDE_COMPLETED_TASKS_['after-time-period']: {
-                const adjust = this._settings.get_int('hct-apotac-value');
-
-                switch (this._settings.get_int('hct-apotac-unit')) {
-                    case Utils.TIME_UNITS_['seconds']:
-                        current.adjust(0, 0, 0, -adjust);
-                        break;
-                    case Utils.TIME_UNITS_['minutes']:
-                        current.adjust(0, 0, -adjust, 0);
-                        break;
-                    case Utils.TIME_UNITS_['hours']:
-                        current.adjust(0, -adjust, 0, 0);
-                        break;
-                    case Utils.TIME_UNITS_['days']:
-                        current.adjust(-adjust, 0, 0, 0);
-                }
-
-                return `(not (completed-before? (make-time "${
-                    ECal.isodate_from_time_t(current.as_timet())}")))`;
-            }
-
-            case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']: {
-                const start = ICalGLib.Time.new_current_with_zone(
-                    ECal.util_get_system_timezone());
-
-                start.set_time(0, 0, 0);
-
-                start.convert_timezone(ECal.util_get_system_timezone(),
-                    ICalGLib.Timezone.get_utc_timezone());
-
-                const spec = ICalGLib.Time.new_current_with_zone(
-                    ECal.util_get_system_timezone());
-
-                spec.set_time(this._settings.get_int('hct-astod-hour'),
-                    this._settings.get_int('hct-astod-minute'), 0);
-
-                spec.convert_timezone(ECal.util_get_system_timezone(),
-                    ICalGLib.Timezone.get_utc_timezone());
-
-                if (current.compare(spec) === -1) {
-                    return `(not (completed-before? (make-time "${
-                        ECal.isodate_from_time_t(start.as_timet())}")))`;
-                } else {
-                    return '(not is-completed?)';
-                }
-            }
-        }
-    }
-
-    /**
      * Handles task click events. Adds/removes styling and stores changes.
      *
      * @param {Checkbox} checkbox - Task's checkbox that got clicked.
@@ -1214,6 +1187,7 @@ class TaskWidget extends St.BoxLayout {
      */
     async _taskClicked(checkbox, client) {
         try {
+            this._resetTaskBox();
             const objects = [];
 
             const processTask = (cb, root = false) => {
@@ -1470,9 +1444,7 @@ class TaskWidget extends St.BoxLayout {
         if (!fullReset)
             return;
 
-        if (this._upperLimit)
-            this._scrollView.vscroll.adjustment.set_values(0, 0, 0, 0, 0, 0);
-
+        this._scrollView.vscroll.adjustment.set_values(0, 0, 0, 0, 0, 0);
         this._upperLimit = 0;
     }
 
