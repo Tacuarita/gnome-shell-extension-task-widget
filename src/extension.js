@@ -909,7 +909,7 @@ class TaskWidget extends St.BoxLayout {
                     if (allocation.y2 >= adjustment.value) {
                         // Quit when task is below the visible region:
                         if (allocation.y1 > adjustment.value + height +
-                            Utils.LL_THRESHOLD)
+                            Utils.LL_THRESHOLD_)
                             return this._resetTaskBox();
 
                         // For tasks that are in the visible region:
