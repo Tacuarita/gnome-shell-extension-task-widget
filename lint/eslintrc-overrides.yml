@@ -1,6 +1,9 @@
 rules:
   prefer-const: error
   prefer-destructuring: error
+  max-len:
+    - error
+    - code: 80
 
 overrides:
 - files: src/*.js
