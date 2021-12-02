@@ -723,12 +723,9 @@ class TaskWidget extends St.BoxLayout {
                     checkbox.getLabelActor().add_style_class_name(
                         'task-cancelled');
                 } else {
-                    checkbox.connect('clicked', () => GLib.idle_add(
-                        GLib.PRIORITY_DEFAULT_IDLE, () => {
-                            this._taskClicked(checkbox, this._clientViews.get(
-                                task._tasklist).client);
-                        })
-                    );
+                    checkbox.connect('clicked', () => this._taskClicked(
+                        checkbox, this._clientViews.get(
+                            task._tasklist).client));
                 }
 
                 if (task._orphan)
@@ -912,8 +909,7 @@ class TaskWidget extends St.BoxLayout {
                     // If task is not above the visible region:
                     if (allocation.y2 >= adjustment.value) {
                         // Quit when task is below the visible region:
-                        if (allocation.y1 > adjustment.value + height +
-                            Utils.LL_THRESHOLD_)
+                        if (allocation.y1 > limit)
                             return this._resetTaskBox();
 
                         // For tasks that are in the visible region:
@@ -927,7 +923,8 @@ class TaskWidget extends St.BoxLayout {
                     }
 
                     if (this._currentChild) {
-                        if (this._currentChild.allocation.y1 <= limit) {
+                        if (this._currentChild.allocation.y1 <= limit -
+                            Utils.LL_THRESHOLD_ / 2) {
                             this._replaceTasksOnGoing = true;
                         } else {
                             this._replaceTasksOnGoing = false;
