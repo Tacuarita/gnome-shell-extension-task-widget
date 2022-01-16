@@ -231,8 +231,6 @@ class TaskWidget extends St.BoxLayout {
 
         this._taskListNameButton = new St.Button({
             style_class: 'task-list-name-button',
-            reactive: true,
-            track_hover: true,
             can_focus: true,
             x_expand: true,
             accessible_name: _('Select task list'),
@@ -697,10 +695,56 @@ class TaskWidget extends St.BoxLayout {
             const toUTC = x => Date.UTC(x.getFullYear(), x.getMonth(),
                 x.getDate());
 
+            // For a focused checkbox, returns UID of the next or previous
+            // sibling checkbox:
+            const getSiblingCheckbox = (item, next = false) => {
+                let sibling = next ? item.get_next_sibling()
+                    : item.get_previous_sibling();
+
+                while (sibling) {
+                    if (sibling instanceof CheckBox.CheckBox &&
+                        sibling.can_focus && !(next && item._rootTask &&
+                        !sibling._rootTask))
+                        return sibling._uid;
+
+                    sibling = next ? sibling.get_next_sibling()
+                        : sibling.get_previous_sibling();
+                }
+
+                return null;
+            };
+
             // Builds task checkboxes:
             const buildCheckbox = (task, root = false) => {
                 const checkbox = new CheckBox.CheckBox(task.get_summary()
                     .get_value());
+
+                // Keep track of the focused checkbox for functional keyboard
+                // navigation:
+                checkbox.connect('key-focus-in', self => {
+                    this._focused = {
+                        'previous': getSiblingCheckbox(self),
+                        'focused': self,
+                        'next': getSiblingCheckbox(self, true),
+                        'refocus': null,
+                    };
+
+                    const allocation = self.get_allocation_box();
+                    const {adjustment} = this._scrollView.vscroll;
+                    const height = this._taskBox.allocation.get_height();
+
+                    // Updates scrollbar adjustment when user navigates task
+                    // lists using keyboard:
+                    if (adjustment.value && allocation.y1 <
+                        adjustment.value + Utils.LL_THRESHOLD_) {
+                        adjustment.set_value(adjustment.value -
+                            Utils.LL_THRESHOLD_ / 2);
+                    } else if (allocation.y1 > height + adjustment.value -
+                        Utils.LL_THRESHOLD_) {
+                        adjustment.set_value(adjustment.value +
+                            Utils.LL_THRESHOLD_ / 2);
+                    }
+                });
 
                 if (task.get_status() === ICalGLib.PropertyStatus.COMPLETED) {
                     checkbox.checked = true;
@@ -719,6 +763,7 @@ class TaskWidget extends St.BoxLayout {
                 if (task.get_status() === ICalGLib.PropertyStatus.CANCELLED) {
                     checkbox.set_opacity(100);
                     checkbox.set_toggle_mode(false);
+                    checkbox.set_can_focus(false);
 
                     checkbox.getLabelActor().add_style_class_name(
                         'task-cancelled');
@@ -904,6 +949,7 @@ class TaskWidget extends St.BoxLayout {
                 const limit = this._upperLimit + height + Utils.LL_THRESHOLD_;
 
                 if (this._currentChild) {
+                    this._replaceTasksOnGoing = true;
                     const {allocation} = this._currentChild;
 
                     // If task is not above the visible region:
@@ -915,6 +961,21 @@ class TaskWidget extends St.BoxLayout {
                         // For tasks that are in the visible region:
                         this._taskBox.replace_child(this._currentChild, item);
                         this._currentChild = item.get_next_sibling();
+
+                        // Keep track of the focused checkbox:
+                        if (this._focused) {
+                            if (this._focused['previous'] === item._uid)
+                                this._focused['refocus'] = item;
+                            else if (this._focused['focused']._uid ===
+                                item._uid)
+                                item.grab_key_focus();
+                            else if (this._focused['next'] === item._uid &&
+                                !this._focused['focused'].has_key_focus())
+                                this._focused['refocus'] = item;
+                            else if (!this._focused['previous'] &&
+                                !this._focused['next'])
+                                this._taskListNameButton.grab_key_focus();
+                        }
                     } else {
                         this._currentChild = this._currentChild
                             .get_next_sibling();
@@ -922,19 +983,16 @@ class TaskWidget extends St.BoxLayout {
                         return;
                     }
 
-                    if (this._currentChild) {
-                        if (this._currentChild.allocation.y1 <= limit -
-                            Utils.LL_THRESHOLD_ / 2) {
-                            this._replaceTasksOnGoing = true;
-                        } else {
-                            this._replaceTasksOnGoing = false;
+                    if (this._currentChild && this._currentChild.allocation.y1 >
+                        limit - Utils.LL_THRESHOLD_ / 2) {
+                        this._replaceTasksOnGoing = false;
 
-                            // Clean tasks below the visible region. These are
-                            // leftover tasks from previous longer task lists:
-                            while (this._currentChild.get_next_sibling())
-                                this._currentChild.get_next_sibling().destroy();
-
+                        // Clean tasks below the visible region. These are
+                        // leftover tasks from previous longer task lists:
+                        while (this._currentChild) {
+                            const next = this._currentChild.get_next_sibling();
                             this._currentChild.destroy();
+                            this._currentChild = next;
                         }
                     }
                 } else {
@@ -944,7 +1002,7 @@ class TaskWidget extends St.BoxLayout {
 
                 // Load tasks in small portions;
                 if (adjustment.upper > limit && !this._replaceTasksOnGoing)
-                    return this._resetTaskBox();
+                    this._resetTaskBox(false, true);
             };
 
             // Adds task checkboxes:
@@ -960,7 +1018,7 @@ class TaskWidget extends St.BoxLayout {
                     }
 
                     this._allTasksLoaded = true;
-                    return this._resetTaskBox();
+                    return this._resetTaskBox(false, true);
                 }
 
                 const checkbox = buildCheckbox(task, true);
@@ -1431,20 +1489,25 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * Stops on-going `GLib.idle_add` operations and resets vertical scrollbar
-     * adjustment.
+     * Stops on-going `GLib.idle_add` operations, restores focus and resets
+     * vertical scrollbar adjustment.
      *
-     * @param {boolean} fullReset - Reset vertical scrollbar adjustment.
+     * @param {boolean} [fullReset] - Reset vertical scrollbar adjustment.
+     * @param {boolean} [refocus] - Refocus the specified task checkbox.
      */
-    _resetTaskBox(fullReset = false) {
+    _resetTaskBox(fullReset = false, refocus = false) {
         if (this._idleAddId) {
             GLib.source_remove(this._idleAddId);
             delete this._idleAddId;
         }
 
+        if (refocus && this._focused && this._focused['refocus'])
+            this._focused['refocus'].grab_key_focus();
+
         if (!fullReset)
             return;
 
+        delete this._focused;
         this._scrollView.vscroll.adjustment.set_values(0, 0, 0, 0, 0, 0);
         this._upperLimit = 0;
     }
