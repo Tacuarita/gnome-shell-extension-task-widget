@@ -245,55 +245,59 @@ class TaskWidget extends St.BoxLayout {
 
         Main.uiGroup.add_actor(this._taskListMenu.actor);
         this._taskListMenu.actor.hide();
+        const placeholder = new PopupMenu.PopupMenuItem('placeholder');
+        this._taskListMenu.addMenuItem(placeholder);
 
-        this._taskListNameButton.connect('clicked', () => {
-            this._taskListMenu.removeAll();
-
-            for (const [index, taskList] of this._taskLists.entries()) {
-                const name = taskList.name.length > 25
-                    ? taskList.name.substring(0, 22) + Utils.ELLIPSIS_CHAR_
-                    : taskList.name;
-
-                const item = new PopupMenu.PopupMenuItem(name);
-
-                if (index === this._activeTaskList && !this._mergeTaskLists)
-                    item.setOrnament(PopupMenu.Ornament.DOT);
-                else
-                    item.setOrnament(PopupMenu.Ornament.NONE);
-
-                item.connect('activate', () => {
-                    if (this._mergeTaskLists)
-                        delete this._mergeTaskLists;
-
-                    this._resetTaskBox(true);
-                    this._showActiveTaskList(index);
-                });
-
-                this._taskListMenu.addMenuItem(item);
-            }
-
-            const separator = new PopupMenu.PopupSeparatorMenuItem();
-            this._taskListMenu.addMenuItem(separator);
-            const allTasksItem = new PopupMenu.PopupMenuItem(_('All Tasks'));
-
-            if (this._mergeTaskLists)
-                allTasksItem.setOrnament(PopupMenu.Ornament.DOT);
-
-            allTasksItem.connect('activate', () => {
-                this._mergeTaskLists = true;
-                this._resetTaskBox(true);
-                this._showActiveTaskList(this._activeTaskList);
-            });
-
-            this._taskListMenu.addMenuItem(allTasksItem);
-            this._taskListMenu.toggle();
-        });
+        this._taskListNameButton.connect('clicked', () =>
+            this._taskListMenu.toggle());
 
         this._taskListMenu.connect('open-state-changed', (self, isOpen) => {
-            if (isOpen)
+            if (isOpen) {
+                this._taskListMenu.removeAll();
                 this._taskListNameButton.add_style_pseudo_class('active');
-            else
+
+                for (const [index, taskList] of this._taskLists.entries()) {
+                    const name = taskList.name.length > 25
+                        ? taskList.name.substring(0, 22) + Utils.ELLIPSIS_CHAR_
+                        : taskList.name;
+
+                    const item = new PopupMenu.PopupMenuItem(name);
+
+                    if (index === this._activeTaskList && !this._mergeTaskLists)
+                        item.setOrnament(PopupMenu.Ornament.DOT);
+                    else
+                        item.setOrnament(PopupMenu.Ornament.NONE);
+
+                    item.connect('activate', () => {
+                        if (this._mergeTaskLists)
+                            delete this._mergeTaskLists;
+
+                        this._resetTaskBox(true);
+                        this._showActiveTaskList(index);
+                    });
+
+                    this._taskListMenu.addMenuItem(item);
+                }
+
+                const separator = new PopupMenu.PopupSeparatorMenuItem();
+                this._taskListMenu.addMenuItem(separator);
+
+                const allTasksItem = new PopupMenu.PopupMenuItem(
+                    _('All Tasks'));
+
+                if (this._mergeTaskLists)
+                    allTasksItem.setOrnament(PopupMenu.Ornament.DOT);
+
+                allTasksItem.connect('activate', () => {
+                    this._mergeTaskLists = true;
+                    this._resetTaskBox(true);
+                    this._showActiveTaskList(this._activeTaskList);
+                });
+
+                this._taskListMenu.addMenuItem(allTasksItem);
+            } else {
                 this._taskListNameButton.remove_style_pseudo_class('active');
+            }
         });
 
         const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
