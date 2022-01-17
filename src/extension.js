@@ -300,8 +300,8 @@ class TaskWidget extends St.BoxLayout {
             }
         });
 
-        const manager = new PopupMenu.PopupMenuManager(this._taskListNameButton,
-            {actionMode: Shell.ActionMode.NONE});
+        const manager = new PopupMenu.PopupMenuManager(
+            this._taskListNameButton);
 
         manager.addMenu(this._taskListMenu);
 
