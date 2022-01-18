@@ -57,6 +57,10 @@ class TaskWidget extends St.BoxLayout {
             settings_schema: gschema.lookup(Me.metadata.base, true),
         });
 
+        const scaleFactor = St.ThemeContext.get_for_stage(
+            global.stage).scale_factor;
+
+        this._threshold = Utils.LL_THRESHOLD_ * scaleFactor;
         this.connect('destroy', this._onDestroy.bind(this));
         this._buildPlaceholder();
         this._initTaskLists();
@@ -723,8 +727,8 @@ class TaskWidget extends St.BoxLayout {
                 const checkbox = new CheckBox.CheckBox(task.get_summary()
                     .get_value());
 
-                // Keep track of the focused checkbox for functional keyboard
-                // navigation:
+                // Keep track of the focused checkbox for users using
+                // keyboard navigation:
                 checkbox.connect('key-focus-in', self => {
                     this._focused = {
                         'previous': getSiblingCheckbox(self),
@@ -740,13 +744,13 @@ class TaskWidget extends St.BoxLayout {
                     // Updates scrollbar adjustment when user navigates task
                     // lists using keyboard:
                     if (adjustment.value && allocation.y1 <
-                        adjustment.value + Utils.LL_THRESHOLD_) {
+                        adjustment.value + this._threshold) {
                         adjustment.set_value(adjustment.value -
-                            Utils.LL_THRESHOLD_ / 2);
+                           this._threshold / 2);
                     } else if (allocation.y1 > height + adjustment.value -
-                        Utils.LL_THRESHOLD_) {
+                        this._threshold) {
                         adjustment.set_value(adjustment.value +
-                            Utils.LL_THRESHOLD_ / 2);
+                            this._threshold / 2);
                     }
                 });
 
@@ -950,7 +954,7 @@ class TaskWidget extends St.BoxLayout {
 
                 const {adjustment} = this._scrollView.vscroll;
                 const height = this._taskBox.get_allocation_box().get_height();
-                const limit = this._upperLimit + height + Utils.LL_THRESHOLD_;
+                const limit = this._upperLimit + height + this._threshold;
 
                 if (this._currentChild) {
                     this._replaceTasksOnGoing = true;
@@ -966,7 +970,7 @@ class TaskWidget extends St.BoxLayout {
                         this._taskBox.replace_child(this._currentChild, item);
                         this._currentChild = item.get_next_sibling();
 
-                        // Keep track of the focused checkbox:
+                        // Reset focused checkbox after update:
                         if (this._focused) {
                             if (this._focused['previous'] === item._uid)
                                 this._focused['refocus'] = item;
@@ -988,7 +992,7 @@ class TaskWidget extends St.BoxLayout {
                     }
 
                     if (this._currentChild && this._currentChild.allocation.y1 >
-                        limit - Utils.LL_THRESHOLD_ / 2) {
+                        limit - this._threshold / 2) {
                         this._replaceTasksOnGoing = false;
 
                         // Clean tasks below the visible region. These are
@@ -1458,7 +1462,7 @@ class TaskWidget extends St.BoxLayout {
         const height = this._taskBox.allocation.get_height();
 
         if (adjustment.upper - adjustment.value - height <
-            Utils.LL_THRESHOLD_) {
+            this._threshold) {
             this._upperLimit += height;
             this._showActiveTaskList(this._activeTaskList);
         }
