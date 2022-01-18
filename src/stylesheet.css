@@ -58,3 +58,7 @@
   min-height: auto;
   border-radius: 0;
 }
+
+.task-widget-column .check-box StBin {
+  background-size: contain;
+}
