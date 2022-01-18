@@ -57,10 +57,6 @@ class TaskWidget extends St.BoxLayout {
             settings_schema: gschema.lookup(Me.metadata.base, true),
         });
 
-        const scaleFactor = St.ThemeContext.get_for_stage(
-            global.stage).scale_factor;
-
-        this._threshold = Utils.LL_THRESHOLD_ * scaleFactor;
         this.connect('destroy', this._onDestroy.bind(this));
         this._buildPlaceholder();
         this._initTaskLists();
@@ -141,28 +137,26 @@ class TaskWidget extends St.BoxLayout {
                 Utils.debounce_(this._onTaskListScrolled.bind(this), 'vscroll',
                     100, false));
 
-            const scaleFactor = St.ThemeContext.get_for_stage(global.stage)
-                .scale_factor;
+            const themeContext = St.ThemeContext.get_for_stage(global.stage);
+            this._threshold = Utils.LL_THRESHOLD_ * themeContext.scale_factor;
 
             const spacing = this._messageList._placeholder.get_theme_node()
                 .get_length('spacing');
 
             this._taskBox = new St.BoxLayout({
                 vertical: true,
-                style: `spacing: ${spacing / scaleFactor}px`,
+                style: `spacing: ${spacing / themeContext.scaleFactor}px`,
             });
 
             this._scrollView.add_actor(this._taskBox);
             this._contentBox.add_child(this._scrollView);
-
-            this._onMenuOpenId = DateMenu.connect('open-state-changed',
-                this._onMenuOpen.bind(this));
-
-            const themeContext = St.ThemeContext.get_for_stage(global.stage);
             this._loadThemeHacks(themeContext);
 
             this._themeChangedId = themeContext.connect('changed',
                 this._loadThemeHacks.bind(this));
+
+            this._onMenuOpenId = DateMenu.connect('open-state-changed',
+                this._onMenuOpen.bind(this));
 
             Gio.Settings.sync();
 
@@ -636,7 +630,6 @@ class TaskWidget extends St.BoxLayout {
      * For a given task list, lists tasks as checkboxes with labels and groups
      * them under appropriate group labels in the widget.
      *
-     * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/3100
      * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2811
      *
      * @param {string} uid - Unique task list identifier.
@@ -1559,6 +1552,7 @@ class TaskWidget extends St.BoxLayout {
             context.scale_factor);
 
         this._contentBox.set_style(`margin-right: ${l}px; margin-left: ${r}px`);
+        this._threshold = Utils.LL_THRESHOLD_ * context.scale_factor;
     }
 
     /**
