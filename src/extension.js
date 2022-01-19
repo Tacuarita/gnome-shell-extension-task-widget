@@ -152,7 +152,7 @@ class TaskWidget extends St.BoxLayout {
             this._contentBox.add_child(this._scrollView);
             this._loadThemeHacks(themeContext);
 
-            this._themeChangedId = themeContext.connect('changed',
+            this._themeChangedId = themeContext.connect('notify::scale-factor',
                 this._loadThemeHacks.bind(this));
 
             this._onMenuOpenId = DateMenu.connect('open-state-changed',
@@ -406,7 +406,7 @@ class TaskWidget extends St.BoxLayout {
                 // Since `source` is only a descriptor of a data source, we
                 // need an `ECal.Client` - interface to access the data itself:
                 client = await Utils.getECalClient_(source,
-                    ECal.ClientSourceType.TASKS, 10);
+                    ECal.ClientSourceType.TASKS, 1);
 
                 // `ECal.ClientView` allows to receive change notifications on
                 // task lists, specifically task additions, removals and
@@ -953,14 +953,10 @@ class TaskWidget extends St.BoxLayout {
                     this._replaceTasksOnGoing = true;
                     const {allocation} = this._currentChild;
 
-                    // If task is not above the visible region:
+                    // Skip tasks above the visible region:
                     if (allocation.y2 >= adjustment.value) {
-                        // Quit when task is below the visible region:
-                        if (allocation.y1 > limit)
-                            return this._resetTaskBox();
-
-                        // For tasks that are in the visible region:
                         this._taskBox.replace_child(this._currentChild, item);
+
                         this._currentChild = item.get_next_sibling();
 
                         // Reset focused checkbox after update:
@@ -984,8 +980,8 @@ class TaskWidget extends St.BoxLayout {
                         return;
                     }
 
-                    if (this._currentChild && this._currentChild.allocation.y1 >
-                        limit - this._threshold / 2) {
+                    if (this._currentChild &&
+                        this._currentChild.allocation.y1 > limit) {
                         this._replaceTasksOnGoing = false;
 
                         // Clean tasks below the visible region. These are
@@ -1001,7 +997,7 @@ class TaskWidget extends St.BoxLayout {
                     this._replaceTasksOnGoing = false;
                 }
 
-                // Load tasks in small portions;
+                // Load tasks in small incrementss;
                 if (adjustment.upper > limit && !this._replaceTasksOnGoing)
                     this._resetTaskBox(false, true);
             };
@@ -1454,8 +1450,7 @@ class TaskWidget extends St.BoxLayout {
 
         const height = this._taskBox.allocation.get_height();
 
-        if (adjustment.upper - adjustment.value - height <
-            this._threshold) {
+        if (adjustment.upper - adjustment.value - height <= this._threshold) {
             this._upperLimit += height;
             this._showActiveTaskList(this._activeTaskList);
         }
