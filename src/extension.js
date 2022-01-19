@@ -1605,27 +1605,25 @@ class TaskWidget extends St.BoxLayout {
                 delete this._refreshTimeoutId;
             }
 
+            let last = this._taskBox.get_last_child();
+            const height = this._taskBox.get_allocation_box().get_height();
+
+            // Once the menu is closed, remove tasks below the visible region:
+            GLib.idle_add(GLib.PRIORITY_LOW, () => {
+                if (last && last.allocation.y1 > height + this._threshold) {
+                    const previous = last.get_previous_sibling();
+                    last.destroy();
+                    last = previous;
+                    return GLib.SOURCE_CONTINUE;
+                }
+
+                return GLib.SOURCE_REMOVE;
+            });
+
             delete this._rootTasks;
             delete this._orphanTasks;
             delete this._taskUids;
             this._resetTaskBox(true);
-
-            // // TODO: move to resetTaskBox
-            // // Because we closed the menu and reset the vertical adjustment,
-            // // checkboxes below the visible region can be freed from memory:
-            // let last = this._taskBox.get_last_child();
-            // const height = this._taskBox.get_allocation_box().get_height();
-
-            // GLib.idle_add(GLib.PRIORITY_LOW, () => {
-            //     if (last && last.allocation.y1 > height) {
-            //         const previous = last.get_previous_sibling();
-            //         last.destroy();
-            //         last = previous;
-            //         return GLib.SOURCE_CONTINUE;
-            //     }
-
-            //     return GLib.SOURCE_REMOVE;
-            // });
         }
     }
 
