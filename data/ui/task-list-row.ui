@@ -11,8 +11,6 @@
       <attribute name='action'>options-menu.down</attribute>
     </item>
   </menu>
-  <object class="GtkBox" id="dragBox">
-  </object>
   <template class="TaskListRow" parent="GtkListBoxRow">
     <property name="activatable">0</property>
     <property name="child">

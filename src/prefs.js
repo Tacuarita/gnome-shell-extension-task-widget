@@ -641,11 +641,10 @@ const TaskListRow = GObject.registerClass({
         'taskListSwitch',
         'taskListName',
         'taskListProvider',
-        'dragBox',
         'taskListOptionsButton',
         'taskListOptionsSpinner',
         'taskListGrid',
-    ],
+    ].concat(!Utils.shellVersionAtLeast_(40) ? ['dragBox'] : []),
 }, class TaskListRow extends Gtk.ListBoxRow {
     /**
      * Initializes a task list row.
