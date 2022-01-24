@@ -549,10 +549,11 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Creates data structures required to resolve task hierarchy.
      *
-     * @param {[string, ECal.Component]} tasks - A list consisting of task
-     * list UIDs and task objects.
+     * @param {ECal.Component[]|ECal.Component[][]} tasks - A list or a list of
+     * lists of task objects.
+     * @param {string} [taskListUid] - UID of task list tasks belong to.
      */
-    _buildTaskMap(tasks) {
+    _buildTaskMap(tasks, taskListUid = null) {
         let index = 0;
         let start = 0;
         this._rootTasks = [];
@@ -560,15 +561,23 @@ class TaskWidget extends St.BoxLayout {
         this._relatedTo = new Map();
         this._orphanTasks = new Set();
 
-        for (const [taskListUid, task] of tasks.sort((a, b) =>
-            Utils.sortByDueDate_(a, b) || Utils.sortByPriority_(a, b) ||
-            Utils.sortByName_(a, b))) {
+        if (!taskListUid) {
+            tasks = [].concat(...tasks.map((taskList, i) => taskList.map(
+                task => {
+                    task._taskList = this._taskLists[i].uid;
+                    return task;
+                }
+            )));
+        }
+
+        for (const task of tasks.sort((a, b) => Utils.sortByDueDate_(a, b) ||
+            Utils.sortByPriority_(a, b) || Utils.sortByName_(a, b))) {
             if (!task.get_summary())
                 continue;
 
             task._uid = task.get_icalcomponent().get_uid();
             task._index = index++;
-            task._tasklist = taskListUid;
+            task._taskList = task._taskList ? task._taskList : taskListUid;
             this._taskUids.add(task._uid);
 
             task._due = task.get_due() ? new Date(task.get_due().get_value()
@@ -597,8 +606,8 @@ class TaskWidget extends St.BoxLayout {
                 this._orphanTasks.delete(task._uid);
         }
 
-        // Orphan tasks are subtasks with inaccessible parents. We will add
-        // them as root tasks into correct positions:
+        // Orphan tasks are subtasks with inaccessible parents. We will
+        // add them as root tasks into correct positions:
         for (const parentUid of this._orphanTasks) {
             for (const task of this._relatedTo.get(parentUid)) {
                 task._orphan = true;
@@ -632,11 +641,11 @@ class TaskWidget extends St.BoxLayout {
      *
      * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2811
      *
-     * @param {string} uid - Unique task list identifier.
+     * @param {string} taskListUid - Unique task list identifier.
      * @param {boolean} merge - Task lists will be merged into one.
      * @returns {Promise<boolean>} `true` if there's at least one task.
      */
-    async _listTasks(uid, merge) {
+    async _listTasks(taskListUid, merge) {
         try {
             let label, prev, tasks;
             const today = new Date();
@@ -677,16 +686,15 @@ class TaskWidget extends St.BoxLayout {
                 if (taskLists.some(taskList => !taskList))
                     return;
 
-                tasks = [].concat(...taskLists.map((taskList, index) =>
-                    taskList.map(task => [this._taskLists[index].uid, task])));
+                this._buildTaskMap(taskLists);
             } else {
                 tasks = await this._filterTasks(this._clientViews.get(
-                    uid).client);
+                    taskListUid).client);
 
                 if (!tasks || this._idleAddId)
                     return;
 
-                tasks = tasks.map(task => [uid, task]);
+                this._buildTaskMap(tasks, taskListUid);
             }
 
             // Dates have time zone information, which can span regions with
@@ -771,7 +779,7 @@ class TaskWidget extends St.BoxLayout {
                 } else {
                     checkbox.connect('clicked', () => this._taskClicked(
                         checkbox, this._clientViews.get(
-                            task._tasklist).client));
+                            task._taskList).client));
                 }
 
                 if (task._orphan)
@@ -997,7 +1005,7 @@ class TaskWidget extends St.BoxLayout {
                     this._replaceTasksOnGoing = false;
                 }
 
-                // Load tasks in small incrementss;
+                // Load tasks in small increments;
                 if (adjustment.upper > limit && !this._replaceTasksOnGoing)
                     this._resetTaskBox(false, true);
             };
@@ -1045,7 +1053,6 @@ class TaskWidget extends St.BoxLayout {
                 return GLib.SOURCE_CONTINUE;
             };
 
-            this._buildTaskMap(tasks);
             this._currentRootTask = 0;
             this._currentChild = this._taskBox.first_child;
 

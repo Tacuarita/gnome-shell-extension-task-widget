@@ -208,19 +208,17 @@ function customSort_(order, a, b) {
 /**
  * Sorts tasks by their name.
  *
- * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
- * and task objects.
- * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
- * and task objects.
+ * @param {ECal.Component[]} a - A list consisting of task objects.
+ * @param {ECal.Component[]} b - A list consisting of task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function sortByName_(a, b) {
-    const lc = x => x[1].get_summary().get_value().toLowerCase();
+    const lc = x => x.get_summary().get_value().toLowerCase();
 
-    if (a[1].get_summary() === null)
+    if (a.get_summary() === null)
         return 1;
 
-    if (b[1].get_summary() === null)
+    if (b.get_summary() === null)
         return -1;
 
     return lc(a).localeCompare(lc(b));
@@ -230,22 +228,20 @@ function sortByName_(a, b) {
  * Sorts tasks by their due date. If a task has no due date, move it to the
  * end of the list.
  *
- * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
- * and task objects.
- * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
- * and task objects.
+ * @param {ECal.Component[]} a - A list consisting of task objects.
+ * @param {ECal.Component[]} b - A list consisting of task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function sortByDueDate_(a, b) {
-    const time = x => x[1].get_due().get_value().as_timet();
+    const time = x => x.get_due().get_value().as_timet();
 
-    if (a[1].get_due() === null && b[1].get_due() === null)
+    if (a.get_due() === null && b.get_due() === null)
         return sortByPriority_(a, b);
 
-    if (b[1].get_due() === null)
+    if (b.get_due() === null)
         return -1;
 
-    if (a[1].get_due() === null)
+    if (a.get_due() === null)
         return 1;
 
     return time(a) - time(b);
@@ -255,14 +251,12 @@ function sortByDueDate_(a, b) {
  * Sorts tasks by their priority. If a task has no priority, move it to the
  * end of the list.
  *
- * @param {[string, ECal.Component]} a - A list consisting of task list UIDs
- * and task objects.
- * @param {[string, ECal.Component]} b - A list consisting of task list UIDs
- * and task objects.
+ * @param {ECal.Component[]} a - A list consisting of task objects.
+ * @param {ECal.Component[]} b - A list consisting of task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function sortByPriority_(a, b) {
-    const priority = x => x[1].get_priority();
+    const priority = x => x.get_priority();
 
     if (priority(a) < 1 && priority(b) < 1)
         return sortByName_(a, b);
