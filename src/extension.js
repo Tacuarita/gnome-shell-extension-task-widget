@@ -1612,15 +1612,14 @@ class TaskWidget extends St.BoxLayout {
                 delete this._refreshTimeoutId;
             }
 
-            let last = this._taskBox.get_last_child();
             const height = this._taskBox.get_allocation_box().get_height();
 
             // Once the menu is closed, remove tasks below the visible region:
-            GLib.idle_add(GLib.PRIORITY_LOW, () => {
+            this._cleanUpId = GLib.idle_add(GLib.PRIORITY_LOW, () => {
+                const last = this._taskBox.get_last_child();
+
                 if (last && last.allocation.y1 > height + this._threshold) {
-                    const previous = last.get_previous_sibling();
                     last.destroy();
-                    last = previous;
                     return GLib.SOURCE_CONTINUE;
                 }
 
@@ -1693,6 +1692,9 @@ class TaskWidget extends St.BoxLayout {
 
         if (this._settingsChangedId)
             this._settings.disconnect(this._settingsChangedId);
+
+        if (this._cleanUpId)
+            GLib.source_remove(this._cleanUpId);
 
         if (this._refreshTimeoutId)
             GLib.source_remove(this._refreshTimeoutId);
