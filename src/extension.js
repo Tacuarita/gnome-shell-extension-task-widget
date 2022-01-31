@@ -431,10 +431,8 @@ class TaskWidget extends St.BoxLayout {
                 ({client} = this._clientViews.get(source.uid));
             }
 
-            if (!await this._filterTasks(client))
-                return;
-
-            if (this._taskLists.map(i => i.uid).indexOf(source.uid) !== -1)
+            if (!await this._filterTasks(client) || this._taskLists.map(i =>
+                i.uid).indexOf(source.uid) !== -1)
                 return;
 
             this._taskLists.push({
@@ -561,7 +559,7 @@ class TaskWidget extends St.BoxLayout {
         this._relatedTo = new Map();
         this._orphanTasks = new Set();
 
-        if (!taskListUid) {
+        if (taskListUid === null) {
             tasks = [].concat(...tasks.map((taskList, i) => taskList.map(
                 task => {
                     task._taskList = this._taskLists[i].uid;
@@ -704,7 +702,7 @@ class TaskWidget extends St.BoxLayout {
             const toUTC = x => Date.UTC(x.getFullYear(), x.getMonth(),
                 x.getDate());
 
-            // For a focused checkbox, returns UID of the next or previous
+            // For a given checkbox, returns UID of the next or previous
             // sibling checkbox:
             const getSiblingCheckbox = (item, next = false) => {
                 let sibling = next ? item.get_next_sibling()
@@ -964,7 +962,6 @@ class TaskWidget extends St.BoxLayout {
                     // Skip tasks above the visible region:
                     if (allocation.y2 >= adjustment.value) {
                         this._taskBox.replace_child(this._currentChild, item);
-
                         this._currentChild = item.get_next_sibling();
 
                         // Reset focused checkbox after update:
@@ -1005,8 +1002,10 @@ class TaskWidget extends St.BoxLayout {
                     this._replaceTasksOnGoing = false;
                 }
 
-                // Load tasks in small increments;
-                if (adjustment.upper > limit && !this._replaceTasksOnGoing)
+                // Load tasks in small increments. If the last task has
+                // children, keep loading until all children are loaded:
+                if (adjustment.upper > limit && !this._replaceTasksOnGoing &&
+                    this._taskBox.last_child._rootTask)
                     this._resetTaskBox(false, true);
             };
 
