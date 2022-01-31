@@ -144,6 +144,8 @@ const TaskWidgetSettings = GObject.registerClass({
 }, class TaskWidgetSettings extends Gtk.Box {
     /**
      * Initializes the settings widget.
+     *
+     * @todo Replace Gtk.ComboBox with GTK4's Gtk.Dropdown.
      */
     _init() {
         super._init();
@@ -500,8 +502,8 @@ const TaskWidgetSettings = GObject.registerClass({
             this._backendRefreshButton.set_visible(false);
             this._backendRefreshButtonSpinner.set_visible(true);
 
-            GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 10,
-                () => {
+            this._backendRefreshId = GLib.timeout_add_seconds(
+                GLib.PRIORITY_DEFAULT, 5, () => {
                     this._backendRefreshButton.set_visible(true);
                     this._backendRefreshButtonSpinner.set_visible(false);
                     return GLib.SOURCE_REMOVE;
@@ -604,6 +606,9 @@ const TaskWidgetSettings = GObject.registerClass({
 
         if (this._taskListChangedId)
             this._sourceRegistry.disconnect(this._taskListChangedId);
+
+        if (this._backendRefreshId)
+            GLib.source_remove(this._backendRefreshId);
     }
 
     /**
