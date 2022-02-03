@@ -58,9 +58,14 @@ if (get_option('per_user') and get_option('build_zip'))
 endif
 
 eslint = find_program('eslint', required: false)
-modules = run_command('npm', 'root', '-g')
+# modules = run_command('npm', 'root', '-g')
+
+# if eslint.found()
+#   test('ESLint', eslint, args: [join_paths(meson.project_source_root() , 'src'),
+#     '--resolve-plugins-relative-to=' + modules.stdout().strip() + '/'])
+# endif
+
 
 if eslint.found()
-  test('ESLint', eslint, args: [join_paths(meson.project_source_root() , 'src'),
-    '--resolve-plugins-relative-to=' + modules.stdout().strip() + '/'])
+  test('ESLint', eslint, args: join_paths(meson.source_root(), 'src'))
 endif
