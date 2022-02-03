@@ -61,6 +61,6 @@ eslint = find_program('eslint', required: false)
 modules = run_command('npm', 'root', '-g', check: true)
 
 if eslint.found()
-  test('ESLint', eslint, args: [join_paths(meson.project_source_root() , 'src'),
+  test('ESLint', eslint, args: [join_paths(meson.project_source_root(), 'src'),
     '--resolve-plugins-relative-to=' + modules.stdout().strip() + '/'])
 endif
