@@ -173,41 +173,24 @@ const TaskWidgetSettings = GObject.registerClass({
             settings_schema: gschema.lookup(Me.metadata.base, true),
         });
 
-        this._settings.bind('merge-task-lists', this._mtlSwitch, 'active',
-            Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('group-past-tasks', this._gptSwitch, 'active',
-            Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('hide-header-for-singular-task-lists',
-            this._hhfstlSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('hide-empty-completed-task-lists',
-            this._heactlSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('hide-completed-tasks', this._hctComboBox,
-            'active', Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('show-only-selected-categories', this._socSwitch,
-            'active', Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('show-only-selected-categories',
-            this._socSettingsRevealer, 'reveal-child',
-            Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('hct-apotac-value', this._hctApotacSpinButton,
-            'value', Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('hct-astod-hour', this._hctAstodSpinButtonHour,
-            'value', Gio.SettingsBindFlags.DEFAULT);
-
-        this._settings.bind('hct-astod-minute', this._hctAstodSpinButtonMinute,
-            'value', Gio.SettingsBindFlags.DEFAULT);
+        [
+            ['merge-task-lists', this._mtlSwitch],
+            ['group-past-tasks', this._gptSwitch],
+            ['hide-header-for-singular-task-lists', this._hhfstlSwitch],
+            ['hide-empty-completed-task-lists', this._heactlSwitch],
+            ['hide-completed-tasks', this._hctComboBox],
+            ['show-only-selected-categories', this._socSwitch],
+            ['hct-apotac-value', this._hctApotacSpinButton, 'value'],
+            ['hct-astod-hour', this._hctAstodSpinButtonHour, 'value'],
+            ['hct-astod-minute', this._hctAstodSpinButtonMinute, 'value'],
+            ['hct-apotac-unit', this._hctApotacComboBox],
+            ['show-only-selected-categories', this._socSettingsRevealer,
+                'reveal-child'],
+        ].forEach(([key, object, property = 'active',
+            flags = Gio.SettingsBindFlags.DEFAULT]) =>
+            this._settings.bind(key, object, property, flags));
 
         this._fillApotacComboBox(this._hctApotacSpinButton.value);
-
-        this._settings.bind('hct-apotac-unit', this._hctApotacComboBox,
-            'active', Gio.SettingsBindFlags.DEFAULT);
 
         this._hctApotacSpinButton.connect('value-changed', button =>
             this._fillApotacComboBox(button.get_value(),
@@ -275,7 +258,7 @@ const TaskWidgetSettings = GObject.registerClass({
             [this._taskCategoryScheduled, 'scheduled'],
             [this._taskCategoryNotCancelled, 'not-cancelled'],
             [this._taskCategoryStarted, 'started'],
-        ].map(([box, category]) =>
+        ].forEach(([box, category]) =>
             box.connect('toggled', this._toggleTaskCategory.bind(
                 this, category)));
 
@@ -286,7 +269,7 @@ const TaskWidgetSettings = GObject.registerClass({
             [this._taskCategoryTomorrow, this._taskCategoryNextSevenDays],
             [this._taskCategoryTomorrow, this._taskCategoryScheduled],
             [this._taskCategoryNextSevenDays, this._taskCategoryScheduled],
-        ].map(([source, target]) =>
+        ].forEach(([source, target]) =>
             source.bind_property_full('active', target, 'active',
                 GObject.BindingFlags.BIDIRECTIONAL,
                 value => [() => {
@@ -612,7 +595,7 @@ const TaskWidgetSettings = GObject.registerClass({
     }
 
     /**
-     * Adds a settings menu button to the header bar as soon as the widget gets
+     * Adds custom buttons to the header bar as soon as the widget gets
      * realized.
      *
      * @param {TaskWidgetSettings} widget - Widget that has been realized.
