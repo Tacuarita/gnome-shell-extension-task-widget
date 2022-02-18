@@ -6,22 +6,33 @@
   margin-left: 0;
 }
 
+.task-widget-remove-task-box-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .task-widget-column {
   margin: 0;
 }
 
 .task-widget-column .task-icon  {
   color: #bebebe;
-  icon-size: 52px;
-  height: 52px;
 }
 
 .task-widget-column .task-cancelled {
   text-decoration: line-through;
 }
 
-.task-widget-column .header {
+.task-widget-column .calendar-month-header {
   margin-bottom: 10px;
+}
+
+.task-widget-column .subtask-label {
+  font-size: 95%;
+}
+
+.task-widget-column .world-clocks-city:rtl {
+  text-align: right;
 }
 
 /**
@@ -29,14 +40,21 @@
  * custom Shell themes.
 */
 
-.task-widget-column .header .pager {
+.task-widget-column .calendar-month-header .pager {
   padding: 0;
 }
 
 .task-widget-column .task-list-name {
-  padding: 0 5px 0 0;
   margin: 0;
   height: auto;
+}
+
+.task-widget-column .task-list-name:ltr {
+  padding: 0 5px 0 0;
+}
+
+.task-widget-column .task-list-name:rtl {
+  padding: 0 0 0 5px;
 }
 
 .task-widget-column .task-list-name-button {

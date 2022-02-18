@@ -20,8 +20,10 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Initializes the widget.
      *
-     * @todo gjs >= 1.65.90 supports ?? and .? operators
-     */
+     * @todo gjs >= 1.65.90 supports ?? and .? operators.
+     * @todo Use static class blocks for gtype registration.
+     * @todo Use regular constructors in GObject subclasses.
+]     */
     _init() {
         super._init({
             name: 'taskWidget',
@@ -35,9 +37,6 @@ class TaskWidget extends St.BoxLayout {
         this._calendarArea = DateMenu.box.find_child_by_name('calendarArea');
         this._messageList = this._calendarArea.get_child_at_index(0);
         this._calendarWidget = this._calendarArea.get_child_at_index(1);
-
-        this._calendarWidget.add_style_class_name(
-            'task-widget-remove-calendar-margin');
 
         // Set the height of the widget to the height of the calendar widget:
         this.add_constraint(new Clutter.BindConstraint({
@@ -80,8 +79,10 @@ class TaskWidget extends St.BoxLayout {
 
         this._taskIcon = new St.Icon({
             gicon: Gio.ThemedIcon.new('checkbox-checked-symbolic'),
-            style_class: 'task-icon',
         });
+
+        if (!Utils.shellVersionAtLeast_(42))
+            this._taskIcon.add_style_class_name('task-icon');
 
         this._statusLabel = new St.Label({
             // Translators: without the ellipsis as it's appended automatically.
@@ -103,9 +104,17 @@ class TaskWidget extends St.BoxLayout {
     async _initTaskLists() {
         try {
             this._contentBox = new St.BoxLayout({
-                style_class: 'calendar weather-button',
+                style_class: 'calendar world-clocks-button',
                 vertical: true,
             });
+
+            if (Utils.shellVersionAtLeast_(42)) {
+                this._contentBox.add_style_class_name(
+                    'task-widget-remove-task-box-padding');
+            } else {
+                this._calendarWidget.add_style_class_name(
+                    'task-widget-remove-calendar-margin');
+            }
 
             this._contentBox.bind_property('visible', this._placeholder,
                 'visible', GObject.BindingFlags.INVERT_BOOLEAN);
@@ -139,9 +148,7 @@ class TaskWidget extends St.BoxLayout {
 
             const themeContext = St.ThemeContext.get_for_stage(global.stage);
             this._threshold = Utils.LL_THRESHOLD_ * themeContext.scale_factor;
-
-            const spacing = this._messageList._placeholder.get_theme_node()
-                .get_length('spacing');
+            const spacing = this.get_theme_node().get_length('spacing') * 2;
 
             this._taskBox = new St.BoxLayout({
                 vertical: true,
@@ -192,7 +199,7 @@ class TaskWidget extends St.BoxLayout {
         this._headerBox = new St.BoxLayout({
             reactive: true,
             x_expand: true,
-            style_class: 'header',
+            style_class: 'calendar-month-header',
         });
 
         this._headerBox.connect('scroll-event',
@@ -764,6 +771,9 @@ class TaskWidget extends St.BoxLayout {
                 checkbox._task = task;
                 checkbox._uid = task._uid;
 
+                checkbox.getLabelActor().add_style_class_name(
+                    'world-clocks-city');
+
                 checkbox.getLabelActor().clutter_text.line_wrap_mode =
                     Pango.WrapMode.WORD_CHAR;
 
@@ -802,8 +812,8 @@ class TaskWidget extends St.BoxLayout {
 
                     const boxWidth = self._box.get_width() / scaleFactor;
 
-                    const spacing = Math.floor(self.child.get_theme_node()
-                        .get_length('spacing') / scaleFactor);
+                    const spacing = self.child.get_theme_node()
+                        .get_length('spacing') / scaleFactor;
 
                     if (this.text_direction === Clutter.TextDirection.RTL) {
                         self._arrow.set_text('\u21B2');
@@ -846,12 +856,12 @@ class TaskWidget extends St.BoxLayout {
             // Creates a due date label:
             const buildDueDateLabel = (due, root = false, orphan = false) => {
                 label = new St.Label({
-                    style_class: 'weather-header',
+                    style_class: 'world-clocks-header',
                     x_align: Clutter.ActorAlign.START,
                 });
 
                 if (!root)
-                    label.add_style_class_name('location');
+                    label.add_style_class_name('subtask-label');
 
                 if (due === null && root) {
                     label.text = _('No due date');
@@ -906,6 +916,10 @@ class TaskWidget extends St.BoxLayout {
                 const subTaskSummary = checkbox.child.get_child_at_index(2);
                 checkbox.child.remove_child(subTaskSummary);
                 box.add_child(buildDueDateLabel(due));
+
+                if (this.text_direction === Clutter.TextDirection.RTL)
+                    subTaskSummary.set_x_align(Clutter.ActorAlign.START);
+
                 box.add_child(subTaskSummary);
                 checkbox.child.insert_child_at_index(box, 2);
                 return checkbox;
@@ -1546,14 +1560,42 @@ class TaskWidget extends St.BoxLayout {
      * @param {St.ThemeContext} context - Holds styling information.
      */
     _loadThemeHacks(context) {
-        // Swap left and right margins for `contentBox` (because task
-        // widget layout is a mirror image of the message list layout):
+        this._threshold = Utils.LL_THRESHOLD_ * context.scale_factor;
+
         const [r, l] = [St.Side.RIGHT, St.Side.LEFT].map(side =>
             this._messageList._sectionList.get_theme_node().get_margin(side) /
             context.scale_factor);
 
         this._contentBox.set_style(`margin-right: ${l}px; margin-left: ${r}px`);
-        this._threshold = Utils.LL_THRESHOLD_ * context.scale_factor;
+
+        if (!Utils.shellVersionAtLeast_(42))
+            return;
+
+        const rtl = this.text_direction === Clutter.TextDirection.RTL;
+
+        const sides = rtl ? [St.Side.LEFT, St.Side.RIGHT]
+            : [St.Side.RIGHT, St.Side.LEFT];
+
+        const [mr, ml] = sides.map(side => this._messageList.get_theme_node()
+            .get_margin(side) / context.scale_factor);
+
+        const [pr, pl] = sides.map(side => this._messageList.get_theme_node()
+            .get_padding(side) / context.scale_factor);
+
+        const color = this._messageList.get_theme_node()
+            .get_border_color(rtl ? St.Side.LEFT : St.Side.RIGHT)
+                .to_string().substr(0, 7);
+
+        const width = this._messageList.get_theme_node()
+            .get_border_width(rtl ? St.Side.LEFT : St.Side.RIGHT);
+
+        const left = rtl ? 'right' : 'left';
+        const right = rtl ? 'left' : 'right';
+
+        this.set_style(`border-${left}: ${width}px solid ${color};` +
+            `border-${right}: none; padding-${right}: ${pl}px;` +
+            `padding-${left}: ${pr}px; margin-${right}: ${ml}px;` +
+            `margin-${left}: ${mr + pr}px`);
     }
 
     /**
@@ -1622,6 +1664,7 @@ class TaskWidget extends St.BoxLayout {
                     return GLib.SOURCE_CONTINUE;
                 }
 
+                delete this._cleanUpId;
                 return GLib.SOURCE_REMOVE;
             });
 
