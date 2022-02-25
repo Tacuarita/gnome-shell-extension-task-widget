@@ -41,6 +41,9 @@ function init() {
  * dependencies) are installed and if there are no prior instances of the
  * settings window. Otherwise, an instance of `BeGoneWidget` is returned.
  *
+ * @todo Use GTK4's dedicated API for widget-specific actions.
+ * @todo Switch list to ListModels where it makes sense.
+ *
  * @returns {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
 function buildPrefsWidget() {
@@ -190,7 +193,8 @@ const TaskWidgetSettings = GObject.registerClass({
             flags = Gio.SettingsBindFlags.DEFAULT]) =>
             this._settings.bind(key, object, property, flags));
 
-        this._fillApotacComboBox(this._hctApotacSpinButton.value);
+        this._fillApotacComboBox(this._hctApotacSpinButton.value,
+            `${this._settings.get_int('hct-apotac-unit')}`);
 
         this._hctApotacSpinButton.connect('value-changed', button =>
             this._fillApotacComboBox(button.get_value(),
@@ -201,6 +205,9 @@ const TaskWidgetSettings = GObject.registerClass({
 
         this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
             .bind(this));
+
+        this._hctSettingsRevealer.set_reveal_child(
+            this._settings.get_int('hide-completed-tasks') > 1);
 
         this._hctComboBox.connect('changed', option => {
             switch (option.active) {

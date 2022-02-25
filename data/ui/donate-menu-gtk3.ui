@@ -50,7 +50,6 @@
         <property name="spacing">15</property>
         <child>
           <object class="GtkComboBoxText" id="donateOptionsComboBox">
-            <property name="active-id">bitcoin</property>
             <property name="hexpand">1</property>
             <property name="visible">1</property>
             <items>
@@ -58,6 +57,7 @@
               <item id="bitcoin-cash">Bitcoin Cash</item>
               <item id="ethereum">Ethereum</item>
             </items>
+            <property name="active-id">bitcoin</property>
           </object>
         </child>
         <child>
