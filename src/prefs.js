@@ -176,39 +176,6 @@ const TaskWidgetSettings = GObject.registerClass({
             settings_schema: gschema.lookup(Me.metadata.base, true),
         });
 
-        [
-            ['merge-task-lists', this._mtlSwitch],
-            ['group-past-tasks', this._gptSwitch],
-            ['hide-header-for-singular-task-lists', this._hhfstlSwitch],
-            ['hide-empty-completed-task-lists', this._heactlSwitch],
-            ['hide-completed-tasks', this._hctComboBox],
-            ['show-only-selected-categories', this._socSwitch],
-            ['hct-apotac-value', this._hctApotacSpinButton, 'value'],
-            ['hct-astod-hour', this._hctAstodSpinButtonHour, 'value'],
-            ['hct-astod-minute', this._hctAstodSpinButtonMinute, 'value'],
-            ['hct-apotac-unit', this._hctApotacComboBox],
-            ['show-only-selected-categories', this._socSettingsRevealer,
-                'reveal-child'],
-        ].forEach(([key, object, property = 'active',
-            flags = Gio.SettingsBindFlags.DEFAULT]) =>
-            this._settings.bind(key, object, property, flags));
-
-        this._fillApotacComboBox(this._hctApotacSpinButton.value,
-            `${this._settings.get_int('hct-apotac-unit')}`);
-
-        this._hctApotacSpinButton.connect('value-changed', button =>
-            this._fillApotacComboBox(button.get_value(),
-                this._hctApotacComboBox.active_id));
-
-        this._hctAstodSpinButtonHour.connect('output', this._timeOutput
-            .bind(this));
-
-        this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
-            .bind(this));
-
-        this._hctSettingsRevealer.set_reveal_child(
-            this._settings.get_int('hide-completed-tasks') > 1);
-
         this._hctComboBox.connect('changed', option => {
             switch (option.active) {
                 case Utils.HIDE_COMPLETED_TASKS_['never']:
@@ -229,6 +196,33 @@ const TaskWidgetSettings = GObject.registerClass({
                         'hctAstodPage');
             }
         });
+
+        this._hctApotacSpinButton.connect('value-changed', button =>
+            this._fillApotacComboBox(button.get_value(),
+                this._hctApotacComboBox.active_id));
+
+        this._hctAstodSpinButtonHour.connect('output', this._timeOutput
+            .bind(this));
+
+        this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
+            .bind(this));
+
+        [
+            ['merge-task-lists', this._mtlSwitch],
+            ['group-past-tasks', this._gptSwitch],
+            ['hide-header-for-singular-task-lists', this._hhfstlSwitch],
+            ['hide-empty-completed-task-lists', this._heactlSwitch],
+            ['hide-completed-tasks', this._hctComboBox],
+            ['show-only-selected-categories', this._socSwitch],
+            ['hct-apotac-value', this._hctApotacSpinButton, 'value'],
+            ['hct-apotac-unit', this._hctApotacComboBox],
+            ['hct-astod-hour', this._hctAstodSpinButtonHour, 'value'],
+            ['hct-astod-minute', this._hctAstodSpinButtonMinute, 'value'],
+            ['show-only-selected-categories', this._socSettingsRevealer,
+                'reveal-child'],
+        ].forEach(([key, object, property = 'active',
+            flags = Gio.SettingsBindFlags.DEFAULT]) =>
+            this._settings.bind(key, object, property, flags));
 
         const categories = this._settings.get_strv('selected-task-categories');
 
