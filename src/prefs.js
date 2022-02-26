@@ -20,8 +20,10 @@ const _npgettext = (context, singular, plural, n) => {
         return Gettext.pgettext(context, singular);
 };
 
-Gio.Resource.load(GLib.build_filenamev([Me.dir.get_path(),
-    Me.metadata.gresource]))._register();
+const resource = Gio.Resource.load(GLib.build_filenamev([Me.dir.get_path(),
+    Me.metadata.gresource]));
+
+resource._register();
 
 /**
  * Used for any one-time setup like translations.
