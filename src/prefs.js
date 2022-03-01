@@ -20,10 +20,21 @@ const _npgettext = (context, singular, plural, n) => {
         return Gettext.pgettext(context, singular);
 };
 
-const resource = Gio.Resource.load(GLib.build_filenamev([Me.dir.get_path(),
-    Me.metadata.gresource]));
+let _resource = null;
 
-resource._register();
+const _resourcePath = GLib.build_filenamev([Me.dir.get_path(),
+    Me.metadata.gresource]);
+
+// Load UI as a resource file:
+const loadResource = () => {
+    if (_resource)
+        _resource._unregister();
+
+    _resource = Gio.Resource.load(_resourcePath);
+    _resource._register();
+};
+
+loadResource();
 
 /**
  * Used for any one-time setup like translations.
@@ -49,6 +60,7 @@ function init() {
  * @returns {Gtk.ScrolledWindow} Scrolled window with either widget in it.
  */
 function buildPrefsWidget() {
+    loadResource();
     const scrolledWindow = new Gtk.ScrolledWindow();
 
     const widget = Gtk.Window.list_toplevels().filter(win => win._uuid &&
@@ -595,6 +607,9 @@ const TaskWidgetSettings = GObject.registerClass({
 
         if (this._backendRefreshId)
             GLib.source_remove(this._backendRefreshId);
+
+        _resource._unregister();
+        _resource = null;
     }
 
     /**
