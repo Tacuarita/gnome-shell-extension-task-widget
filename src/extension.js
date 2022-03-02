@@ -23,7 +23,7 @@ class TaskWidget extends St.BoxLayout {
      * @todo gjs >= 1.65.90 supports ?? and .? operators.
      * @todo Use static class blocks for gtype registration.
      * @todo Use regular constructors in GObject subclasses.
-]     */
+     */
     _init() {
         super._init({
             name: 'taskWidget',
@@ -221,6 +221,7 @@ class TaskWidget extends St.BoxLayout {
         this._taskListName = new St.Label({
             style_class: 'calendar-month-label task-list-name',
             text: 'placeholder',
+            x_expand: true,
         });
 
         this._taskListNameArrow = new St.Icon({
@@ -798,9 +799,12 @@ class TaskWidget extends St.BoxLayout {
 
             // Adds arrows and margins to denote subtasks:
             const styleSubtaskCheckbox = (checkbox, depth) => {
+                const rtl = this.text_direction === Clutter.TextDirection.RTL;
+
                 const arrow = new St.Label({
                     accessible_name: _('Beginning of a subtask list'),
                     accessible_role: Atk.Role.ARROW,
+                    text: rtl ? '\u21B2' : '\u21B3',
                 });
 
                 checkbox._arrow = arrow;
@@ -815,17 +819,13 @@ class TaskWidget extends St.BoxLayout {
                     const spacing = self.child.get_theme_node()
                         .get_length('spacing') / scaleFactor;
 
-                    if (this.text_direction === Clutter.TextDirection.RTL) {
-                        self._arrow.set_text('\u21B2');
-
+                    if (rtl) {
                         self._arrow.set_style(`padding-left: ${boxWidth -
                             self._arrow.get_width() / scaleFactor}px`);
 
                         self.set_style(`margin-right: ${--depth *
                             (boxWidth + spacing)}px`);
                     } else {
-                        self._arrow.set_text('\u21B3');
-
                         self._arrow.set_style(`padding-right: ${boxWidth -
                             self._arrow.get_width() / scaleFactor}px`);
 
@@ -1560,11 +1560,16 @@ class TaskWidget extends St.BoxLayout {
      * @param {St.ThemeContext} context - Holds styling information.
      */
     _loadThemeHacks(context) {
+        // Threshold is a fixed number, we have to scale it accordingly
+        // whenever scale factor changes:
         this._threshold = Utils.LL_THRESHOLD_ * context.scale_factor;
 
+        // To make Task Widget look as symmetric as possible, we need to use
+        // swapped left and right margin/padding values of the message list
+        // widget:
         const [r, l] = [St.Side.RIGHT, St.Side.LEFT].map(side =>
             this._messageList._sectionList.get_theme_node().get_margin(side) /
-            context.scale_factor);
+                context.scale_factor);
 
         this._contentBox.set_style(`margin-right: ${l}px; margin-left: ${r}px`);
 
