@@ -44,6 +44,10 @@
   padding: 0;
 }
 
+.task-widget-column .world-clocks-city {
+  font-weight: normal;
+}
+
 .task-widget-column .task-list-name {
   margin: 0;
   height: auto;
