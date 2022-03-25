@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 20:46+0100\n"
+"POT-Creation-Date: 2022-03-25 20:50+0100\n"
 "PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -151,15 +151,15 @@ msgstr "Оновити перелік списків завдань з облі�
 msgid "Refresh in progress"
 msgstr "Оновлення..."
 
-#: src/prefs.js:745
+#: src/prefs.js:746
 msgid "Refresh Tasks"
 msgstr "Оновити завдання"
 
-#: src/prefs.js:752
+#: src/prefs.js:753
 msgid "Properties"
 msgstr "Властивості"
 
-#: src/prefs.js:1038
+#: src/prefs.js:1039
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
@@ -168,7 +168,7 @@ msgstr[1] "хвилини"
 msgstr[2] "хвилин"
 msgstr[3] "хвилилин"
 
-#: src/prefs.js:1040
+#: src/prefs.js:1041
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
@@ -177,7 +177,7 @@ msgstr[1] "години"
 msgstr[2] "годин"
 msgstr[3] "години"
 
-#: src/prefs.js:1042
+#: src/prefs.js:1043
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -189,7 +189,7 @@ msgstr[3] "доби"
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1108
+#: src/prefs.js:1109
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "Андрій «archdron» Сербовець <serbovets.translation@gmail.com>"

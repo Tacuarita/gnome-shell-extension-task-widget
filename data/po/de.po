@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 20:46+0100\n"
+"POT-Creation-Date: 2022-03-25 20:50+0100\n"
 "PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
@@ -141,29 +141,29 @@ msgstr "Liste der Aufgabenlisten aktualisieren"
 msgid "Refresh in progress"
 msgstr "Aktualisierung im Gange"
 
-#: src/prefs.js:745
+#: src/prefs.js:746
 msgid "Refresh Tasks"
 msgstr "Aufgaben aktualisieren"
 
-#: src/prefs.js:752
+#: src/prefs.js:753
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: src/prefs.js:1038
+#: src/prefs.js:1039
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "Minute"
 msgstr[1] "Minuten"
 
-#: src/prefs.js:1040
+#: src/prefs.js:1041
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "Stunde"
 msgstr[1] "Stunden"
 
-#: src/prefs.js:1042
+#: src/prefs.js:1043
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -173,7 +173,7 @@ msgstr[1] "Tage"
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1108
+#: src/prefs.js:1109
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "lightonflux"
