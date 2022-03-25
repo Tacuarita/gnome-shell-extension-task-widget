@@ -17,6 +17,21 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
           <child>
+            <object class="GtkDragSource">
+              <property name="actions">move</property>
+              <signal name="prepare" handler="_dragPrepare"/>
+              <signal name="drag-begin" handler="_dragBegin" swapped="no"/>
+              <signal name="drag-end" handler="_dragEnd"/>
+            </object>
+          </child>
+          <child>
+            <object class="GtkDropTarget">
+              <property name="actions">move</property>
+              <property name="formats">TaskListRow</property>
+              <signal name="drop" handler="_dragDrop"/>
+            </object>
+          </child>
+          <child>
             <object class="GtkGrid" id="taskListGrid">
               <property name="margin-start">12</property>
               <property name="margin-end">12</property>
