@@ -668,6 +668,7 @@ const TaskWidgetSettings = GObject.registerClass({
         // Use of `run_dispose()` is discouraged but this prevents `gjs` from
         // crashing after closing the preferences window. GJS bug maybe?
         this._sourceRegistry.run_dispose();
+        delete this._sourceRegistry;
 
         Gio.resources_unregister(_resource);
         _resource = null;
