@@ -95,8 +95,7 @@ msgstr "Erreur: Dépendances manquantes"
 
 #: src/prefs.js:141
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Veuillez installer Evolution Data Server pour utiliser cette extension."
+msgstr "Veuillez installer Evolution Data Server pour utiliser cette extension."
 
 #: src/prefs.js:145 data/ui/settings-menu.ui:26
 msgid "Help"
@@ -192,15 +191,8 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:39
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Les messages de débogage sont enregistrés. Effectuez toutes les étapes "
-"nécessaires pour reproduire un problème, puis consultez le journal. Vous "
-"devriez supprimer ou censurer toute information que vous considérez comme "
-"privée."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Les messages de débogage sont enregistrés. Effectuez toutes les étapes nécessaires pour reproduire un problème, puis consultez le journal. Vous devriez supprimer ou censurer toute information que vous considérez comme privée."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:42
 msgid "Cancel"
@@ -223,9 +215,8 @@ msgid "Group past tasks"
 msgstr "Regrouper les tâches passées"
 
 #: data/ui/settings-window.ui:49
-#, fuzzy
 msgid "Hide header for singular tasks"
-msgstr "Masquer l'en-tête pour les listes de tâches uniques"
+msgstr ""
 
 #: data/ui/settings-window.ui:60
 msgid "Hide empty and completed task lists"
@@ -253,9 +244,7 @@ msgstr "Échéance dans les 7 prochains jours"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr ""
-"Tâches qui doivent être effectuées dans les sept prochains jours, y compris "
-"aujourd'hui"
+msgstr "Tâches qui doivent être effectuées dans les sept prochains jours, y compris aujourd'hui"
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
@@ -277,12 +266,8 @@ msgid "Started"
 msgstr "Commencée"
 
 #: data/ui/settings-window.ui:154
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
-msgstr ""
-"Tâches qui n'ont pas de date de début ou dont la date de début est "
-"antérieure à l'heure actuelle"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgstr "Tâches qui n'ont pas de date de début ou dont la date de début est antérieure à l'heure actuelle"
 
 #: data/ui/settings-window.ui:166
 msgid "Hide completed tasks"
@@ -319,11 +304,8 @@ msgid "Task Lists"
 msgstr "Listes de tâches"
 
 #: data/ui/settings-window.ui:262
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Vous pouvez faire glisser et déposer des lignes pour modifier l'ordre des "
-"listes de tâches dans le widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Vous pouvez faire glisser et déposer des lignes pour modifier l'ordre des listes de tâches dans le widget."
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
@@ -361,3 +343,4 @@ msgstr "Faire un don"
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr "Faire un don en cryptomonnaie"
+
