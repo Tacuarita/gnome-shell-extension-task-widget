@@ -736,10 +736,10 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * For a given checkbox, returns UID of the next or previous
-     * sibling checkbox:
+     * sibling checkbox.
      *
      * @param {Checkbox.Checkbox} item - Checkbox to investigate.
-     * @param {boolean} [next] - Retrieve next simbling checkbox.
+     * @param {boolean} [next] - Retrieve next sibling checkbox.
      *
      * @returns {string|null} UID of a sibling checkbox or `null`.
      */
@@ -840,7 +840,7 @@ class TaskWidget extends St.BoxLayout {
      *
      * @param {Checkbox.Checkbox} checkbox - Checkbox to style.
      *
-     * @returns {Checkbox.Checkbox} Modified checkbox.
+     * @returns {Checkbox.Checkbox} Styled checkbox.
      */
     _styleOrphanTaskCheckbox(checkbox) {
         const indicator = new St.Label({
@@ -863,7 +863,7 @@ class TaskWidget extends St.BoxLayout {
      * @param {Checkbox.Checkbox} checkbox - Checkbox to style.
      * @param {number} depth - Depth level of a subtask.
      *
-     * @returns {Checkbox.Checkbox} Modified checkbox.
+     * @returns {Checkbox.Checkbox} Styled checkbox.
      */
     _styleSubtaskCheckbox(checkbox, depth) {
         const rtl = this.text_direction === Clutter.TextDirection.RTL;
@@ -1151,11 +1151,12 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Filters tasks and task lists based on user-defined settings.
      *
-     * @param {ECal.Client} client - Task list to perform filtering on.
+     * @param {ECal.Client} client - Task list to filter.
      * @returns {Promise<ECal.Component[]>} List of tasks.
      */
     async _filterTasks(client) {
         try {
+            // (User-defined) Show only selected task categories:
             let query = this._showOnlySelectedCategories();
 
             // (User-defined) Hide completed tasks:
@@ -1349,7 +1350,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles task click events. Adds/removes styling and stores changes.
      *
-     * @param {Checkbox} checkbox - Task's checkbox that got clicked.
+     * @param {Checkbox} checkbox - Checkbox that got clicked.
      * @param {ECal.Client} client - Task list that the task belongs to.
      */
     async _taskClicked(checkbox, client) {
@@ -1722,7 +1723,7 @@ class TaskWidget extends St.BoxLayout {
      * occurred refreshes is <= 60.
      *
      * @param {Object|null} _menu - Menu of a `dateMenu` button.
-     * @param {boolean} isOpen - Menu is in its opened state.
+     * @param {boolean} isOpen - Menu is open.
      */
     _onMenuOpen(_menu, isOpen) {
         if (isOpen && this._activeTaskList !== null) {
