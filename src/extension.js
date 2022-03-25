@@ -19,10 +19,6 @@ const TaskWidget = GObject.registerClass(
 class TaskWidget extends St.BoxLayout {
     /**
      * Initializes the widget.
-     *
-     * @todo gjs >= 1.65.90 supports ?? and .? operators.
-     * @todo Use static class blocks for gtype registration.
-     * @todo Use regular constructors in GObject subclasses.
      */
     _init() {
         super._init({
@@ -98,8 +94,6 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * Initializes task lists.
-     *
-     * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2661
      */
     async _initTaskLists() {
         try {
@@ -107,6 +101,9 @@ class TaskWidget extends St.BoxLayout {
                 style_class: 'calendar world-clocks-button',
                 vertical: true,
             });
+
+            this._calendarWidget.add_style_class_name(
+                'task-widget-remove-calendar-margin');
 
             if (Utils.shellVersionAtLeast_(42)) {
                 this._contentBox.add_style_class_name(
@@ -192,8 +189,6 @@ class TaskWidget extends St.BoxLayout {
      * Switching is also triggered by scrolling a mouse wheel on the header.
      * If there's more than one task list, user can click on the task list name
      * and activate another task list via the popup menu.
-     *
-     * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2661
      */
     _buildHeader() {
         this._headerBox = new St.BoxLayout({
@@ -257,54 +252,8 @@ class TaskWidget extends St.BoxLayout {
         this._taskListNameButton.connect('clicked', () =>
             this._taskListMenu.toggle());
 
-        this._taskListMenu.connect('open-state-changed', (self, isOpen) => {
-            if (isOpen) {
-                this._taskListMenu.removeAll();
-                this._taskListNameButton.add_style_pseudo_class('active');
-
-                for (const [index, taskList] of this._taskLists.entries()) {
-                    const name = taskList.name.length > 25
-                        ? taskList.name.substring(0, 22) + Utils.ELLIPSIS_CHAR_
-                        : taskList.name;
-
-                    const item = new PopupMenu.PopupMenuItem(name);
-
-                    if (index === this._activeTaskList && !this._mergeTaskLists)
-                        item.setOrnament(PopupMenu.Ornament.DOT);
-                    else
-                        item.setOrnament(PopupMenu.Ornament.NONE);
-
-                    item.connect('activate', () => {
-                        if (this._mergeTaskLists)
-                            delete this._mergeTaskLists;
-
-                        this._resetTaskBox(true);
-                        this._showActiveTaskList(index);
-                    });
-
-                    this._taskListMenu.addMenuItem(item);
-                }
-
-                const separator = new PopupMenu.PopupSeparatorMenuItem();
-                this._taskListMenu.addMenuItem(separator);
-
-                const allTasksItem = new PopupMenu.PopupMenuItem(
-                    _('All Tasks'));
-
-                if (this._mergeTaskLists)
-                    allTasksItem.setOrnament(PopupMenu.Ornament.DOT);
-
-                allTasksItem.connect('activate', () => {
-                    this._mergeTaskLists = true;
-                    this._resetTaskBox(true);
-                    this._showActiveTaskList(this._activeTaskList);
-                });
-
-                this._taskListMenu.addMenuItem(allTasksItem);
-            } else {
-                this._taskListNameButton.remove_style_pseudo_class('active');
-            }
-        });
+        this._taskListMenu.connect('open-state-changed',
+            this._onTaskListMenuOpen.bind(this));
 
         const manager = new PopupMenu.PopupMenuManager(
             this._taskListNameButton);
@@ -328,6 +277,62 @@ class TaskWidget extends St.BoxLayout {
         this._headerBox.add_actor(this._taskListNameButton);
         this._headerBox.add_child(this._forwardButton);
         this._contentBox.add_child(this._headerBox);
+    }
+
+    /**
+     * Fills the task list menu.
+     *
+     * @param {PopupMenu.PopupMenu} _self - Task list menu object.
+     * @param {boolean} isOpen - Menu is open.
+     */
+    _onTaskListMenuOpen(_self, isOpen) {
+        if (!isOpen) {
+            this._taskListNameButton.remove_style_pseudo_class('active');
+            return;
+        }
+
+        this._taskListMenu.removeAll();
+        this._taskListNameButton.add_style_pseudo_class('active');
+
+        for (const [index, taskList] of this._taskLists.entries()) {
+            const name = taskList.name.length > 25
+                ? taskList.name.substring(0, 22) + Utils.ELLIPSIS_CHAR_
+                : taskList.name;
+
+            const item = new PopupMenu.PopupMenuItem(name);
+
+            if (index === this._activeTaskList && !this._mergeTaskLists)
+                item.setOrnament(PopupMenu.Ornament.DOT);
+            else
+                item.setOrnament(PopupMenu.Ornament.NONE);
+
+            item.connect('activate', () => {
+                if (this._mergeTaskLists)
+                    delete this._mergeTaskLists;
+
+                this._resetTaskBox(true);
+                this._showActiveTaskList(index);
+            });
+
+            this._taskListMenu.addMenuItem(item);
+        }
+
+        const separator = new PopupMenu.PopupSeparatorMenuItem();
+        this._taskListMenu.addMenuItem(separator);
+
+        const allTasksItem = new PopupMenu.PopupMenuItem(
+            _('All Tasks'));
+
+        if (this._mergeTaskLists)
+            allTasksItem.setOrnament(PopupMenu.Ornament.DOT);
+
+        allTasksItem.connect('activate', () => {
+            this._mergeTaskLists = true;
+            this._resetTaskBox(true);
+            this._showActiveTaskList(this._activeTaskList);
+        });
+
+        this._taskListMenu.addMenuItem(allTasksItem);
     }
 
     /**
@@ -400,8 +405,6 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles task list addition events and connects signal handlers to
      * monitor for its task additions, removals and changes.
-     *
-     * @todo gitlab.com/jmiskinis/gnome-shell-extension-task-widget/-/issues/27
      *
      * @param {EDataServer.SourceRegistry|null} registry - Source registry.
      * @param {EDataServer.Source} source - Task list that got added.
@@ -567,6 +570,8 @@ class TaskWidget extends St.BoxLayout {
         this._relatedTo = new Map();
         this._orphanTasks = new Set();
 
+        // No task list UID means we have multiple tasks lists that need to be
+        // merged into one:
         if (taskListUid === null) {
             tasks = [].concat(...tasks.map((taskList, i) => taskList.map(
                 task => {
@@ -642,19 +647,15 @@ class TaskWidget extends St.BoxLayout {
     }
 
     /**
-     * For a given task list, lists tasks as checkboxes with labels and groups
-     * them under appropriate group labels in the widget.
-     *
-     * @todo https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2811
+     * Initializes listing of tasks in the widget.
      *
      * @param {string} taskListUid - Unique task list identifier.
      * @param {boolean} merge - Task lists will be merged into one.
+     *
      * @returns {Promise<boolean>} `true` if there's at least one task.
      */
     async _listTasks(taskListUid, merge) {
         try {
-            let label, prev, tasks;
-            const today = new Date();
             this._allTasksLoaded = false;
 
             // (User-defined) Merge task lists:
@@ -694,7 +695,7 @@ class TaskWidget extends St.BoxLayout {
 
                 this._buildTaskMap(taskLists);
             } else {
-                tasks = await this._filterTasks(this._clientViews.get(
+                const tasks = await this._filterTasks(this._clientViews.get(
                     taskListUid).client);
 
                 if (!tasks || this._idleAddId)
@@ -703,383 +704,448 @@ class TaskWidget extends St.BoxLayout {
                 this._buildTaskMap(tasks, taskListUid);
             }
 
-            // Dates have time zone information, which can span regions with
-            // different day light savings adjustments. To accurately calculate
-            // day differences between two dates, we'll use this to convert
-            // the dates to UTC first:
-            const toUTC = x => Date.UTC(x.getFullYear(), x.getMonth(),
-                x.getDate());
-
-            // For a given checkbox, returns UID of the next or previous
-            // sibling checkbox:
-            const getSiblingCheckbox = (item, next = false) => {
-                let sibling = next ? item.get_next_sibling()
-                    : item.get_previous_sibling();
-
-                while (sibling) {
-                    if (sibling instanceof CheckBox.CheckBox &&
-                        sibling.can_focus && !(next && item._rootTask &&
-                        !sibling._rootTask))
-                        return sibling._uid;
-
-                    sibling = next ? sibling.get_next_sibling()
-                        : sibling.get_previous_sibling();
-                }
-
-                return null;
-            };
-
-            // Builds task checkboxes:
-            const buildCheckbox = (task, root = false) => {
-                const checkbox = new CheckBox.CheckBox(task.get_summary()
-                    .get_value());
-
-                // Keep track of the focused checkbox for users using
-                // keyboard navigation:
-                checkbox.connect('key-focus-in', self => {
-                    this._focused = {
-                        'previous': getSiblingCheckbox(self),
-                        'focused': self,
-                        'next': getSiblingCheckbox(self, true),
-                        'refocus': null,
-                    };
-
-                    const allocation = self.get_allocation_box();
-                    const {adjustment} = this._scrollView.vscroll;
-                    const height = this._taskBox.allocation.get_height();
-
-                    // Updates scrollbar adjustment when user navigates task
-                    // lists using keyboard:
-                    if (adjustment.value && allocation.y1 <
-                        adjustment.value + this._threshold) {
-                        adjustment.set_value(adjustment.value -
-                           this._threshold / 2);
-                    } else if (allocation.y1 > height + adjustment.value -
-                        this._threshold) {
-                        adjustment.set_value(adjustment.value +
-                            this._threshold / 2);
-                    }
-                });
-
-                if (task.get_status() === ICalGLib.PropertyStatus.COMPLETED) {
-                    checkbox.checked = true;
-                    checkbox.getLabelActor().set_opacity(100);
-                }
-
-                if (root)
-                    checkbox._rootTask = true;
-
-                checkbox._task = task;
-                checkbox._uid = task._uid;
-
-                checkbox.getLabelActor().add_style_class_name(
-                    'world-clocks-city');
-
-                checkbox.getLabelActor().clutter_text.line_wrap_mode =
-                    Pango.WrapMode.WORD_CHAR;
-
-                if (task.get_status() === ICalGLib.PropertyStatus.CANCELLED) {
-                    checkbox.set_opacity(100);
-                    checkbox.set_toggle_mode(false);
-                    checkbox.set_can_focus(false);
-
-                    checkbox.getLabelActor().add_style_class_name(
-                        'task-cancelled');
-                } else {
-                    checkbox.connect('clicked', () => this._taskClicked(
-                        checkbox, this._clientViews.get(
-                            task._taskList).client));
-                }
-
-                if (task._orphan)
-                    return styleOrphanTaskCheckbox(checkbox);
-
-                return checkbox;
-            };
-
-            // Adds arrows and margins to denote subtasks:
-            const styleSubtaskCheckbox = (checkbox, depth) => {
-                const rtl = this.text_direction === Clutter.TextDirection.RTL;
-
-                const arrow = new St.Label({
-                    accessible_name: _('Beginning of a subtask list'),
-                    accessible_role: Atk.Role.ARROW,
-                    text: rtl ? '\u21B2' : '\u21B3',
-                });
-
-                checkbox._arrow = arrow;
-                checkbox.child.insert_child_at_index(arrow, 0);
-
-                checkbox.connect('show', self => {
-                    const scaleFactor = St.ThemeContext
-                        .get_for_stage(global.stage).scale_factor;
-
-                    const boxWidth = self._box.get_width() / scaleFactor;
-
-                    const spacing = self.child.get_theme_node()
-                        .get_length('spacing') / scaleFactor;
-
-                    if (rtl) {
-                        self._arrow.set_style(`padding-left: ${boxWidth -
-                            self._arrow.get_width() / scaleFactor}px`);
-
-                        self.set_style(`margin-right: ${--depth *
-                            (boxWidth + spacing)}px`);
-                    } else {
-                        self._arrow.set_style(`padding-right: ${boxWidth -
-                            self._arrow.get_width() / scaleFactor}px`);
-
-                        self.set_style(`margin-left: ${--depth *
-                            (boxWidth + spacing)}px`);
-                    }
-                });
-
-                return checkbox;
-            };
-
-            // Adds an arrow indicator to denote orphan tasks:
-            const styleOrphanTaskCheckbox = checkbox => {
-                const indicator = new St.Label({
-                    text: '\u2930',
-                    y_align: Clutter.ActorAlign.CENTER,
-                    style: 'color: coral',
-                    /* Translators: this denotes a subtask with an inaccessible
-                    parent task. */
-                    accessible_name: _('Orphan task'),
-                    accessible_role: Atk.Role.ARROW,
-                });
-
-                checkbox.child.insert_child_at_index(indicator, 1);
-                return checkbox;
-            };
-
-            // Creates a due date label:
-            const buildDueDateLabel = (due, root = false, orphan = false) => {
-                label = new St.Label({
-                    style_class: 'world-clocks-header',
-                    x_align: Clutter.ActorAlign.START,
-                });
-
-                if (!root)
-                    label.add_style_class_name('subtask-label');
-
-                if (due === null && root) {
-                    label.text = _('No due date');
-                } else if (due.toDateString() === today.toDateString()) {
-                    label.text = _('Today');
-                } else if (due < today && this._settings.get_boolean(
-                    'group-past-tasks') && root) {
-                    /* Translators: this is a category name for tasks with
-                    due date in the past. */
-                    label.text = _('Past');
-
-                    if (prev && !orphan)
-                        label._skip = true;
-                } else {
-                    let format = due.getYear() === today.getYear()
-                        /* Translators: %A is the weekday name (e.g. Friday)
-                        %B is the name of the month (e.g. February)
-                        %-d is the day of the month, a decimal number ("-"
-                        before "d" disables padding with zeros (e.g. prints "2"
-                        instead of "02")
-                        %Y is the year as a decimal number including the
-                        century (e.g. 2021)
-
-                        So, "%A, %B %-d" in English translates to e.g. "Friday,
-                        February 2".
-
-                        The idea is of course to adjust these placeholders
-                        according to the format used in your language. */
-                        ? NC_('task due date', '%A, %B %-d')
-                        : NC_('task due date with a year', '%A, %B %-d, %Y');
-
-                    format = Shell.util_translate_time_string(format);
-                    const diff = toUTC(due) - toUTC(today);
-
-                    label.text = `${due.toLocaleFormat(format)} (${diff > 0
-                        ? '+' : '-'}${Math.floor(Math.abs(diff) /
-                            Utils.MSECS_IN_DAY_)})`;
-                }
-
-                return label;
-            };
-
-            // Prepends due date to subtasks:
-            const prependDueDate = (checkbox, due) => {
-                if (!due || checkbox.checked)
-                    return checkbox;
-
-                const box = new St.BoxLayout({
-                    vertical: true,
-                });
-
-                const subTaskSummary = checkbox.child.get_child_at_index(2);
-                checkbox.child.remove_child(subTaskSummary);
-                box.add_child(buildDueDateLabel(due));
-
-                if (this.text_direction === Clutter.TextDirection.RTL)
-                    subTaskSummary.set_x_align(Clutter.ActorAlign.START);
-
-                box.add_child(subTaskSummary);
-                checkbox.child.insert_child_at_index(box, 2);
-                return checkbox;
-            };
-
-            // Adds subtasks:
-            const addSubtasks = (parentCheckbox, parentUid, depth = 0) => {
-                if (!this._idleAddId)
-                    return;
-
-                const subtasks = this._relatedTo.get(parentUid);
-
-                if (!subtasks)
-                    return;
-
-                for (const [index, subtask] of subtasks.entries()) {
-                    let subtaskCheckbox = buildCheckbox(subtask);
-
-                    subtaskCheckbox = styleSubtaskCheckbox(subtaskCheckbox,
-                        depth + 1);
-
-                    if (parentCheckbox._subtasks)
-                        parentCheckbox._subtasks.push(subtaskCheckbox);
-                    else
-                        parentCheckbox._subtasks = [subtaskCheckbox];
-
-                    subtaskCheckbox._parentCheckbox = parentCheckbox;
-
-                    if (index !== 0)
-                        subtaskCheckbox._arrow.set_opacity(0);
-
-                    subtaskCheckbox = prependDueDate(subtaskCheckbox,
-                        subtask._due);
-
-                    idleAddHelper(subtaskCheckbox);
-                    this._relatedTo.delete(parentUid);
-                    addSubtasks(subtaskCheckbox, subtask._uid, depth + 1);
-                }
-            };
-
-            // Facilitates lazy loading of task box items:
-            const idleAddHelper = item => {
-                if (!this._idleAddId)
-                    return;
-
-                const {adjustment} = this._scrollView.vscroll;
-                const height = this._taskBox.get_allocation_box().get_height();
-                const limit = this._upperLimit + height + this._threshold;
-
-                if (this._currentChild) {
-                    this._replaceTasksOnGoing = true;
-                    const {allocation} = this._currentChild;
-
-                    // Skip tasks above the visible region:
-                    if (allocation.y2 >= adjustment.value) {
-                        this._taskBox.replace_child(this._currentChild, item);
-                        this._currentChild = item.get_next_sibling();
-
-                        // Reset focused checkbox after update:
-                        if (this._focused) {
-                            if (this._focused['previous'] === item._uid)
-                                this._focused['refocus'] = item;
-                            else if (this._focused['focused']._uid ===
-                                item._uid)
-                                item.grab_key_focus();
-                            else if (this._focused['next'] === item._uid &&
-                                !this._focused['focused'].has_key_focus())
-                                this._focused['refocus'] = item;
-                            else if (!this._focused['previous'] &&
-                                !this._focused['next'])
-                                this._taskListNameButton.grab_key_focus();
-                        }
-                    } else {
-                        this._currentChild = this._currentChild
-                            .get_next_sibling();
-
-                        return;
-                    }
-
-                    if (this._currentChild &&
-                        this._currentChild.allocation.y1 > limit) {
-                        this._replaceTasksOnGoing = false;
-
-                        // Clean tasks below the visible region. These are
-                        // leftover tasks from previous longer task lists:
-                        while (this._currentChild) {
-                            const next = this._currentChild.get_next_sibling();
-                            this._currentChild.destroy();
-                            this._currentChild = next;
-                        }
-                    }
-                } else {
-                    this._taskBox.add_child(item);
-                    this._replaceTasksOnGoing = false;
-                }
-
-                // Load tasks in small increments. If the last task has
-                // children, keep loading until all children are loaded:
-                if (adjustment.upper > limit && !this._replaceTasksOnGoing &&
-                    this._taskBox.last_child._rootTask)
-                    this._resetTaskBox(false, true);
-            };
-
-            // Adds task checkboxes:
-            const idleAdd = () => {
-                const task = this._rootTasks[this._currentRootTask++];
-
-                if (!task) {
-                    // Clean leftover tasks from previous task lists:
-                    while (this._currentChild) {
-                        const next = this._currentChild.get_next_sibling();
-                        this._currentChild.destroy();
-                        this._currentChild = next;
-                    }
-
-                    this._allTasksLoaded = true;
-                    return this._resetTaskBox(false, true);
-                }
-
-                const checkbox = buildCheckbox(task, true);
-                const due = task._due;
-
-                // If a task belongs to an already created group:
-                if ((due === null && due === prev) || (prev && due &&
-                    due.toDateString() === prev.toDateString())) {
-                    // Simply add the task:
-                    idleAddHelper(checkbox);
-                } else {
-                    // Otherwise, we need a new group label:
-                    label = buildDueDateLabel(due, true);
-
-                    if (label._skip) {
-                        idleAddHelper(checkbox);
-                        addSubtasks(checkbox, task._uid);
-                        return GLib.SOURCE_CONTINUE;
-                    } else {
-                        idleAddHelper(label);
-                        idleAddHelper(checkbox);
-                        prev = due;
-                    }
-                }
-
-                addSubtasks(checkbox, task._uid);
-                return GLib.SOURCE_CONTINUE;
-            };
-
             this._currentRootTask = 0;
             this._currentChild = this._taskBox.first_child;
+            this._previousDueDate = undefined;
 
-            if (this._currentChild) {
-                this._idleAddId = GLib.idle_add(GLib.PRIORITY_LOW, idleAdd);
-            } else {
-                this._idleAddId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE,
-                    idleAdd);
-            }
+            this._idleAddId = GLib.idle_add(this._currentChild
+                ? GLib.PRIORITY_LOW : GLib.PRIORITY_DEFAULT_IDLE, this._idleAdd
+                    .bind(this));
 
             return true;
         } catch (e) {
             logError(e);
         }
+    }
+
+    /**
+     * Dates have time zone information, which can span regions with
+     * different day light savings adjustments. To accurately calculate
+     * day differences between two dates, we'll use this method to convert
+     * the dates to UTC first.
+     *
+     * @param {Date} date - Date to be converted into UTC.
+     *
+     * @returns {number} The number of milliseconds since January 1, 1970,
+     * 00:00:00 UTC.
+     */
+    _toUTC(date) {
+        return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+
+    /**
+     * For a given checkbox, returns UID of the next or previous
+     * sibling checkbox:
+     *
+     * @param {Checkbox.Checkbox} item - Checkbox to investigate.
+     * @param {boolean} [next] - Retrieve next simbling checkbox.
+     *
+     * @returns {string|null} UID of a sibling checkbox or `null`.
+     */
+    _getSiblingCheckbox(item, next = false) {
+        let sibling = next ? item.get_next_sibling()
+            : item.get_previous_sibling();
+
+        while (sibling) {
+            if (sibling instanceof CheckBox.CheckBox &&
+                sibling.can_focus && !(next && item._rootTask &&
+                !sibling._rootTask))
+                return sibling._uid;
+
+            sibling = next ? sibling.get_next_sibling()
+                : sibling.get_previous_sibling();
+        }
+
+        return null;
+    }
+
+    /**
+     * Builds task checkboxes.
+     *
+     * @param {ECal.Component} task - Task to be displayed as a checkbox.
+     * @param {boolean} [root] - Task is a root task (not subtask).
+     *
+     * @returns {Checkbox.Checkbox} Task checkbox.
+     */
+    _buildCheckbox(task, root = false) {
+        const checkbox = new CheckBox.CheckBox(task.get_summary()
+            .get_value());
+
+        // Keep track of the focused checkbox for users using
+        // keyboard navigation:
+        checkbox.connect('key-focus-in', self => {
+            this._focused = {
+                'previous': this._getSiblingCheckbox(self),
+                'focused': self,
+                'next': this._getSiblingCheckbox(self, true),
+                'refocus': null,
+            };
+
+            const allocation = self.get_allocation_box();
+            const {adjustment} = this._scrollView.vscroll;
+            const height = this._taskBox.allocation.get_height();
+
+            // Updates scrollbar adjustment when user navigates task
+            // lists using keyboard:
+            if (adjustment.value && allocation.y1 <
+                adjustment.value + this._threshold) {
+                adjustment.set_value(adjustment.value -
+                    this._threshold / 2);
+            } else if (allocation.y1 > height + adjustment.value -
+                this._threshold) {
+                adjustment.set_value(adjustment.value +
+                    this._threshold / 2);
+            }
+        });
+
+        if (task.get_status() === ICalGLib.PropertyStatus.COMPLETED) {
+            checkbox.checked = true;
+            checkbox.getLabelActor().set_opacity(100);
+        }
+
+        if (root)
+            checkbox._rootTask = true;
+
+        checkbox._task = task;
+        checkbox._uid = task._uid;
+
+        checkbox.getLabelActor().add_style_class_name(
+            'world-clocks-city');
+
+        checkbox.getLabelActor().clutter_text.line_wrap_mode =
+            Pango.WrapMode.WORD_CHAR;
+
+        if (task.get_status() === ICalGLib.PropertyStatus.CANCELLED) {
+            checkbox.set_opacity(100);
+            checkbox.set_toggle_mode(false);
+            checkbox.set_can_focus(false);
+
+            checkbox.getLabelActor().add_style_class_name(
+                'task-cancelled');
+        } else {
+            checkbox.connect('clicked', () => this._taskClicked(
+                checkbox, this._clientViews.get(
+                    task._taskList).client));
+        }
+
+        if (task._orphan)
+            return this._styleOrphanTaskCheckbox(checkbox);
+
+        return checkbox;
+    }
+
+    /**
+     * Adds an arrow indicator to denote orphan tasks.
+     *
+     * @param {Checkbox.Checkbox} checkbox - Checkbox to style.
+     *
+     * @returns {Checkbox.Checkbox} Modified checkbox.
+     */
+    _styleOrphanTaskCheckbox(checkbox) {
+        const indicator = new St.Label({
+            text: '\u2930',
+            y_align: Clutter.ActorAlign.CENTER,
+            style: 'color: coral',
+            /* Translators: this denotes a subtask with an inaccessible
+            parent task. */
+            accessible_name: _('Orphan task'),
+            accessible_role: Atk.Role.ARROW,
+        });
+
+        checkbox.child.insert_child_at_index(indicator, 1);
+        return checkbox;
+    }
+
+    /**
+     * Adds arrows and margins to denote subtasks.
+     *
+     * @param {Checkbox.Checkbox} checkbox - Checkbox to style.
+     * @param {number} depth - Depth level of a subtask.
+     *
+     * @returns {Checkbox.Checkbox} Modified checkbox.
+     */
+    _styleSubtaskCheckbox(checkbox, depth) {
+        const rtl = this.text_direction === Clutter.TextDirection.RTL;
+
+        const arrow = new St.Label({
+            accessible_name: _('Beginning of a subtask list'),
+            accessible_role: Atk.Role.ARROW,
+            text: rtl ? '\u21B2' : '\u21B3',
+        });
+
+        checkbox._arrow = arrow;
+        checkbox.child.insert_child_at_index(arrow, 0);
+
+        checkbox.connect('show', self => {
+            const scaleFactor = St.ThemeContext
+                .get_for_stage(global.stage).scale_factor;
+
+            const boxWidth = self._box.get_width() / scaleFactor;
+
+            const spacing = self.child.get_theme_node()
+                .get_length('spacing') / scaleFactor;
+
+            if (rtl) {
+                self._arrow.set_style(`padding-left: ${boxWidth -
+                    self._arrow.get_width() / scaleFactor}px`);
+
+                self.set_style(`margin-right: ${--depth *
+                    (boxWidth + spacing)}px`);
+            } else {
+                self._arrow.set_style(`padding-right: ${boxWidth -
+                    self._arrow.get_width() / scaleFactor}px`);
+
+                self.set_style(`margin-left: ${--depth *
+                    (boxWidth + spacing)}px`);
+            }
+        });
+
+        return checkbox;
+    }
+
+    /**
+     * Creates due date labels for tasks.
+     *
+     * @param {Date|null} due - Due date of a task.
+     * @param {boolean} [root] - Task is a root tasks (not subtask).
+     * @param {boolean} [orphan] - Task is an orphan task.
+     *
+     * @returns {St.Label} Due date label.
+     */
+    _buildDueDateLabel(due, root = false, orphan = false) {
+        const today = new Date();
+
+        const label = new St.Label({
+            style_class: 'world-clocks-header',
+            x_align: Clutter.ActorAlign.START,
+        });
+
+        if (!root)
+            label.add_style_class_name('subtask-label');
+
+        if (due === null && root) {
+            label.text = _('No due date');
+        } else if (due.toDateString() === today.toDateString()) {
+            label.text = _('Today');
+        } else if (due < today && this._settings.get_boolean(
+            'group-past-tasks') && root) {
+            /* Translators: this is a category name for tasks with
+            due date in the past. */
+            label.text = _('Past');
+
+            if (this._previousDueDate && !orphan)
+                label._skip = true;
+        } else {
+            let format = due.getYear() === today.getYear()
+                /* Translators: %A is the weekday name (e.g. Friday)
+                %B is the name of the month (e.g. February)
+                %-d is the day of the month, a decimal number ("-"
+                before "d" disables padding with zeros (e.g. prints "2"
+                instead of "02")
+                %Y is the year as a decimal number including the
+                century (e.g. 2021)
+
+                So, "%A, %B %-d" in English translates to e.g. "Friday,
+                February 2".
+
+                The idea is of course to adjust these placeholders
+                according to the format used in your language. */
+                ? NC_('task due date', '%A, %B %-d')
+                : NC_('task due date with a year', '%A, %B %-d, %Y');
+
+            format = Shell.util_translate_time_string(format);
+            const diff = this._toUTC(due) - this._toUTC(today);
+
+            label.text = `${due.toLocaleFormat(format)} (${diff > 0
+                ? '+' : '-'}${Math.floor(Math.abs(diff) /
+                    Utils.MSECS_IN_DAY_)})`;
+        }
+
+        return label;
+    }
+
+    /**
+     * Prepends due date to subtasks.
+     *
+     * @param {Checkbox.Checkbox} checkbox - Checkbox to modify.
+     * @param {Date|null} due - Due date of a task.
+     *
+     * @returns {Checkbox.Checkbox} Checkbox with a prepended due date.
+     */
+    _prependDueDate(checkbox, due) {
+        if (!due || checkbox.checked)
+            return checkbox;
+
+        const box = new St.BoxLayout({
+            vertical: true,
+        });
+
+        const subTaskSummary = checkbox.child.get_child_at_index(2);
+        checkbox.child.remove_child(subTaskSummary);
+        box.add_child(this._buildDueDateLabel(due));
+
+        if (this.text_direction === Clutter.TextDirection.RTL)
+            subTaskSummary.set_x_align(Clutter.ActorAlign.START);
+
+        box.add_child(subTaskSummary);
+        checkbox.child.insert_child_at_index(box, 2);
+        return checkbox;
+    }
+
+    /**
+     * Adds subtasks to root tasks.
+     *
+     * @param {Checkbox.Checkbox} parentCheckbox - Parent checkbox to append
+     * subtasks to.
+     * @param {string} parentUid - UID of the parent checkbox.
+     * @param {number} [depth] - Depth level of a subtask.
+     */
+    _addSubtasks(parentCheckbox, parentUid, depth = 0) {
+        if (!this._idleAddId)
+            return;
+
+        const subtasks = this._relatedTo.get(parentUid);
+
+        if (!subtasks)
+            return;
+
+        for (const [index, subtask] of subtasks.entries()) {
+            let subtaskCheckbox = this._buildCheckbox(subtask);
+
+            subtaskCheckbox = this._styleSubtaskCheckbox(
+                subtaskCheckbox, depth + 1);
+
+            if (parentCheckbox._subtasks)
+                parentCheckbox._subtasks.push(subtaskCheckbox);
+            else
+                parentCheckbox._subtasks = [subtaskCheckbox];
+
+            subtaskCheckbox._parentCheckbox = parentCheckbox;
+
+            if (index !== 0)
+                subtaskCheckbox._arrow.set_opacity(0);
+
+            subtaskCheckbox = this._prependDueDate(subtaskCheckbox,
+                subtask._due);
+
+            this._idleAddHelper(subtaskCheckbox);
+            this._relatedTo.delete(parentUid);
+            this._addSubtasks(subtaskCheckbox, subtask._uid, depth + 1);
+        }
+    }
+
+    /**
+     * Facilitates lazy loading of task box items.
+     *
+     * @param {*} item - Object to add to the task box.
+     */
+    _idleAddHelper(item) {
+        if (!this._idleAddId)
+            return;
+
+        const {adjustment} = this._scrollView.vscroll;
+        const height = this._taskBox.get_allocation_box().get_height();
+        const limit = this._upperLimit + height + this._threshold;
+
+        if (this._currentChild) {
+            this._replaceTasksOnGoing = true;
+            const {allocation} = this._currentChild;
+
+            // Skip tasks above the visible region:
+            if (allocation.y2 >= adjustment.value) {
+                this._taskBox.replace_child(this._currentChild, item);
+                this._currentChild = item.get_next_sibling();
+
+                // Reset focused checkbox after update:
+                if (this._focused) {
+                    if (this._focused['previous'] === item._uid)
+                        this._focused['refocus'] = item;
+                    else if (this._focused['focused']._uid ===
+                        item._uid)
+                        item.grab_key_focus();
+                    else if (this._focused['next'] === item._uid &&
+                        !this._focused['focused'].has_key_focus())
+                        this._focused['refocus'] = item;
+                    else if (!this._focused['previous'] &&
+                        !this._focused['next'])
+                        this._taskListNameButton.grab_key_focus();
+                }
+            } else {
+                this._currentChild = this._currentChild
+                    .get_next_sibling();
+
+                return;
+            }
+
+            if (this._currentChild &&
+                this._currentChild.allocation.y1 > limit) {
+                this._replaceTasksOnGoing = false;
+
+                // Clean tasks below the visible region. These are
+                // leftover tasks from previous longer task lists:
+                while (this._currentChild) {
+                    const next = this._currentChild.get_next_sibling();
+                    this._currentChild.destroy();
+                    this._currentChild = next;
+                }
+            }
+        } else {
+            this._taskBox.add_child(item);
+            this._replaceTasksOnGoing = false;
+        }
+
+        // Load tasks in small increments. If the last task has
+        // children, keep loading until all children are loaded:
+        if (adjustment.upper > limit && !this._replaceTasksOnGoing &&
+            this._taskBox.last_child._rootTask)
+            this._resetTaskBox(false, true);
+    }
+
+    /**
+     * Adds task checkboxes.
+     */
+    _idleAdd() {
+        const task = this._rootTasks[this._currentRootTask++];
+
+        if (!task) {
+            // Clean leftover tasks from previous task lists:
+            while (this._currentChild) {
+                const next = this._currentChild.get_next_sibling();
+                this._currentChild.destroy();
+                this._currentChild = next;
+            }
+
+            this._allTasksLoaded = true;
+            return this._resetTaskBox(false, true);
+        }
+
+        const checkbox = this._buildCheckbox(task, true);
+        const due = task._due;
+
+        // If a task belongs to an already created group:
+        if ((due === null && due === this._previousDueDate) || (
+            this._previousDueDate && due && due.toDateString() ===
+            this._previousDueDate.toDateString())) {
+            // Simply add the task:
+            this._idleAddHelper(checkbox);
+        } else {
+            // Otherwise, we need a new group label:
+            const label = this._buildDueDateLabel(due, true);
+
+            if (label._skip) {
+                this._idleAddHelper(checkbox);
+                this._addSubtasks(checkbox, task._uid);
+                return GLib.SOURCE_CONTINUE;
+            } else {
+                this._idleAddHelper(label);
+                this._idleAddHelper(checkbox);
+                this._previousDueDate = due;
+            }
+        }
+
+        this._addSubtasks(checkbox, task._uid);
+        return GLib.SOURCE_CONTINUE;
     }
 
     /**
@@ -1090,143 +1156,11 @@ class TaskWidget extends St.BoxLayout {
      */
     async _filterTasks(client) {
         try {
-            let query = '';
-
-            const selected = this._settings.get_strv(
-                'selected-task-categories');
-
-            const currentTime = ICalGLib.Time.new_current_with_zone(
-                ICalGLib.Timezone.get_utc_timezone());
-
-            // Builds an S-expression to facilitate task filtering:
-            const buildQuery = (start, end) => {
-                return '(due-in-time-range? (make-time "' + start + '") ' +
-                    '(make-time "' + end + '"))';
-            };
-
-            // Builds an S-expression to facilitate hiding of completed tasks:
-            const hideCompletedTasks = () => {
-                switch (this._settings.get_int('hide-completed-tasks')) {
-                    case Utils.HIDE_COMPLETED_TASKS_['immediately']:
-                        return '(not is-completed?)';
-                    case Utils.HIDE_COMPLETED_TASKS_['after-time-period']: {
-                        const adjust = this._settings.get_int(
-                            'hct-apotac-value');
-
-                        switch (this._settings.get_int('hct-apotac-unit')) {
-                            case Utils.TIME_UNITS_['seconds']:
-                                currentTime.adjust(0, 0, 0, -adjust);
-                                break;
-                            case Utils.TIME_UNITS_['minutes']:
-                                currentTime.adjust(0, 0, -adjust, 0);
-                                break;
-                            case Utils.TIME_UNITS_['hours']:
-                                currentTime.adjust(0, -adjust, 0, 0);
-                                break;
-                            case Utils.TIME_UNITS_['days']:
-                                currentTime.adjust(-adjust, 0, 0, 0);
-                        }
-
-                        return `(not (completed-before? (make-time "${
-                            ECal.isodate_from_time_t(
-                                currentTime.as_timet())}")))`;
-                    }
-
-                    case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']: {
-                        const start = ICalGLib.Time.new_current_with_zone(
-                            ECal.util_get_system_timezone());
-
-                        start.set_time(0, 0, 0);
-
-                        start.convert_timezone(ECal.util_get_system_timezone(),
-                            ICalGLib.Timezone.get_utc_timezone());
-
-                        const spec = ICalGLib.Time.new_current_with_zone(
-                            ECal.util_get_system_timezone());
-
-                        spec.set_time(this._settings.get_int('hct-astod-hour'),
-                            this._settings.get_int('hct-astod-minute'), 0);
-
-                        spec.convert_timezone(ECal.util_get_system_timezone(),
-                            ICalGLib.Timezone.get_utc_timezone());
-
-                        if (currentTime.compare(spec) === -1) {
-                            return `(not (completed-before? (make-time "${
-                                ECal.isodate_from_time_t(
-                                    start.as_timet())}")))`;
-                        } else {
-                            return '(not is-completed?)';
-                        }
-                    }
-                }
-            };
-
-            // (User-defined) Show only selected task categories:
-            if (this._settings.get_boolean('show-only-selected-categories') &&
-                selected.length) {
-                const today = ECal.time_day_begin(currentTime.as_timet());
-                const yesterday = ECal.time_add_day(today, -1);
-                const tomorrow = ECal.time_add_day(today, 1);
-                const nextSevenDays = ECal.time_add_day(today, 7);
-                const startOfPast = ECal.isodate_from_time_t(0);
-                const startOfToday = ECal.isodate_from_time_t(today);
-
-                const startOfTomorrow = ECal.isodate_from_time_t(ECal
-                    .time_day_begin(tomorrow));
-
-                const endOfToday = ECal.isodate_from_time_t(
-                    ECal.time_day_end(today));
-
-                const endOfTomorrow = ECal.isodate_from_time_t(
-                    ECal.time_day_end(tomorrow));
-
-                const endOfNextSevenDays = ECal.isodate_from_time_t(
-                    ECal.time_day_end(nextSevenDays));
-
-                const endOfYesterday = ECal.isodate_from_time_t(
-                    ECal.time_day_end(yesterday));
-
-                if (['past', 'today', 'tomorrow'].every(category =>
-                    selected.includes(category)))
-                    query = buildQuery(startOfPast, endOfTomorrow);
-                else if (['past', 'today'].every(category =>
-                    selected.includes(category)))
-                    query = buildQuery(startOfPast, endOfToday);
-                else if (['past', 'tomorrow'].every(category =>
-                    selected.includes(category)))
-                    query = buildQuery(startOfPast, endOfTomorrow);
-                else if (['today', 'tomorrow'].every(category =>
-                    selected.includes(category)))
-                    query = buildQuery(startOfToday, endOfTomorrow);
-                else if (['past', 'next-seven-days'].every(category =>
-                    selected.includes(category)))
-                    query = buildQuery(startOfPast, endOfNextSevenDays);
-                else if (selected.includes('past'))
-                    query = buildQuery(startOfPast, endOfYesterday);
-                else if (selected.includes('today'))
-                    query = buildQuery(startOfToday, endOfToday);
-                else if (selected.includes('tomorrow'))
-                    query = buildQuery(startOfTomorrow, endOfTomorrow);
-                else if (selected.includes('next-seven-days'))
-                    query = buildQuery(startOfToday, endOfNextSevenDays);
-
-                if (selected.includes('scheduled'))
-                    query = '(and ' + query + ' (has-due?))';
-
-                if (selected.includes('started')) {
-                    query = '(or (and ' + query + ' (starts-before? ' +
-                            '(time-now))) (not (has-start?)))';
-                }
-
-                if (selected.includes('not-cancelled')) {
-                    query = '(and ' + query + ' (not (contains? "status" ' +
-                            '"CANCELLED")))';
-                }
-            }
+            let query = this._showOnlySelectedCategories();
 
             // (User-defined) Hide completed tasks:
             if (this._settings.get_int('hide-completed-tasks'))
-                query = '(and ' + hideCompletedTasks() + ' ' +  query + ')';
+                query = `(and ${this._hideCompletedTasks()} ${query})`;
             else if (query === '')
                 query = '#t';
 
@@ -1253,6 +1187,163 @@ class TaskWidget extends St.BoxLayout {
         } catch (e) {
             logError(e);
         }
+    }
+
+    /**
+     * Builds an S-expression to facilitate task filtering.
+     *
+     * @param {string} start - String with the ISO 8601 representation of a
+     * start point in UTC time.
+     * @param {string} end - String with the ISO 8601 representation of an
+     * end point in UTC time.
+     *
+     * @returns {string} S-expression to facilitate task filtering.
+     */
+    _buildQuery(start, end) {
+        return '(due-in-time-range? (make-time "' + start + '") ' +
+            '(make-time "' + end + '"))';
+    }
+
+    /**
+     * Builds an S-expression to facilitate hiding of completed tasks.
+     *
+     * @returns {string} S-expression to facilitate task filtering.
+     */
+    _hideCompletedTasks() {
+        const currentTime = ICalGLib.Time.new_current_with_zone(
+            ICalGLib.Timezone.get_utc_timezone());
+
+        switch (this._settings.get_int('hide-completed-tasks')) {
+            case Utils.HIDE_COMPLETED_TASKS_['immediately']:
+                return '(not is-completed?)';
+            case Utils.HIDE_COMPLETED_TASKS_['after-time-period']: {
+                const adjust = this._settings.get_int(
+                    'hct-apotac-value');
+
+                switch (this._settings.get_int('hct-apotac-unit')) {
+                    case Utils.TIME_UNITS_['seconds']:
+                        currentTime.adjust(0, 0, 0, -adjust);
+                        break;
+                    case Utils.TIME_UNITS_['minutes']:
+                        currentTime.adjust(0, 0, -adjust, 0);
+                        break;
+                    case Utils.TIME_UNITS_['hours']:
+                        currentTime.adjust(0, -adjust, 0, 0);
+                        break;
+                    case Utils.TIME_UNITS_['days']:
+                        currentTime.adjust(-adjust, 0, 0, 0);
+                }
+
+                return `(not (completed-before? (make-time "${
+                    ECal.isodate_from_time_t(
+                        currentTime.as_timet())}")))`;
+            }
+
+            case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']: {
+                const start = ICalGLib.Time.new_current_with_zone(
+                    ECal.util_get_system_timezone());
+
+                start.set_time(0, 0, 0);
+
+                start.convert_timezone(ECal.util_get_system_timezone(),
+                    ICalGLib.Timezone.get_utc_timezone());
+
+                const spec = ICalGLib.Time.new_current_with_zone(
+                    ECal.util_get_system_timezone());
+
+                spec.set_time(this._settings.get_int('hct-astod-hour'),
+                    this._settings.get_int('hct-astod-minute'), 0);
+
+                spec.convert_timezone(ECal.util_get_system_timezone(),
+                    ICalGLib.Timezone.get_utc_timezone());
+
+                if (currentTime.compare(spec) === -1) {
+                    return `(not (completed-before? (make-time "${
+                        ECal.isodate_from_time_t(
+                            start.as_timet())}")))`;
+                } else {
+                    return '(not is-completed?)';
+                }
+            }
+        }
+    }
+
+    /**
+     * Builds an S-expression to facilitate showing of only selected task
+     * categories.
+     *
+     * @returns {string} S-expression to facilitate task filtering.
+     */
+    _showOnlySelectedCategories() {
+        let query = '';
+        const selected = this._settings.get_strv('selected-task-categories');
+
+        const currentTime = ICalGLib.Time.new_current_with_zone(
+            ICalGLib.Timezone.get_utc_timezone());
+
+        if (this._settings.get_boolean('show-only-selected-categories') &&
+            selected.length) {
+            const today = ECal.time_day_begin(currentTime.as_timet());
+            const yesterday = ECal.time_add_day(today, -1);
+            const tomorrow = ECal.time_add_day(today, 1);
+            const nextSevenDays = ECal.time_add_day(today, 7);
+            const startOfPast = ECal.isodate_from_time_t(0);
+            const startOfToday = ECal.isodate_from_time_t(today);
+
+            const startOfTomorrow = ECal.isodate_from_time_t(ECal
+                .time_day_begin(tomorrow));
+
+            const endOfToday = ECal.isodate_from_time_t(
+                ECal.time_day_end(today));
+
+            const endOfTomorrow = ECal.isodate_from_time_t(
+                ECal.time_day_end(tomorrow));
+
+            const endOfNextSevenDays = ECal.isodate_from_time_t(
+                ECal.time_day_end(nextSevenDays));
+
+            const endOfYesterday = ECal.isodate_from_time_t(
+                ECal.time_day_end(yesterday));
+
+            if (['past', 'today', 'tomorrow'].every(category =>
+                selected.includes(category)))
+                query = this._buildQuery(startOfPast, endOfTomorrow);
+            else if (['past', 'today'].every(category =>
+                selected.includes(category)))
+                query = this._buildQuery(startOfPast, endOfToday);
+            else if (['past', 'tomorrow'].every(category =>
+                selected.includes(category)))
+                query = this._buildQuery(startOfPast, endOfTomorrow);
+            else if (['today', 'tomorrow'].every(category =>
+                selected.includes(category)))
+                query = this._buildQuery(startOfToday, endOfTomorrow);
+            else if (['past', 'next-seven-days'].every(category =>
+                selected.includes(category)))
+                query = this._buildQuery(startOfPast, endOfNextSevenDays);
+            else if (selected.includes('past'))
+                query = this._buildQuery(startOfPast, endOfYesterday);
+            else if (selected.includes('today'))
+                query = this._buildQuery(startOfToday, endOfToday);
+            else if (selected.includes('tomorrow'))
+                query = this._buildQuery(startOfTomorrow, endOfTomorrow);
+            else if (selected.includes('next-seven-days'))
+                query = this._buildQuery(startOfToday, endOfNextSevenDays);
+
+            if (selected.includes('scheduled'))
+                query = '(and ' + query + ' (has-due?))';
+
+            if (selected.includes('started')) {
+                query = '(or (and ' + query + ' (starts-before? ' +
+                        '(time-now))) (not (has-start?)))';
+            }
+
+            if (selected.includes('not-cancelled')) {
+                query = '(and ' + query + ' (not (contains? "status" ' +
+                        '"CANCELLED")))';
+            }
+        }
+
+        return query;
     }
 
     /**

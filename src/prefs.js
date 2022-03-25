@@ -8,11 +8,22 @@ const Gettext = imports.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
+const Adw = Utils.shellVersionAtLeast_(42) ? imports.gi.Adw : undefined;
+
 /* exported ICalGLib */
 const {ECal, EDataServer, ICalGLib} = Utils.HAS_EDS_ ? imports.gi : {undefined};
 const _ = Gettext.gettext;
 
-// Enable the use of context in translation of plurals:
+/**
+ * Enables the use of context in translation of plurals.
+ *
+ * @param {string} context - Context for the translation.
+ * @param {string} singular - Singular of the translatable string.
+ * @param {string} plural - Plural of the translatable string.
+ * @param {number} n - Number to apply the plural formula to.
+ *
+ * @returns {string} Translated string.
+ */
 const _npgettext = (context, singular, plural, n) => {
     if (n !== 1)
         return Gettext.ngettext(`${context}\u0004${singular}`, plural, n);
@@ -22,19 +33,41 @@ const _npgettext = (context, singular, plural, n) => {
 
 let _resource = null;
 
-const _resourcePath = GLib.build_filenamev([Me.dir.get_path(),
-    Me.metadata.gresource]);
-
-// Load UI as a resource file:
-const loadResource = () => {
+/**
+ * (Re)loads UI as a resource file.
+ */
+const _loadResource = () => {
     if (_resource)
-        _resource._unregister();
+        return;
 
-    _resource = Gio.Resource.load(_resourcePath);
-    _resource._register();
+    const resourcePath = GLib.build_filenamev([Me.dir.get_path(),
+        Me.metadata.gresource]);
+
+    _resource = Gio.Resource.load(resourcePath);
+    Gio.resources_register(_resource);
 };
 
-loadResource();
+/**
+ * Generates paths to UI files available in a resource file.
+ *
+ * @param {string} file - Filename of a UI file.
+ *
+ * @returns {string} Path to UI file in a resource file.
+ */
+const _templatePath = file => {
+    let suffix = '';
+
+    if (Utils.shellVersionAtLeast_(42))
+        suffix = '';
+    else if (Utils.shellVersionAtLeast_(40))
+        suffix = '-gtk4';
+    else
+        suffix = '-gtk3';
+
+    return `resource://${Me.metadata.epath}/${file + suffix}.ui`;
+};
+
+_loadResource();
 
 /**
  * Used for any one-time setup like translations.
@@ -54,18 +87,19 @@ function init() {
  * dependencies) are installed and if there are no prior instances of the
  * settings window. Otherwise, an instance of `BeGoneWidget` is returned.
  *
- * @todo Use GTK4's dedicated API for widget-specific actions.
- * @todo Switch list to ListModels where it makes sense.
- *
- * @returns {Gtk.ScrolledWindow} Scrolled window with either widget in it.
+ * @returns {Gtk.ScrolledWindow|Adw.PreferencesPage} The settings widget.
  */
 function buildPrefsWidget() {
-    loadResource();
-    const scrolledWindow = new Gtk.ScrolledWindow();
+    _loadResource();
+
+    if (Utils.shellVersionAtLeast_(42))
+        return Utils.HAS_EDS_ ? new TaskWidgetSettings() : new BeGoneWidget();
 
     const widget = Gtk.Window.list_toplevels().filter(win => win._uuid &&
         win._uuid === Me.uuid).length === 1 && Utils.HAS_EDS_
         ? new TaskWidgetSettings() : new BeGoneWidget();
+
+    const scrolledWindow = new Gtk.ScrolledWindow();
 
     if (Utils.shellVersionAtLeast_(40)) {
         scrolledWindow.set_child(widget);
@@ -84,9 +118,6 @@ class BeGoneWidget extends Gtk.Box {
      * Shows a message dialog if required dependencies are not installed on the
      * system. Also, closes the settings window if there's another instance of
      * it already opened (only X11 sessions are affected by this).
-     *
-     * @todo Duplicate window check is not necessary anymore since GNOME 40.6:
-     * g-g-o/GNOME/gnome-shell/-/commit/b93342f72e871dc8472a9e92b23b45e0e7ded282
      */
     _init() {
         super._init();
@@ -131,15 +162,14 @@ class BeGoneWidget extends Gtk.Box {
 
 const TaskWidgetSettings = GObject.registerClass({
     GTypeName: 'TaskWidgetSettings',
-    Template: `resource://${Me.metadata.epath}/settings-window${
-        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
+    Template: _templatePath('settings-window'),
     InternalChildren: [
         'mtlSwitch',
         'gptSwitch',
         'hhfstlSwitch',
         'heactlSwitch',
+        'socRow',
         'socSwitch',
-        'socSettingsRevealer',
         'taskCategoryPast',
         'taskCategoryToday',
         'taskCategoryTomorrow',
@@ -147,22 +177,24 @@ const TaskWidgetSettings = GObject.registerClass({
         'taskCategoryScheduled',
         'taskCategoryNotCancelled',
         'taskCategoryStarted',
-        'hctSettingsRevealer',
+        'hctRow',
         'hctComboBox',
         'hctSettingsStack',
         'hctApotacComboBox',
         'hctApotacSpinButton',
         'hctAstodSpinButtonHour',
         'hctAstodSpinButtonMinute',
-        'taskListBox',
         'backendRefreshButton',
         'backendRefreshButtonSpinner',
-    ],
-}, class TaskWidgetSettings extends Gtk.Box {
+        'taskListBox',
+    ].concat(!Utils.shellVersionAtLeast_(42) ? [
+        'socSettingsRevealer',
+        'hctSettingsRevealer',
+    ] : []),
+}, class TaskWidgetSettings extends (Utils.shellVersionAtLeast_(42)
+    ? Adw.PreferencesPage : Gtk.Box) {
     /**
      * Initializes the settings widget.
-     *
-     * @todo Replace Gtk.ComboBox with GTK4's Gtk.Dropdown.
      */
     _init() {
         super._init();
@@ -177,8 +209,10 @@ const TaskWidgetSettings = GObject.registerClass({
                 provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         }
 
-        this.connect('realize', this._onRealized.bind(this));
-        this.connect('unrealize', this._onUnrealized.bind(this));
+        if (Utils.shellVersionAtLeast_(42)) {
+            [this._socRow, this._hctRow].forEach(row => this._findChildWidget(
+                'styleClass', row, 'expander-row-arrow').hide());
+        }
 
         const dir = Me.metadata.schemas === 'user-specific'
             ? Me.dir.get_child('schemas').get_path() : Me.metadata.schemas;
@@ -191,35 +225,29 @@ const TaskWidgetSettings = GObject.registerClass({
         });
 
         this._hctComboBox.connect('changed', option => {
-            switch (option.active) {
-                case Utils.HIDE_COMPLETED_TASKS_['never']:
-                case Utils.HIDE_COMPLETED_TASKS_['immediately']:
-                    this._hctSettingsRevealer.set_reveal_child(false);
-                    break;
-                case Utils.HIDE_COMPLETED_TASKS_['after-time-period']:
-                    this._hctSettingsRevealer.set_reveal_child(true);
+            const expanded = option.active > 1;
 
+            if (!Utils.shellVersionAtLeast_(42)) {
+                this._hctSettingsRevealer.set_reveal_child(expanded);
+            } else {
+                this._hctRow.set_enable_expansion(expanded);
+                this._hctRow.set_expanded(expanded);
+            }
+
+            switch (option.active) {
+                case Utils.HIDE_COMPLETED_TASKS_['after-time-period']: {
                     this._hctSettingsStack.set_visible_child_name(
                         'hctApotacPage');
 
                     break;
-                case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']:
-                    this._hctSettingsRevealer.set_reveal_child(true);
+                }
 
+                case Utils.HIDE_COMPLETED_TASKS_['after-specified-time']: {
                     this._hctSettingsStack.set_visible_child_name(
                         'hctAstodPage');
+                }
             }
         });
-
-        this._hctApotacSpinButton.connect('value-changed', button =>
-            this._fillApotacComboBox(button.get_value(),
-                this._hctApotacComboBox.active_id));
-
-        this._hctAstodSpinButtonHour.connect('output', this._timeOutput
-            .bind(this));
-
-        this._hctAstodSpinButtonMinute.connect('output', this._timeOutput
-            .bind(this));
 
         [
             ['merge-task-lists', this._mtlSwitch],
@@ -232,8 +260,6 @@ const TaskWidgetSettings = GObject.registerClass({
             ['hct-apotac-unit', this._hctApotacComboBox],
             ['hct-astod-hour', this._hctAstodSpinButtonHour, 'value'],
             ['hct-astod-minute', this._hctAstodSpinButtonMinute, 'value'],
-            ['show-only-selected-categories', this._socSettingsRevealer,
-                'reveal-child'],
         ].forEach(([key, object, property = 'active',
             flags = Gio.SettingsBindFlags.DEFAULT]) =>
             this._settings.bind(key, object, property, flags));
@@ -266,18 +292,6 @@ const TaskWidgetSettings = GObject.registerClass({
         });
 
         [
-            [this._taskCategoryPast, 'past'],
-            [this._taskCategoryToday, 'today'],
-            [this._taskCategoryTomorrow, 'tomorrow'],
-            [this._taskCategoryNextSevenDays, 'next-seven-days'],
-            [this._taskCategoryScheduled, 'scheduled'],
-            [this._taskCategoryNotCancelled, 'not-cancelled'],
-            [this._taskCategoryStarted, 'started'],
-        ].forEach(([box, category]) =>
-            box.connect('toggled', this._toggleTaskCategory.bind(
-                this, category)));
-
-        [
             [this._taskCategoryPast, this._taskCategoryScheduled],
             [this._taskCategoryToday, this._taskCategoryNextSevenDays],
             [this._taskCategoryToday, this._taskCategoryScheduled],
@@ -291,6 +305,7 @@ const TaskWidgetSettings = GObject.registerClass({
                     if (value.source.active)
                         value.target.set_active(false);
                 }],
+
                 value => [() => {
                     if (value.target.active)
                         value.source.set_active(false);
@@ -311,22 +326,58 @@ const TaskWidgetSettings = GObject.registerClass({
             this._taskCategoryStarted.set_sensitive(false);
         }
 
-        this._listTaskListsAndAccounts(false, true);
+        this._listTaskListsAndAccounts();
+    }
+
+    /**
+     * Recursively traverses the widget tree below the given parent and returns
+     * the first widget whose given property matches the given value.
+     *
+     * @param {string} property - Look for a child with this property.
+     * @param {*} parent - Parent of the child to be searched.
+     * @param {*} value - Value of the given property.
+     *
+     * @returns {*|null} Child that meets the criteria or `null`.
+     */
+    _findChildWidget(property, parent, value) {
+        let match;
+
+        for (const child of [...parent]) {
+            switch (property) {
+                case 'type': {
+                    if (child instanceof value)
+                        return child;
+
+                    break;
+                }
+
+                case 'styleClass': {
+                    if (child.get_css_classes().includes(value))
+                        return child;
+                }
+            }
+
+            match = this._findChildWidget(property, child, value);
+
+            if (match)
+                return match;
+        }
+
+        return null;
     }
 
     /**
      * Handles click events for task category checkbuttons.
      *
-     * @param {string} category - Task category.
      * @param {Gtk.CheckButton} button - Corresponding checkbutton.
      */
-    _toggleTaskCategory(category, button) {
+    _toggleTaskCategory(button) {
         const selection = this._settings.get_strv('selected-task-categories');
 
-        if (button.active)
-            selection.push(category);
-        else
-            selection.splice(selection.indexOf(category), 1);
+        if (!button.active)
+            selection.splice(selection.indexOf(button.name), 1);
+        else if (!selection.includes(button.name))
+            selection.push(button.name);
 
         this._settings.set_strv('selected-task-categories', selection);
     }
@@ -335,10 +386,13 @@ const TaskWidgetSettings = GObject.registerClass({
      * Fills "After a period of time after completion" Gtk.ComboBox with
      * time units.
      *
-     * @param {number} duration - Time to elapse before hiding the task.
-     * @param {string} [active] - ID of the active Gtk.ComboBox item.
+     * @param {Gtk.SpinButton} button - Corresponding `Gtk.SpinButton` that
+     * sets time units.
      */
-    _fillApotacComboBox(duration, active = null) {
+    _fillApotacComboBox(button) {
+        const active = this._hctApotacComboBox.active_id;
+        const duration = button.get_value();
+
         const time = new Map([
             [Utils.TIME_UNITS_['seconds'], _npgettext('after X second(s)',
                 'second', 'seconds', duration)],
@@ -362,29 +416,12 @@ const TaskWidgetSettings = GObject.registerClass({
     /**
      * Lists task lists and accounts of remote task lists.
      *
-     * @param {boolean} accountsOnly - Only refresh the account list.
-     * @param {boolean} [initRegistry] - Initialize the source registry.
+     * @param {boolean} [accountsOnly] - Only refresh the account list.
      */
-    async _listTaskListsAndAccounts(accountsOnly, initRegistry = false) {
+    async _listTaskListsAndAccounts(accountsOnly = false) {
         try {
-            if (initRegistry) {
-                this._sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
-                this._sourceRegistry = await Utils.getSourceRegistry_(null);
-                const customOrder = this._settings.get_strv('task-list-order');
-
-                const customSort = customOrder.length ? Utils.customSort_.bind(
-                    this, customOrder) : undefined;
-
-                const sources = this._sourceRegistry.list_sources(
-                    this._sourceType).sort(customSort);
-
-                const clients = await Promise.all(sources.map(source =>
-                    Utils.getECalClient_(source, ECal.ClientSourceType.TASKS,
-                        1, null)));
-
-                this._clients = new Map(clients.map(client =>
-                    [client.source.uid, client]));
-            }
+            if (!accountsOnly)
+                await this._initRegistry();
 
             const accounts = new Map();
 
@@ -406,8 +443,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 if (accountsOnly)
                     continue;
 
-                const taskListRow = new TaskListRow(client,
-                    this._sourceRegistry, remote, this._settings, this._window);
+                const taskListRow = new TaskListRow(client, remote, this);
 
                 if (Utils.shellVersionAtLeast_(40))
                     this._taskListBox.append(taskListRow);
@@ -420,9 +456,6 @@ const TaskWidgetSettings = GObject.registerClass({
 
                 this._backendRefreshButton.set_tooltip_text(
                     _('No remote task lists found'));
-
-                if (accountsOnly)
-                    return;
             } else {
                 this._backendRefreshButton.set_tooltip_text(
                     _('Refresh the list of account task lists'));
@@ -435,9 +468,8 @@ const TaskWidgetSettings = GObject.registerClass({
                     menu.append(account, `accounts.${account}`);
                     action = new Gio.SimpleAction({name: account});
 
-                    action.connect('activate', () => {
-                        this._onAccountButtonClicked(source, account);
-                    });
+                    action.connect('activate', () =>
+                        this._onAccountButtonClicked(source, account));
 
                     actionGroup.add_action(action);
                 }
@@ -447,33 +479,52 @@ const TaskWidgetSettings = GObject.registerClass({
                 this._backendRefreshButton.insert_action_group('accounts',
                     actionGroup);
             }
-
-            if (accountsOnly)
-                return;
-
-            this._taskListAddedId = this._sourceRegistry.connect(
-                'source-added', (_self, source) => {
-                    if (source.has_extension(this._sourceType))
-                        this._onTaskListEvent('added', source);
-                }
-            );
-
-            this._taskListRemovedId = this._sourceRegistry.connect(
-                'source-removed', (_self, source) => {
-                    if (source.has_extension(this._sourceType))
-                        this._onTaskListEvent('removed', source);
-                }
-            );
-
-            this._taskListChangedId = this._sourceRegistry.connect(
-                'source-changed', (_self, source) => {
-                    if (source.has_extension(this._sourceType))
-                        this._onTaskListEvent('changed', source);
-                }
-            );
         } catch (e) {
             logError(e);
         }
+    }
+
+    /**
+     * Initializes the source registry.
+     */
+    async _initRegistry() {
+        const sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
+        this._sourceRegistry = await Utils.getSourceRegistry_();
+        const customOrder = this._settings.get_strv('task-list-order');
+
+        const customSort = customOrder.length ? Utils.customSort_.bind(
+            this, customOrder) : undefined;
+
+        const sources = this._sourceRegistry.list_sources(
+            sourceType).sort(customSort);
+
+        const clients = await Promise.all(sources.map(source =>
+            Utils.getECalClient_(source, ECal.ClientSourceType.TASKS,
+                1, null)));
+
+        this._clients = new Map(clients.map(client =>
+            [client.source.uid, client]));
+
+        this._taskListAddedId = this._sourceRegistry.connect(
+            'source-added', (_self, source) => {
+                if (source.has_extension(sourceType))
+                    this._onTaskListEvent('added', source);
+            }
+        );
+
+        this._taskListRemovedId = this._sourceRegistry.connect(
+            'source-removed', (_self, source) => {
+                if (source.has_extension(sourceType))
+                    this._onTaskListEvent('removed', source);
+            }
+        );
+
+        this._taskListChangedId = this._sourceRegistry.connect(
+            'source-changed', (_self, source) => {
+                if (source.has_extension(sourceType))
+                    this._onTaskListEvent('changed', source);
+            }
+        );
     }
 
     /**
@@ -504,6 +555,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 GLib.PRIORITY_DEFAULT, 5, () => {
                     this._backendRefreshButton.set_visible(true);
                     this._backendRefreshButtonSpinner.set_visible(false);
+                    delete this._backendRefreshId;
                     return GLib.SOURCE_REMOVE;
                 }
             );
@@ -531,8 +583,7 @@ const TaskWidgetSettings = GObject.registerClass({
                     this._clients.set(source.uid, client);
 
                     const taskListRow = new TaskListRow(client,
-                        this._sourceRegistry, client.check_refresh_supported(),
-                        this._settings, this._window);
+                        client.check_refresh_supported(), this);
 
                     if (Utils.shellVersionAtLeast_(40))
                         this._taskListBox.append(taskListRow);
@@ -564,7 +615,11 @@ const TaskWidgetSettings = GObject.registerClass({
                 case 'changed': {
                     while (row) {
                         if (row._uid === source.uid) {
-                            row._taskListName.set_text(source.display_name);
+                            if (Utils.shellVersionAtLeast_(42))
+                                row.set_title(source.display_name);
+                            else
+                                row._taskListName.set_text(source.display_name);
+
                             break;
                         }
 
@@ -585,6 +640,7 @@ const TaskWidgetSettings = GObject.registerClass({
      * two digits.
      *
      * @param {Gtk.SpinButton} button - Widget involved in the operation.
+     *
      * @returns {boolean} `true` to display the formatted value.
      */
     _timeOutput(button) {
@@ -593,7 +649,8 @@ const TaskWidgetSettings = GObject.registerClass({
     }
 
     /**
-     * Disconnects signal handlers when settings window gets closed.
+     * Disconnects signal handlers and unregisters resources when settings
+     * window gets closed.
      */
     _onUnrealized() {
         if (this._taskListAddedId)
@@ -608,7 +665,11 @@ const TaskWidgetSettings = GObject.registerClass({
         if (this._backendRefreshId)
             GLib.source_remove(this._backendRefreshId);
 
-        _resource._unregister();
+        // Use of `run_dispose()` is discouraged but this prevents `gjs` from
+        // crashing after closing the preferences window. GJS bug maybe?
+        this._sourceRegistry.run_dispose();
+
+        Gio.resources_unregister(_resource);
         _resource = null;
     }
 
@@ -619,77 +680,64 @@ const TaskWidgetSettings = GObject.registerClass({
      * @param {TaskWidgetSettings} widget - Widget that has been realized.
      */
     _onRealized(widget) {
-        if (Utils.shellVersionAtLeast_(40)) {
-            this._window = widget.get_root();
-            const headerBar = new Gtk.HeaderBar({show_title_buttons: true});
-            headerBar.pack_end(new SettingsMenuButton(this._window));
-            headerBar.pack_end(new DonateMenuButton(this._window));
-            this._window.set_titlebar(headerBar);
-        } else {
-            this._window = widget.get_toplevel();
+        this._window = Utils.shellVersionAtLeast_(40) ? widget.get_root()
+            : widget.get_toplevel();
 
-            this._window._headerBar.pack_end(
-                new SettingsMenuButton(this._window));
+        const headerBar = Utils.shellVersionAtLeast_(42)
+            ? this._findChildWidget('type', this._window, Adw.HeaderBar)
+            : this._window.get_titlebar();
 
-            this._window._headerBar.pack_end(
-                new DonateMenuButton(this._window));
+        headerBar.pack_end(new SettingsMenuButton(this));
+        headerBar.pack_end(new DonateMenuButton(this));
 
-            this._window._headerBar.show_all();
-        }
+        if (!Utils.shellVersionAtLeast_(40))
+            headerBar.show_all();
     }
 });
 
 const TaskListRow = GObject.registerClass({
     GTypeName: 'TaskListRow',
-    Template: `resource://${Me.metadata.epath}/task-list-row${
-        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
+    Template: _templatePath('task-list-row'),
     InternalChildren: [
-        'taskListSwitch',
-        'taskListName',
         'taskListProvider',
+        'taskListSwitch',
         'taskListOptionsButton',
         'taskListOptionsSpinner',
-        'taskListGrid',
-    ].concat(!Utils.shellVersionAtLeast_(40) ? ['dragBox'] : []),
-}, class TaskListRow extends Gtk.ListBoxRow {
+    ].concat(!Utils.shellVersionAtLeast_(42) ? ['taskListName'] : [])
+     .concat(!Utils.shellVersionAtLeast_(40) ? ['dragBox'] : []),
+}, class TaskListRow extends (Utils.shellVersionAtLeast_(42)
+    ? Adw.ActionRow : Gtk.ListBoxRow) {
     /**
      * Initializes a task list row.
      *
      * @param {ECal.Client} client - `ECal.Client` of the task list.
-     * @param {EDataServer.SourceRegistry} registry - Source registry.
      * @param {boolean} remote - It's a remote task list.
-     * @param {Gio.Settings} settings - API for storing and retrieving
-     * extension settings.
-     * @param {Gtk.Window} window - Extension settings window.
+     * @param {TaskWidgetSettings} widget - Reference to the main widget class.
      */
-    _init(client, registry, remote, settings, window) {
+    _init(client, remote, widget) {
         super._init();
-        const {source} = client;
-        this._settings = settings;
-        this._uid = source.uid;
-        this._taskListName.set_text(source.display_name);
+        this._source = client.source;
+        this._settings = widget._settings;
+        this._uid = this._source.uid;
 
-        this._taskListProvider.set_text(registry.ref_source(source.get_parent())
-            .display_name);
+        if (Utils.shellVersionAtLeast_(42))
+            this.set_title(this._source.display_name);
+        else
+            this._taskListName.set_text(this._source.display_name);
+
+        this._taskListProvider.set_text(widget._sourceRegistry.ref_source(
+            this._source.get_parent()).display_name);
 
         this._taskListSwitch.active = this._settings.get_strv(
-            'disabled-task-lists').indexOf(source.uid) === -1;
+            'disabled-task-lists').indexOf(this._source.uid) === -1;
 
         let action;
         const actionGroup = new Gio.SimpleActionGroup();
         action = new Gio.SimpleAction({name: 'up'});
-
-        action.connect('activate', () => {
-            this._moveRow(true);
-        });
-
+        action.connect('activate', () => this._moveRow(true));
         actionGroup.add_action(action);
         action = new Gio.SimpleAction({name: 'down'});
-
-        action.connect('activate', () => {
-            this._moveRow(false);
-        });
-
+        action.connect('activate', () => this._moveRow(false));
         actionGroup.add_action(action);
 
         if (remote) {
@@ -697,18 +745,15 @@ const TaskListRow = GObject.registerClass({
             menu.append(_('Refresh Tasks'), 'options-menu.refresh');
             action = new Gio.SimpleAction({name: 'refresh'});
 
-            action.connect('activate', () => {
-                this._onRefreshButtonClicked(client);
-            });
+            action.connect('activate', () =>
+                this._onRefreshButtonClicked(client));
 
             actionGroup.add_action(action);
             menu.append(_('Properties'), 'options-menu.properties');
             action = new Gio.SimpleAction({name: 'properties'});
 
-            action.connect('activate', () => {
-                const dialog = new TaskListPropertiesDialog(window, source);
-                dialog.present();
-            });
+            action.connect('activate', () =>
+                new TaskListPropertiesDialog(widget, this._source).present());
 
             actionGroup.add_action(action);
             this._taskListOptionsButton.set_menu_model(menu);
@@ -717,127 +762,65 @@ const TaskListRow = GObject.registerClass({
         this._taskListOptionsButton.insert_action_group('options-menu',
             actionGroup);
 
-        this._taskListSwitch.connect('state-set', this._setTaskListState.bind(
-            this, source));
-
-        if (Utils.shellVersionAtLeast_(40)) {
-            // Enable drag and drop operations:
-            const dragSource = new Gtk.DragSource({
-                actions: Gdk.DragAction.MOVE,
-            });
-
-            const dropTarget = new Gtk.DropTargetAsync({
-                actions: Gdk.DragAction.MOVE,
-            });
-
-            this.add_controller(dropTarget);
-            this.add_controller(dragSource);
-
-            dragSource.connect('drag-begin', this._dragBegin.bind(this));
-            dragSource.connect('drag-end', this._dragEnd.bind(this));
-
-            dragSource.connect('prepare', (_self, x, y) => {
-                const taskListBox = this.get_parent();
-                taskListBox.dragX = x;
-                taskListBox.dragY = y;
-                return new Gdk.ContentProvider(TaskListRow);
-            });
-
-            dropTarget.connect('drag-enter', () => {
-                this.get_parent().drag_highlight_row(this);
-            });
-
-            dropTarget.connect('drag-leave', () => {
-                this.get_parent().drag_unhighlight_row();
-            });
-
-            dropTarget.connect('drop', (_self, gdkDrop) => {
-                const taskListBox = this.get_parent();
-                const index = this.get_index();
-
-                if (index === taskListBox.dragRow.get_index()) {
-                    gdkDrop.read_value_async(TaskListRow, 1, null, () => {
-                        gdkDrop.finish(Gdk.DragAction.MOVE);
-                    });
-
-                    return true;
-                }
-
-                taskListBox.remove(taskListBox.dragRow);
-                taskListBox.insert(taskListBox.dragRow, index);
-                this._updateTaskListOrder();
-
-                gdkDrop.read_value_async(TaskListRow, 1, null, () => {
-                    gdkDrop.finish(Gdk.DragAction.MOVE);
-                });
-
-                return true;
-            });
-
-            // Set appropriate cursors for draggable row elements:
-            const tlgController = new Gtk.EventControllerMotion();
-            const tlsController = new Gtk.EventControllerMotion();
-            const tlobController = new Gtk.EventControllerMotion();
-            tlgController.connect('enter', this._onMotionEvent.bind(this, 1));
-            tlgController.connect('leave', this._onMotionEvent.bind(this, 0));
-            tlsController.connect('enter', this._onMotionEvent.bind(this, 0));
-            tlsController.connect('leave', this._onMotionEvent.bind(this, 1));
-            tlobController.connect('enter', this._onMotionEvent.bind(this, 0));
-            tlobController.connect('leave', this._onMotionEvent.bind(this, 1));
-            this._taskListGrid.add_controller(tlgController);
-            this._taskListSwitch.add_controller(tlsController);
-            this._taskListOptionsButton.add_controller(tlobController);
-        } else {
-            this.drag_dest_set(Gtk.DestDefaults.ALL, [Gtk.TargetEntry.new(
-                'Gtk.ListBoxRow', Gtk.TargetFlags.SAME_APP, 0)],
-            Gdk.DragAction.MOVE);
-
-            this.connect('drag-motion', () => {
-                this.get_parent().dropRow = this;
-            });
+        // Set up drag and drop operations:
+        if (!Utils.shellVersionAtLeast_(40)) {
+            const targets = [Gtk.TargetEntry.new('Gtk.ListBoxRow',
+                Gtk.TargetFlags.SAME_APP, 0)];
 
             this._dragBox.drag_source_set(Gdk.ModifierType.BUTTON1_MASK,
-                [Gtk.TargetEntry.new('Gtk.ListBoxRow', Gtk.TargetFlags.SAME_APP,
-                    0)], Gdk.DragAction.MOVE);
+                targets, Gdk.DragAction.MOVE);
 
-            this._dragBox.connect('drag-begin', this._dragBegin.bind(this));
-            this._dragBox.connect('drag-end', this._dragEnd.bind(this));
-
-            this._dragBox.connect('enter-notify-event',
-                this._onMotionEvent.bind(this, 1));
-
-            this._dragBox.connect('leave-notify-event',
-                this._onMotionEvent.bind(this, 0));
-
-            this._taskListSwitch.connect('enter-notify-event',
-                this._onMotionEvent.bind(this, 0));
-
-            this._taskListSwitch.connect('leave-notify-event',
-                this._onMotionEvent.bind(this, 1));
-
-            this._taskListOptionsButton.connect('enter-notify-event',
-                this._onMotionEvent.bind(this, 0));
-
-            this._taskListOptionsButton.connect('leave-notify-event',
-                this._onMotionEvent.bind(this, 1));
+            this.drag_dest_set(Gtk.DestDefaults.ALL, targets,
+                Gdk.DragAction.MOVE);
         }
     }
 
     /**
-     * Sets cursor to either `grab` or `default` to denote draggability.
+     * Handles motion events for GTK3 widgets.
      *
-     * @param {number} grab - Change cursor to `grab` (1) or `default` (0).
+     * @param {*} widget - Widget participating in the motion event.
+     * @param {Gdk.Event} event - Associated `Gdk.Event`.
+     *
+     * @returns {Gdk.EVENT_PROPAGATE} `false` to continue propagation of an
+     * event handler.
      */
-    _onMotionEvent(grab) {
-        const cursor = grab === 1 ? 'grab' : 'default';
+    _onMotionEventLegacy(widget, event) {
+        let cursor;
 
-        if (Utils.shellVersionAtLeast_(40)) {
-            this.get_root().set_cursor(Gdk.Cursor.new_from_name(cursor, null));
-        } else {
-            this.get_window().set_cursor(Gdk.Cursor.new_from_name(
-                this.get_window().get_display(), cursor));
-        }
+        const reactive = widget instanceof Gtk.Switch ||
+            widget instanceof Gtk.MenuButton;
+
+        if (event.get_event_type() === Gdk.EventType.ENTER_NOTIFY)
+            cursor = reactive ? 'default' : 'grab';
+        else
+            cursor = reactive ? 'grab' : 'default';
+
+        this.get_window().set_cursor(Gdk.Cursor.new_from_name(
+            this.get_window().get_display(), cursor));
+
+        return Gdk.EVENT_PROPAGATE;
     }
+
+    /**
+     * Handles motion events for GTK4 widgets.
+     *
+     * @param {Gtk.EventControllerMotion} controller - Event controller.
+     * @param {number} x - The X coordinate.
+     */
+    _onMotionEvent(controller, x) {
+        let cursor;
+
+        const reactive = controller.widget instanceof Gtk.Switch ||
+            controller.widget instanceof Gtk.MenuButton;
+
+        if (x !== undefined)
+            cursor = reactive ? 'default' : 'grab';
+        else
+            cursor = reactive ? 'grab' : 'default';
+
+        this.get_root().set_cursor(Gdk.Cursor.new_from_name(cursor, null));
+    }
+
 
     /**
      * Updates the task content of the task list when it's `Refresh Tasks`
@@ -866,7 +849,6 @@ const TaskListRow = GObject.registerClass({
             logError(e);
         }
     }
-
 
     /**
      * Ensures that changes in task list order are saved in settings.
@@ -907,20 +889,38 @@ const TaskListRow = GObject.registerClass({
     }
 
     /**
-     * Initializes the drag and drop operation.
+     * Prepares drag and drop operations.
      *
-     * @param {*} widget - Widget involved in the operation.
-     * @param {Gdk.DragContext} context - Drag context.
+     * @param {*} y - the Y coordinate of the drag starting point.
+     * @param {*} x - the X coordinate of the drag starting point.
+     *
+     * @returns {Gdk.ContentProvider} Type of content to provide in drag and
+     * drop operations.
      */
-    _dragBegin(widget, context) {
+    _dragPrepare(y, x) {
+        const taskListBox = this.get_parent();
+        taskListBox.dragX = x;
+        taskListBox.dragY = y;
+        return Gdk.ContentProvider.new_for_value(this);
+    }
+
+    /**
+     * Initializes drag and drop operations.
+     *
+     * @param {Gtk.EventBox|Gtk.DragSource} source - `Gtk.EventBox` or
+     * `Gtk.DragSource` when either GTK3 or GTK4 is used.
+     * @param {Gdk.DragContext|Gdk.Drag} context - `Gdk.DragContext` or
+     * `Gdk.Drag` when either GTK3 or GTK4 is used.
+     */
+    _dragBegin(source, context) {
         this.get_style_context().add_class('drag-icon');
         const taskListBox = this.get_parent();
-        taskListBox.dragRow = this;
 
         if (Utils.shellVersionAtLeast_(40)) {
-            widget.set_icon(Gtk.WidgetPaintable.new(this), taskListBox.dragX,
+            source.set_icon(Gtk.WidgetPaintable.new(this), taskListBox.dragX,
                 taskListBox.dragY);
         } else {
+            taskListBox._dragRow = this;
             const allocation = this.get_allocation();
 
             const imageSurface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
@@ -934,45 +934,51 @@ const TaskListRow = GObject.registerClass({
     }
 
     /**
+     * Handles the `drop` part of a drag and drop operation.
+     *
+     * @param {TaskListRow|Gtk.DropTarget} target - `TaskListRow` receiving the
+     * drop or `Gtk.DropTarget` when either GTK3 or GTK4 is used.
+     */
+    _dragDrop(target) {
+        const taskListBox = this.get_parent();
+
+        const dropIndex = Utils.shellVersionAtLeast_(40) ? this.get_index()
+            : target.get_index();
+
+        const dragRow = Utils.shellVersionAtLeast_(40) ? target.value
+            : taskListBox._dragRow;
+
+        if (dropIndex === dragRow.get_index())
+            return false;
+
+        taskListBox.remove(dragRow);
+        taskListBox.insert(dragRow, dropIndex);
+        this._updateTaskListOrder();
+        return true;
+    }
+
+    /**
      * Finalizes the drag and drop operation.
      */
     _dragEnd() {
         this.get_style_context().remove_class('drag-icon');
-        const taskListBox = this.get_parent();
-
-        if (Utils.shellVersionAtLeast_(40)) {
-            taskListBox.drag_unhighlight_row();
-        } else {
-            const dropIndex = taskListBox.dropRow.get_index();
-
-            if (taskListBox.dragRow.get_index() === dropIndex)
-                return;
-
-            taskListBox.remove(taskListBox.dragRow);
-            taskListBox.insert(taskListBox.dragRow, dropIndex);
-            this._updateTaskListOrder();
-            delete taskListBox.dragRow;
-            delete taskListBox.dropRow;
-        }
     }
 
     /**
      * Adds or removes the task list from the list of disabled task lists.
      *
-     * @param {EDataServer.Source} source - Source of the task list.
-     * @param {Gtk.Switch} _widget - Switch whose state is handled.
-     * @param {boolean} enabled - Switch is in its enabled state.
+     * @param {Gtk.Switch} widget - Switch whose state is handled.
      */
-    _setTaskListState(source, _widget, enabled) {
+    _setTaskListState(widget) {
         const disabled = this._settings.get_strv('disabled-task-lists');
 
-        if (enabled) {
-            const index = disabled.indexOf(source.uid);
+        if (widget.active) {
+            const index = disabled.indexOf(this._source.uid);
 
             if (index !== -1)
                 disabled.splice(index, 1);
         } else {
-            disabled.push(source.uid);
+            disabled.push(this._source.uid);
         }
 
         this._settings.set_strv('disabled-task-lists', disabled);
@@ -981,8 +987,7 @@ const TaskListRow = GObject.registerClass({
 
 const TaskListPropertiesDialog = GObject.registerClass({
     GTypeName: 'TaskListPropertiesDialog',
-    Template: `resource://${Me.metadata.epath}/task-list-properties-dialog${
-        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
+    Template: _templatePath('task-list-properties-dialog'),
     InternalChildren: [
         'taskListPropertiesDialogComboBox',
         'taskListPropertiesDialogSpinButton',
@@ -991,12 +996,12 @@ const TaskListPropertiesDialog = GObject.registerClass({
     /**
      * Initializes a dialog for task list properties.
      *
-     * @param {Gtk.Window} window - Extension settings window.
+     * @param {TaskWidgetSettings} widget - Reference to the main widget class.
      * @param {EDataServer.Source} source - Source of the task list.
      */
-    _init(window, source) {
+    _init(widget, source) {
         super._init();
-        this.set_transient_for(window);
+        this.set_transient_for(widget._window);
         this.set_title(`${this.get_title()} \u2014 ${source.display_name}`);
         this._source = source;
 
@@ -1018,20 +1023,16 @@ const TaskListPropertiesDialog = GObject.registerClass({
             units = Utils.TIME_UNITS_['minutes'];
         }
 
-        this._fillTimeUnitComboBox(interval, `${units}`);
         this._taskListPropertiesDialogSpinButton.set_value(interval);
-
-        this._taskListPropertiesDialogSpinButton.connect('value-changed',
-            button => this._fillTimeUnitComboBox(button.value));
+        this._taskListPropertiesDialogComboBox.set_active_id(`${units}`);
     }
 
     /**
      * Fills Gtk.ComboBox with time units.
-     *
-     * @param {number} interval - Time interval used to update the task list.
-     * @param {string} [active] - ID of the active Gtk.ComboBox item.
      */
-    _fillTimeUnitComboBox(interval, active = null) {
+    _fillTimeUnitComboBox() {
+        const interval = this._taskListPropertiesDialogSpinButton.value;
+
         const time = new Map([
             [Utils.TIME_UNITS_['minutes'], _npgettext(
                 'refresh every X minutes(s)', 'minute', 'minutes', interval)],
@@ -1041,11 +1042,14 @@ const TaskListPropertiesDialog = GObject.registerClass({
                 'refresh every X day(s)', 'day', 'days', interval)],
         ]);
 
-        const comboBox = this._taskListPropertiesDialogComboBox;
-        active = active !== null ? active : comboBox.active_id;
-        comboBox.remove_all();
-        time.forEach((label, i) => comboBox.append(`${i}`, label));
-        comboBox.set_active_id(active);
+        const active = this._taskListPropertiesDialogComboBox.active_id;
+        this._taskListPropertiesDialogComboBox.remove_all();
+
+        time.forEach((label, i) => this._taskListPropertiesDialogComboBox
+            .append(`${i}`, label));
+
+        if (active !== null)
+            this._taskListPropertiesDialogComboBox.set_active_id(active);
     }
 
     /**
@@ -1077,8 +1081,7 @@ const TaskListPropertiesDialog = GObject.registerClass({
 
 const SettingsMenuButton = GObject.registerClass({
     GTypeName: 'SettingsMenuButton',
-    Template: `resource://${Me.metadata.epath}/settings-menu${
-        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
+    Template: _templatePath('settings-menu'),
     InternalChildren: [
         'aboutDialog',
         'supportLogDialog',
@@ -1087,16 +1090,12 @@ const SettingsMenuButton = GObject.registerClass({
     /**
      * Initializes the settings menu.
      *
-     * @todo xgettext cannot extract translatable strings from JSON files yet,
-     * therefore extension name and description in the "About" dialog will
-     * not be translated.
-     *
-     * @param {Gtk.Window} window - Extension settings window.
+     * @param {TaskWidgetSettings} widget - Reference to the main widget class.
      */
-    _init(window) {
+    _init(widget) {
         super._init();
-        const {modal} = window;
-        this._aboutDialog.transient_for = window;
+        const {modal} = widget._window;
+        this._aboutDialog.transient_for = widget._window;
         this._aboutDialog.program_name = _(Me.metadata.name);
         this._aboutDialog.version = Me.metadata.version.toString();
         this._aboutDialog.website = Me.metadata.url;
@@ -1116,7 +1115,7 @@ const SettingsMenuButton = GObject.registerClass({
                 GLib.DateTime.new_now_local().format('%F %T');
 
             if (modal)
-                window.set_modal(false);
+                widget._window.set_modal(false);
 
             this._supportLogDialog.present();
             this.set_sensitive(false);
@@ -1146,7 +1145,7 @@ const SettingsMenuButton = GObject.registerClass({
                 this._generateSupportLog(dialog._time);
 
             if (modal)
-                window.set_modal(true);
+                widget._window.set_modal(true);
 
             this.set_sensitive(true);
             dialog._time = null;
@@ -1160,6 +1159,7 @@ const SettingsMenuButton = GObject.registerClass({
      *
      * @author Andy Holmes <andrew.g.r.holmes@gmail.com> (the original code was
      * extended to include more data).
+     *
      * @param {GLib.DateTime} time - Restricts log entries displayed to those
      * after this time.
      */
@@ -1222,6 +1222,7 @@ const SettingsMenuButton = GObject.registerClass({
                 GLib.get_os_info('PRETTY_NAME') + '\n' +
                 'GNOME Shell ' + imports.misc.config.PACKAGE_VERSION + '\n' +
                 'gjs ' + imports.system.version + '\n' +
+                (Adw ? 'Libadwaita ' + Adw.VERSION_S + '\n' : '') +
                 'Language: ' + GLib.getenv('LANG') + '\n' +
                 'XDG Session Type: ' + GLib.getenv('XDG_SESSION_TYPE') + '\n' +
                 'GDM Session Type: ' + GLib.getenv('GDMSESSION') + '\n' +
@@ -1264,8 +1265,7 @@ const SettingsMenuButton = GObject.registerClass({
 
 const DonateMenuButton = GObject.registerClass({
     GTypeName: 'DonateMenuButton',
-    Template: `resource://${Me.metadata.epath}/donate-menu${
-        Utils.shellVersionAtLeast_(40) ? '' : '-gtk3'}.ui`,
+    Template: _templatePath('donate-menu'),
     InternalChildren: [
         'donateCrypto',
         'donateOptionsComboBox',
@@ -1275,11 +1275,11 @@ const DonateMenuButton = GObject.registerClass({
     /**
      * Initializes the donations menu.
      *
-     * @param {Gtk.Window} window - Extension settings window.
+     * @param {TaskWidgetSettings} widget - Reference to the main widget class.
      */
-    _init(window) {
+    _init(widget) {
         super._init();
-        this._donateCrypto.set_transient_for(window);
+        this._donateCrypto.set_transient_for(widget._window);
         const actionGroup = new Gio.SimpleActionGroup();
         let action = new Gio.SimpleAction({name: 'coffee'});
 

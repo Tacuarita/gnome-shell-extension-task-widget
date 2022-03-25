@@ -14,12 +14,17 @@
   <template class="TaskListRow" parent="GtkListBoxRow">
     <property name="activatable">0</property>
     <property name="visible">1</property>
+    <signal name="drag-drop" handler="_dragDrop"/>
     <child>
       <object class="GtkBox">
         <property name="visible">1</property>
         <child>
           <object class="GtkEventBox" id="dragBox">
             <property name="visible">1</property>
+            <signal name="drag-begin" handler="_dragBegin" swapped="no"/>
+            <signal name="drag-end" handler="_dragEnd"/>
+            <signal name="enter-notify-event" handler="_onMotionEventLegacy"/>
+            <signal name="leave-notify-event" handler="_onMotionEventLegacy"/>
             <child>
               <object class="GtkGrid" id="taskListGrid">
                 <property name="visible">1</property>
@@ -63,6 +68,8 @@
                     <property name="menu_model">optionsMenu</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <signal name="enter-notify-event" handler="_onMotionEventLegacy"/>
+                    <signal name="leave-notify-event" handler="_onMotionEventLegacy"/>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">1</property>
@@ -105,6 +112,9 @@
                   <object class="GtkSwitch" id="taskListSwitch">
                     <property name="visible">1</property>
                     <property name="valign">center</property>
+                    <signal name="state-set" handler="_setTaskListState"/>
+                    <signal name="enter-notify-event" handler="_onMotionEventLegacy"/>
+                    <signal name="leave-notify-event" handler="_onMotionEventLegacy"/>
                   </object>
                 </child>
               </object>

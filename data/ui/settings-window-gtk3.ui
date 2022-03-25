@@ -21,6 +21,8 @@
     <property name="margin-top">30</property>
     <property name="margin-bottom">30</property>
     <property name="orientation">vertical</property>
+    <signal name="realize" handler="_onRealized"/>
+    <signal name="unrealize" handler="_onUnrealized"/>
     <child>
       <object class="GtkLabel">
         <property name="xalign">0</property>
@@ -171,7 +173,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkListBoxRow">
+          <object class="GtkListBoxRow" id="socRow">
             <property name="activatable">0</property>
             <child>
               <object class="GtkBox">
@@ -198,6 +200,7 @@
                 </child>
                 <child>
                   <object class="GtkRevealer" id="socSettingsRevealer">
+                    <property name="reveal-child" bind-source="socSwitch" bind-property="active" bind-flags="default"/>
                     <child>
                       <object class="GtkGrid">
                         <property name="margin-start">12</property>
@@ -210,21 +213,27 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryPast">
+                                <property name="name">past</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes">Past</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that were due yesterday or earlier</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryToday">
+                                <property name="name">today</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes">Due Today</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
-                             <child>
+                            <child>
                               <object class="GtkCheckButton" id="taskCategoryTomorrow">
+                                <property name="name">tomorrow</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes">Due Tomorrow</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
                           </object>
@@ -234,22 +243,28 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryNextSevenDays">
+                                <property name="name">next-seven-days</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes">Due in the Next 7 Days</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that are due in the next seven days including today</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryScheduled">
+                                <property name="name">scheduled</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes" context="used in Scheduled Tasks">Scheduled</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that have a due date</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
-                             <child>
+                            <child>
                               <object class="GtkCheckButton" id="taskCategoryNotCancelled">
+                                <property name="name">not-cancelled</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes" context="used in Not Cancelled Tasks">Not Cancelled</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
                           </object>
@@ -259,9 +274,11 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCheckButton" id="taskCategoryStarted">
+                                <property name="name">started</property>
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes" context="used in Started Tasks">Started</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that either do not have a start date or the start date is earlier than current time</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
                           </object>
@@ -275,7 +292,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkListBoxRow">
+          <object class="GtkListBoxRow" id="hctRow">
             <property name="activatable">0</property>
             <child>
               <object class="GtkBox">
@@ -329,6 +346,7 @@
                               <object class="GtkSpinButton" id="hctApotacSpinButton">
                                 <property name="adjustment">hctApotacAdjustment</property>
                                 <property name="numeric">1</property>
+                                <signal name="value-changed" handler="_fillApotacComboBox"/>
                               </object>
                             </child>
                             <child>
@@ -358,6 +376,7 @@
                               <object class="GtkSpinButton" id="hctAstodSpinButtonHour">
                                 <property name="adjustment">hctAstodHourAdjustment</property>
                                 <property name="numeric">1</property>
+                                <signal name="output" handler="_timeOutput"/>
                               </object>
                             </child>
                             <child>
@@ -369,6 +388,7 @@
                               <object class="GtkSpinButton" id="hctAstodSpinButtonMinute">
                                 <property name="adjustment">hctAstodMinuteAdjustment</property>
                                 <property name="numeric">1</property>
+                                <signal name="output" handler="_timeOutput"/>
                               </object>
                             </child>
                           </object>
@@ -423,7 +443,6 @@
         <child>
           <object class="GtkSeparator">
             <property name="margin-bottom">12</property>
-            <property name="orientation">vertical</property>
           </object>
         </child>
         <child>
