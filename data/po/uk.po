@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 20:28+0100\n"
+"POT-Creation-Date: 2022-03-25 20:46+0100\n"
 "PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -36,7 +36,7 @@ msgstr "Вибір списку завдань"
 msgid "Next task list"
 msgstr "Наступний список завдань"
 
-#: src/extension.js:324 src/extension.js:1447
+#: src/extension.js:324 src/extension.js:1448
 msgid "All Tasks"
 msgstr "Усі завдання"
 
@@ -87,11 +87,11 @@ msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %-d %B, %Y р."
 
-#: src/extension.js:1482
+#: src/extension.js:1483
 msgid "No Tasks"
 msgstr "Завдань немає"
 
-#: src/extension.js:1488 src/prefs.js:140
+#: src/extension.js:1489 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr "Помилка: треба задовольнити залежності"
 

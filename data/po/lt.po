@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 20:28+0100\n"
+"POT-Creation-Date: 2022-03-25 20:46+0100\n"
 "PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
@@ -35,7 +35,7 @@ msgstr "Pasirinkite užduočių sąrašą"
 msgid "Next task list"
 msgstr "Sekantis užduočių sąrašas"
 
-#: src/extension.js:324 src/extension.js:1447
+#: src/extension.js:324 src/extension.js:1448
 msgid "All Tasks"
 msgstr "Visos užduotys"
 
@@ -86,11 +86,11 @@ msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %Y m. %B %-d d."
 
-#: src/extension.js:1482
+#: src/extension.js:1483
 msgid "No Tasks"
 msgstr "Nėra užduočių"
 
-#: src/extension.js:1488 src/prefs.js:140
+#: src/extension.js:1489 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr "Klaida: trūksta reikalingų modulių"
 
