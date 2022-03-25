@@ -95,8 +95,7 @@ msgstr "Fout: ontbrekende afhankelijkheden"
 
 #: src/prefs.js:141
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
+msgstr "Installeer Evolution Data Server om deze uitbreiding te kunnen gebruiken."
 
 #: src/prefs.js:145 data/ui/settings-menu.ui:26
 msgid "Help"
@@ -192,14 +191,8 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr ""
 
 #: data/ui/settings-menu.ui:39
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het "
-"probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-"
-"informatie."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Foutopsporingsberichten worden gelogd. Doe alles wat nodig is om het probleem aan te tonen en bekijk dan het logboek. Verwijder wel alle privé-informatie."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:42
 msgid "Cancel"
@@ -273,9 +266,7 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:154
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:166
@@ -313,8 +304,7 @@ msgid "Task Lists"
 msgstr "Takenlijsten"
 
 #: data/ui/settings-window.ui:262
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Je kunt rijen op de widget verslepen om de volgorde aan te passen."
 
 #: data/ui/task-list-properties-dialog.ui:13
@@ -353,3 +343,4 @@ msgstr ""
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr ""
+

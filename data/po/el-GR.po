@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-17 18:32+0100\n"
-"PO-Revision-Date: 2021-11-17 17:47\n"
+"POT-Creation-Date: 2022-03-25 20:50+0100\n"
+"PO-Revision-Date: 2022-03-25 20:27\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -18,47 +18,47 @@ msgstr ""
 "X-Crowdin-File-ID: 8\n"
 
 #. Translators: without the ellipsis as it's appended automatically.
-#: src/extension.js:88
+#: src/extension.js:85
 msgid "Loading"
 msgstr ""
 
-#: src/extension.js:202
+#: src/extension.js:205
 msgid "Previous task list"
 msgstr ""
 
-#: src/extension.js:234
+#: src/extension.js:237
 msgid "Select task list"
 msgstr ""
 
-#: src/extension.js:275 src/extension.js:1303
-msgid "All Tasks"
-msgstr ""
-
-#: src/extension.js:304
+#: src/extension.js:265
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:736
-msgid "Beginning of a subtask list"
+#: src/extension.js:324 src/extension.js:1448
+msgid "All Tasks"
 msgstr ""
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:782
+#: src/extension.js:852
 msgid "Orphan task"
 msgstr ""
 
-#: src/extension.js:801
+#: src/extension.js:872
+msgid "Beginning of a subtask list"
+msgstr ""
+
+#: src/extension.js:928
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:803
+#: src/extension.js:930
 msgid "Today"
 msgstr ""
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:808 data/ui/settings-window.ui:200
+#: src/extension.js:935 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr ""
 
@@ -75,95 +75,95 @@ msgstr ""
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:827
+#: src/extension.js:954
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:828
+#: src/extension.js:955
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:1338
+#: src/extension.js:1483
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:1344 src/prefs.js:92
+#: src/extension.js:1489 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr ""
 
-#: src/prefs.js:93
+#: src/prefs.js:141
 msgid "Please install Evolution Data Server to use this extension."
 msgstr ""
 
-#: src/prefs.js:97 data/ui/settings-menu.ui:26
+#: src/prefs.js:145 data/ui/settings-menu.ui:26
 msgid "Help"
 msgstr ""
 
-#: src/prefs.js:344
+#: src/prefs.js:398
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:346
+#: src/prefs.js:400
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:347
+#: src/prefs.js:401
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:349
+#: src/prefs.js:403
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:422
+#: src/prefs.js:458
 msgid "No remote task lists found"
 msgstr ""
 
-#: src/prefs.js:428 data/ui/settings-window.ui:426
+#: src/prefs.js:461 data/ui/settings-window.ui:288
 msgid "Refresh the list of account task lists"
 msgstr ""
 
-#: src/prefs.js:498
+#: src/prefs.js:549 data/ui/settings-window.ui:300 data/ui/task-list-row.ui:86
 msgid "Refresh in progress"
 msgstr ""
 
-#: src/prefs.js:692
+#: src/prefs.js:746
 msgid "Refresh Tasks"
 msgstr ""
 
-#: src/prefs.js:700
+#: src/prefs.js:753
 msgid "Properties"
 msgstr ""
 
-#: src/prefs.js:1032
+#: src/prefs.js:1039
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:1034
+#: src/prefs.js:1041
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:1036
+#: src/prefs.js:1043
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -173,7 +173,7 @@ msgstr[1] ""
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1104
+#: src/prefs.js:1109
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr ""
@@ -194,7 +194,7 @@ msgstr ""
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
 msgstr ""
 
-#: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:47
+#: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:42
 msgid "Cancel"
 msgstr ""
 
@@ -202,121 +202,121 @@ msgstr ""
 msgid "Review Log"
 msgstr ""
 
-#: data/ui/settings-window.ui:29
+#: data/ui/settings-window.ui:24
 msgid "Settings"
 msgstr ""
 
-#: data/ui/settings-window.ui:56
+#: data/ui/settings-window.ui:27
 msgid "Merge task lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:86
+#: data/ui/settings-window.ui:38
 msgid "Group past tasks"
 msgstr ""
 
-#: data/ui/settings-window.ui:116
-msgid "Hide header for singular task lists"
+#: data/ui/settings-window.ui:49
+msgid "Hide header for singular tasks"
 msgstr ""
 
-#: data/ui/settings-window.ui:146
+#: data/ui/settings-window.ui:60
 msgid "Hide empty and completed task lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:176
+#: data/ui/settings-window.ui:71
 msgid "Show only selected task categories"
 msgstr ""
 
-#: data/ui/settings-window.ui:201
+#: data/ui/settings-window.ui:93
 msgid "Tasks that were due yesterday or earlier"
 msgstr ""
 
-#: data/ui/settings-window.ui:207
+#: data/ui/settings-window.ui:101
 msgid "Due Today"
 msgstr ""
 
-#: data/ui/settings-window.ui:213
+#: data/ui/settings-window.ui:109
 msgid "Due Tomorrow"
 msgstr ""
 
-#: data/ui/settings-window.ui:224
+#: data/ui/settings-window.ui:122
 msgid "Due in the Next 7 Days"
 msgstr ""
 
-#: data/ui/settings-window.ui:225
+#: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
 msgstr ""
 
-#: data/ui/settings-window.ui:231
+#: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
 msgid "Scheduled"
 msgstr ""
 
-#: data/ui/settings-window.ui:232
+#: data/ui/settings-window.ui:132
 msgid "Tasks that have a due date"
 msgstr ""
 
-#: data/ui/settings-window.ui:238
+#: data/ui/settings-window.ui:140
 msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
 msgstr ""
 
-#: data/ui/settings-window.ui:249
+#: data/ui/settings-window.ui:153
 msgctxt "used in Started Tasks"
 msgid "Started"
 msgstr ""
 
-#: data/ui/settings-window.ui:250
+#: data/ui/settings-window.ui:154
 msgid "Tasks that either do not have a start date or the start date is earlier than current time"
 msgstr ""
 
-#: data/ui/settings-window.ui:280
+#: data/ui/settings-window.ui:166
 msgid "Hide completed tasks"
 msgstr ""
 
-#: data/ui/settings-window.ui:286
+#: data/ui/settings-window.ui:172
 msgid "Never"
 msgstr ""
 
-#: data/ui/settings-window.ui:287
+#: data/ui/settings-window.ui:173
 msgid "Immediately"
 msgstr ""
 
-#: data/ui/settings-window.ui:288
+#: data/ui/settings-window.ui:174
 msgid "After a period of time after completion"
 msgstr ""
 
-#: data/ui/settings-window.ui:289
+#: data/ui/settings-window.ui:175
 msgid "After a specific time of the day"
 msgstr ""
 
-#: data/ui/settings-window.ui:313
+#: data/ui/settings-window.ui:196
 msgctxt "e.g. After 5 minutes"
 msgid "After"
 msgstr ""
 
-#: data/ui/settings-window.ui:343
+#: data/ui/settings-window.ui:227
 msgctxt "e.g. After 9:00"
 msgid "After"
 msgstr ""
 
-#: data/ui/settings-window.ui:391
+#: data/ui/settings-window.ui:261
 msgid "Task Lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:401
+#: data/ui/settings-window.ui:262
 msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr ""
 
-#: data/ui/task-list-properties-dialog.ui:11
+#: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
 msgstr ""
 
 #. Translators: e.g. "Refresh every 10 minutes".
-#: data/ui/task-list-properties-dialog.ui:26
+#: data/ui/task-list-properties-dialog.ui:24
 msgid "Refresh every"
 msgstr ""
 
-#: data/ui/task-list-properties-dialog.ui:52
+#: data/ui/task-list-properties-dialog.ui:47
 msgid "OK"
 msgstr ""
 
@@ -328,7 +328,7 @@ msgstr ""
 msgid "Move Down"
 msgstr ""
 
-#: data/ui/task-list-row.ui:60
+#: data/ui/task-list-row.ui:67
 msgid "Task list options"
 msgstr ""
 
