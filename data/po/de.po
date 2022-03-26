@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-26 18:21+0100\n"
+"POT-Creation-Date: 2022-03-26 21:42+0100\n"
 "PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
@@ -101,69 +101,69 @@ msgstr "Installiere den Evolution Data Server um diese Erweiterung zu nutzen."
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/prefs.js:398
+#: src/prefs.js:399
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "Sekunde"
 msgstr[1] "Sekunden"
 
-#: src/prefs.js:400
+#: src/prefs.js:401
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "Minute"
 msgstr[1] "Minuten"
 
-#: src/prefs.js:401
+#: src/prefs.js:402
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "Stunde"
 msgstr[1] "Stunden"
 
-#: src/prefs.js:403
+#: src/prefs.js:404
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] "Tag"
 msgstr[1] "Tage"
 
-#: src/prefs.js:458
+#: src/prefs.js:459
 msgid "No remote task lists found"
 msgstr "Keine Online-Aufgabenlisten gefunden"
 
-#: src/prefs.js:461 data/ui/settings-window.ui:288
+#: src/prefs.js:462 data/ui/settings-window.ui:288
 msgid "Refresh the list of account task lists"
 msgstr "Liste der Aufgabenlisten aktualisieren"
 
-#: src/prefs.js:549 data/ui/settings-window.ui:300 data/ui/task-list-row.ui:86
+#: src/prefs.js:550 data/ui/settings-window.ui:300 data/ui/task-list-row.ui:86
 msgid "Refresh in progress"
 msgstr "Aktualisierung im Gange"
 
-#: src/prefs.js:746
+#: src/prefs.js:747
 msgid "Refresh Tasks"
 msgstr "Aufgaben aktualisieren"
 
-#: src/prefs.js:753
+#: src/prefs.js:754
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: src/prefs.js:1039
+#: src/prefs.js:1040
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "Minute"
 msgstr[1] "Minuten"
 
-#: src/prefs.js:1041
+#: src/prefs.js:1042
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "Stunde"
 msgstr[1] "Stunden"
 
-#: src/prefs.js:1043
+#: src/prefs.js:1044
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -173,7 +173,7 @@ msgstr[1] "Tage"
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1109
+#: src/prefs.js:1110
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr "lightonflux"
