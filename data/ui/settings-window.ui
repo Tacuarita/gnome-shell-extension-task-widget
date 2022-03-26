@@ -46,7 +46,7 @@
         </child>
         <child>
           <object class="AdwActionRow">
-            <property name="title" translatable="yes">Hide header for singular tasks</property>
+            <property name="title" translatable="yes">Hide header for singular task lists</property>
             <property name="activatable-widget">hhfstlSwitch</property>
             <child>
               <object class="GtkSwitch" id="hhfstlSwitch">
