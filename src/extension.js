@@ -102,9 +102,6 @@ class TaskWidget extends St.BoxLayout {
                 vertical: true,
             });
 
-            this._calendarWidget.add_style_class_name(
-                'task-widget-remove-calendar-margin');
-
             if (Utils.shellVersionAtLeast_(42)) {
                 this._contentBox.add_style_class_name(
                     'task-widget-remove-task-box-padding');
