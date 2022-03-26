@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 20:50+0100\n"
-"PO-Revision-Date: 2022-03-25 20:26\n"
+"POT-Creation-Date: 2022-03-26 21:42+0100\n"
+"PO-Revision-Date: 2022-03-26 20:48\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -22,43 +22,43 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: src/extension.js:205
+#: src/extension.js:202
 msgid "Previous task list"
 msgstr ""
 
-#: src/extension.js:237
+#: src/extension.js:234
 msgid "Select task list"
 msgstr ""
 
-#: src/extension.js:265
+#: src/extension.js:262
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:324 src/extension.js:1448
+#: src/extension.js:321 src/extension.js:1445
 msgid "All Tasks"
 msgstr ""
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:852
+#: src/extension.js:849
 msgid "Orphan task"
 msgstr ""
 
-#: src/extension.js:872
+#: src/extension.js:869
 msgid "Beginning of a subtask list"
 msgstr ""
 
-#: src/extension.js:928
+#: src/extension.js:925
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:930
+#: src/extension.js:927
 msgid "Today"
 msgstr ""
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:935 data/ui/settings-window.ui:92
+#: src/extension.js:932 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr ""
 
@@ -75,21 +75,21 @@ msgstr ""
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:954
+#: src/extension.js:951
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:955
+#: src/extension.js:952
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:1483
+#: src/extension.js:1480
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:1489 src/prefs.js:140
+#: src/extension.js:1486 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr ""
 
@@ -101,63 +101,63 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: src/prefs.js:398
+#: src/prefs.js:399
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 
-#: src/prefs.js:400
+#: src/prefs.js:401
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 
-#: src/prefs.js:401
+#: src/prefs.js:402
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 
-#: src/prefs.js:403
+#: src/prefs.js:404
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 
-#: src/prefs.js:458
+#: src/prefs.js:459
 msgid "No remote task lists found"
 msgstr ""
 
-#: src/prefs.js:461 data/ui/settings-window.ui:288
+#: src/prefs.js:462 data/ui/settings-window.ui:288
 msgid "Refresh the list of account task lists"
 msgstr ""
 
-#: src/prefs.js:549 data/ui/settings-window.ui:300 data/ui/task-list-row.ui:86
+#: src/prefs.js:550 data/ui/settings-window.ui:300 data/ui/task-list-row.ui:86
 msgid "Refresh in progress"
 msgstr ""
 
-#: src/prefs.js:746
+#: src/prefs.js:747
 msgid "Refresh Tasks"
 msgstr ""
 
-#: src/prefs.js:753
+#: src/prefs.js:754
 msgid "Properties"
 msgstr ""
 
-#: src/prefs.js:1039
+#: src/prefs.js:1040
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 
-#: src/prefs.js:1041
+#: src/prefs.js:1042
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 
-#: src/prefs.js:1043
+#: src/prefs.js:1044
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -166,7 +166,7 @@ msgstr[0] ""
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1109
+#: src/prefs.js:1110
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr ""
@@ -208,7 +208,7 @@ msgid "Group past tasks"
 msgstr ""
 
 #: data/ui/settings-window.ui:49
-msgid "Hide header for singular tasks"
+msgid "Hide header for singular task lists"
 msgstr ""
 
 #: data/ui/settings-window.ui:60
