@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 23:08+0100\n"
+"POT-Creation-Date: 2022-03-26 18:21+0100\n"
 "PO-Revision-Date: 2021-11-17 17:47\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
@@ -22,43 +22,43 @@ msgstr ""
 msgid "Loading"
 msgstr "Caricamento"
 
-#: src/extension.js:205
+#: src/extension.js:202
 msgid "Previous task list"
 msgstr "Elenco attività precedente"
 
-#: src/extension.js:237
+#: src/extension.js:234
 msgid "Select task list"
 msgstr "Seleziona elenco attività"
 
-#: src/extension.js:265
+#: src/extension.js:262
 msgid "Next task list"
 msgstr "Elenco attività successivo"
 
-#: src/extension.js:324 src/extension.js:1448
+#: src/extension.js:321 src/extension.js:1445
 msgid "All Tasks"
 msgstr "Tutte le attività"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:852
+#: src/extension.js:849
 msgid "Orphan task"
 msgstr "Attività orfana"
 
-#: src/extension.js:872
+#: src/extension.js:869
 msgid "Beginning of a subtask list"
 msgstr "Inizio di un elenco di sotto-attività"
 
-#: src/extension.js:928
+#: src/extension.js:925
 msgid "No due date"
 msgstr "Nessuna data di scadenza"
 
-#: src/extension.js:930
+#: src/extension.js:927
 msgid "Today"
 msgstr "Oggi"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:935 data/ui/settings-window.ui:92
+#: src/extension.js:932 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr "Passato"
 
@@ -75,21 +75,21 @@ msgstr "Passato"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:954
+#: src/extension.js:951
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %-d %B"
 
-#: src/extension.js:955
+#: src/extension.js:952
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %-d %B %Y"
 
-#: src/extension.js:1483
+#: src/extension.js:1480
 msgid "No Tasks"
 msgstr "Nessuna attività"
 
-#: src/extension.js:1489 src/prefs.js:140
+#: src/extension.js:1486 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr "Errore: Dipendenze Mancanti"
 
@@ -191,8 +191,14 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr ""
 
 #: data/ui/settings-menu.ui:39
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "I messaggi di debug stanno venendo registrati. Prendi tutte le misure necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti rimuovere o censurare qualsiasi informazione che ritieni privata."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"I messaggi di debug stanno venendo registrati. Prendi tutte le misure "
+"necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti "
+"rimuovere o censurare qualsiasi informazione che ritieni privata."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:42
 msgid "Cancel"
@@ -215,8 +221,9 @@ msgid "Group past tasks"
 msgstr "Raggruppa attività passate"
 
 #: data/ui/settings-window.ui:49
-msgid "Hide header for singular tasks"
-msgstr ""
+#, fuzzy
+msgid "Hide header for singular task lists"
+msgstr "Nascondi elenchi attività vuoti e completati"
 
 #: data/ui/settings-window.ui:60
 msgid "Hide empty and completed task lists"
@@ -266,7 +273,9 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:154
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:166
@@ -304,8 +313,11 @@ msgid "Task Lists"
 msgstr "Elenco attività"
 
 #: data/ui/settings-window.ui:262
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "È possibile trascinare le righe per modificare l'ordine degli elenchi di attività nel widget."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"È possibile trascinare le righe per modificare l'ordine degli elenchi di "
+"attività nel widget."
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
@@ -343,4 +355,3 @@ msgstr ""
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr ""
-

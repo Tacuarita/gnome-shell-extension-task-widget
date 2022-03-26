@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 23:08+0100\n"
+"POT-Creation-Date: 2022-03-26 18:21+0100\n"
 "PO-Revision-Date: 2021-11-21 09:57\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
@@ -22,43 +22,43 @@ msgstr ""
 msgid "Loading"
 msgstr "Chargement"
 
-#: src/extension.js:205
+#: src/extension.js:202
 msgid "Previous task list"
 msgstr "Liste des tâches précédente"
 
-#: src/extension.js:237
+#: src/extension.js:234
 msgid "Select task list"
 msgstr "Sélectionner la liste des tâches"
 
-#: src/extension.js:265
+#: src/extension.js:262
 msgid "Next task list"
 msgstr "Liste des tâches suivante"
 
-#: src/extension.js:324 src/extension.js:1448
+#: src/extension.js:321 src/extension.js:1445
 msgid "All Tasks"
 msgstr "Toutes les tâches"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:852
+#: src/extension.js:849
 msgid "Orphan task"
 msgstr "Tâche orpheline"
 
-#: src/extension.js:872
+#: src/extension.js:869
 msgid "Beginning of a subtask list"
 msgstr "Début d'une liste de sous-tâches"
 
-#: src/extension.js:928
+#: src/extension.js:925
 msgid "No due date"
 msgstr "Sans date d'échéance"
 
-#: src/extension.js:930
+#: src/extension.js:927
 msgid "Today"
 msgstr "Aujourd'hui"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:935 data/ui/settings-window.ui:92
+#: src/extension.js:932 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr "Passée"
 
@@ -75,27 +75,28 @@ msgstr "Passée"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:954
+#: src/extension.js:951
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %B %-d"
 
-#: src/extension.js:955
+#: src/extension.js:952
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %B %-d, %Y"
 
-#: src/extension.js:1483
+#: src/extension.js:1480
 msgid "No Tasks"
 msgstr "Aucune tâche"
 
-#: src/extension.js:1489 src/prefs.js:140
+#: src/extension.js:1486 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr "Erreur: Dépendances manquantes"
 
 #: src/prefs.js:141
 msgid "Please install Evolution Data Server to use this extension."
-msgstr "Veuillez installer Evolution Data Server pour utiliser cette extension."
+msgstr ""
+"Veuillez installer Evolution Data Server pour utiliser cette extension."
 
 #: src/prefs.js:145 data/ui/settings-menu.ui:26
 msgid "Help"
@@ -191,8 +192,15 @@ msgid "Copyright © 2020-2021 Juozas Miškinis"
 msgstr "Copyright © 2020-2021 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:39
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Les messages de débogage sont enregistrés. Effectuez toutes les étapes nécessaires pour reproduire un problème, puis consultez le journal. Vous devriez supprimer ou censurer toute information que vous considérez comme privée."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Les messages de débogage sont enregistrés. Effectuez toutes les étapes "
+"nécessaires pour reproduire un problème, puis consultez le journal. Vous "
+"devriez supprimer ou censurer toute information que vous considérez comme "
+"privée."
 
 #: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:42
 msgid "Cancel"
@@ -215,8 +223,9 @@ msgid "Group past tasks"
 msgstr "Regrouper les tâches passées"
 
 #: data/ui/settings-window.ui:49
-msgid "Hide header for singular tasks"
-msgstr ""
+#, fuzzy
+msgid "Hide header for singular task lists"
+msgstr "Masquer les listes de tâches vides et terminées"
 
 #: data/ui/settings-window.ui:60
 msgid "Hide empty and completed task lists"
@@ -244,7 +253,9 @@ msgstr "Échéance dans les 7 prochains jours"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr "Tâches qui doivent être effectuées dans les sept prochains jours, y compris aujourd'hui"
+msgstr ""
+"Tâches qui doivent être effectuées dans les sept prochains jours, y compris "
+"aujourd'hui"
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
@@ -266,8 +277,12 @@ msgid "Started"
 msgstr "Commencée"
 
 #: data/ui/settings-window.ui:154
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
-msgstr "Tâches qui n'ont pas de date de début ou dont la date de début est antérieure à l'heure actuelle"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
+msgstr ""
+"Tâches qui n'ont pas de date de début ou dont la date de début est "
+"antérieure à l'heure actuelle"
 
 #: data/ui/settings-window.ui:166
 msgid "Hide completed tasks"
@@ -304,8 +319,11 @@ msgid "Task Lists"
 msgstr "Listes de tâches"
 
 #: data/ui/settings-window.ui:262
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "Vous pouvez faire glisser et déposer des lignes pour modifier l'ordre des listes de tâches dans le widget."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"Vous pouvez faire glisser et déposer des lignes pour modifier l'ordre des "
+"listes de tâches dans le widget."
 
 #: data/ui/task-list-properties-dialog.ui:13
 msgid "Task List Properties"
@@ -343,4 +361,3 @@ msgstr "Faire un don"
 #: data/ui/donate-menu.ui:34
 msgid "Donate Cryptocurrencies"
 msgstr "Faire un don en cryptomonnaie"
-
