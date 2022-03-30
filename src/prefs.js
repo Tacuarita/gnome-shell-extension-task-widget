@@ -460,18 +460,20 @@ const TaskWidgetSettings = GObject.registerClass({
                 this._backendRefreshButton.set_tooltip_text(
                     _('Refresh the list of account task lists'));
 
+                let i = 0;
                 let action;
                 const menu = Gio.Menu.new();
                 const actionGroup = new Gio.SimpleActionGroup();
 
                 for (const [account, source] of accounts) {
-                    menu.append(account, `accounts.${account}`);
-                    action = new Gio.SimpleAction({name: account});
+                    menu.append(account, `accounts.${i}`);
+                    action = new Gio.SimpleAction({name: `${i}`});
 
                     action.connect('activate', () =>
                         this._onAccountButtonClicked(source, account));
 
                     actionGroup.add_action(action);
+                    i++;
                 }
 
                 this._backendRefreshButton.set_menu_model(menu);
@@ -664,11 +666,6 @@ const TaskWidgetSettings = GObject.registerClass({
 
         if (this._backendRefreshId)
             GLib.source_remove(this._backendRefreshId);
-
-        // Use of `run_dispose()` is discouraged but this prevents `gjs` from
-        // crashing after closing the preferences window. GJS bug maybe?
-        this._sourceRegistry.run_dispose();
-        delete this._sourceRegistry;
 
         Gio.resources_unregister(_resource);
         _resource = null;
