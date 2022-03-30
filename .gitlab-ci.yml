@@ -24,6 +24,7 @@ build:
     - meson install -C _build
   artifacts:
     name: "$CI_JOB_NAME"
+    untracked: true
     paths:
       - /builds/jmiskinis/gnome-shell-extension-task-widget/_build/
     expire_in: 1 week
