@@ -22,6 +22,11 @@ build:
     - meson _build -Dper_user=true -Dbuild_zip=true
     - meson test -C _build
     - meson install -C _build
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - _build/
+    expire_in: 1 week
 # https://gitlab.com/gitlab-org/gitlab/-/issues/17838
 #   artifacts:
 #     expire_in: 1 minute
