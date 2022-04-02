@@ -20,14 +20,15 @@
         <child internal-child="action_area">
           <object class="GtkBox">
             <child>
-              <object class="GtkButton" id="taskListPropertiesDialogCancelButton">
+              <object class="GtkButton" id="cancelDialog">
                 <property name="visible">1</property>
                 <property name="label" translatable="yes">Cancel</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="taskListPropertiesDialogOkButton">
+              <object class="GtkButton" id="submitDialog">
                 <property name="visible">1</property>
+                <property name="can-default">1</property>
                 <property name="label" translatable="yes">OK</property>
               </object>
             </child>
@@ -61,8 +62,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="cancel">taskListPropertiesDialogCancelButton</action-widget>
-      <action-widget response="ok">taskListPropertiesDialogOkButton</action-widget>
+      <action-widget response="cancel">cancelDialog</action-widget>
+      <action-widget response="ok" default="yes">submitDialog</action-widget>
     </action-widgets>
   </template>
 </interface>

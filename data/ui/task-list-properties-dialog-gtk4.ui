@@ -7,16 +7,34 @@
     <property name="step-increment">1</property>
   </object>
   <template class="TaskListPropertiesDialog" parent="GtkDialog">
-    <property name="use-header-bar">1</property>
     <property name="resizable">0</property>
     <property name="modal">1</property>
     <property name="title" translatable="yes">Task List Properties</property>
-    <child internal-child="content_area">
+    <child internal-child="action_area">
       <object class="GtkBox">
         <property name="margin-start">18</property>
         <property name="margin-end">18</property>
         <property name="margin-top">18</property>
         <property name="margin-bottom">18</property>
+        <property name="spacing">6</property>
+        <property name="orientation">horizontal</property>
+        <child type="action">
+          <object class="GtkButton" id="cancelDialog">
+            <property name="label" translatable="yes">Cancel</property>
+          </object>
+        </child>
+        <child type="action">
+          <object class="GtkButton" id="submitDialog">
+            <property name="label" translatable="yes">OK</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="content_area">
+      <object class="GtkBox">
+        <property name="margin-start">18</property>
+        <property name="margin-end">18</property>
+        <property name="margin-top">18</property>
         <property name="spacing">12</property>
         <property name="orientation">horizontal</property>
         <child>
@@ -35,16 +53,6 @@
             <property name="hexpand">1</property>
           </object>
         </child>
-      </object>
-    </child>
-    <child type="action">
-      <object class="GtkButton" id="cancelDialog">
-        <property name="label" translatable="1">Cancel</property>
-      </object>
-    </child>
-    <child type="action">
-      <object class="GtkButton" id="submitDialog">
-        <property name="label" translatable="1">OK</property>
       </object>
     </child>
     <action-widgets>

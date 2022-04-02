@@ -55,8 +55,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">supportLogDialogCancelButton</action-widget>
-      <action-widget response="-5">supportLogDialogReviewLogButton</action-widget>
+      <action-widget response="cancel">supportLogDialogCancelButton</action-widget>
+      <action-widget response="ok">supportLogDialogReviewLogButton</action-widget>
     </action-widgets>
   </object>
 </interface>

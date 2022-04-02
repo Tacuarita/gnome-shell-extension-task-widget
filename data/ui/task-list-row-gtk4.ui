@@ -32,18 +32,18 @@
             </object>
           </child>
           <child>
+            <object class="GtkEventControllerMotion">
+              <signal name="enter" handler="_onMotionEvent"/>
+              <signal name="leave" handler="_onMotionEvent"/>
+            </object>
+          </child>
+          <child>
             <object class="GtkGrid" id="taskListGrid">
               <property name="margin-start">12</property>
               <property name="margin-end">12</property>
               <property name="margin-top">5</property>
               <property name="margin-bottom">5</property>
               <property name="column-spacing">12</property>
-              <child>
-                <object class="GtkEventControllerMotion">
-                  <signal name="enter" handler="_onMotionEvent"/>
-                  <signal name="leave" handler="_onMotionEvent"/>
-                </object>
-              </child>
               <child>
                 <object class="GtkImage">
                   <property name="icon-name">list-drag-handle-symbolic</property>
