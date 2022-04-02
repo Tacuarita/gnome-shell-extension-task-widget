@@ -73,7 +73,6 @@
                   <property name="menu_model">optionsMenu</property>
                   <property name="icon-name">view-more-symbolic</property>
                   <property name="has-frame">0</property>
-                  <property name="accessible-role">menu</property>
                   <accessibility>
                     <property name="label" translatable="yes">Task list options</property>
                   </accessibility>

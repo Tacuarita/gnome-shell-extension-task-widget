@@ -459,7 +459,6 @@
             <child internal-child="accessible">
               <object class="AtkObject">
                 <property name="AtkObject::accessible-name" translatable="yes">Refresh the list of account task lists</property>
-                <property name="AtkObject::accessible-role">menu</property>
               </object>
             </child>
           </object>

@@ -60,7 +60,6 @@
         <property name="menu_model">optionsMenu</property>
         <property name="icon-name">view-more-symbolic</property>
         <property name="has-frame">0</property>
-        <property name="accessible-role">menu</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <accessibility>

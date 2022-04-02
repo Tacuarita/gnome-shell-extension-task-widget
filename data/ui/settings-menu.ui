@@ -21,7 +21,6 @@
     <property name="focus-on-click">0</property>
     <property name="icon-name">open-menu-symbolic</property>
     <property name="menu-model">settingsMenu</property>
-    <property name="accessible-role">menu</property>
     <accessibility>
       <property name="label" translatable="yes">Help</property>
     </accessibility>
