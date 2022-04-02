@@ -35,6 +35,10 @@ learn how to use it and then replace this text with the output of the log. You
 should remove or censor any information you consider private before submitting.
 -->
 
+```
+Replace this text with your support log output.
+```
+
 #### Other relevant logs, screenshots, screencasts etc.
 
 <!-- 
