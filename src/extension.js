@@ -705,9 +705,8 @@ class TaskWidget extends St.BoxLayout {
             this._currentChild = this._taskBox.first_child;
             this._previousDueDate = undefined;
 
-            this._idleAddId = GLib.idle_add(this._currentChild
-                ? GLib.PRIORITY_LOW : GLib.PRIORITY_DEFAULT_IDLE, this._idleAdd
-                    .bind(this));
+            this._idleAddId = GLib.idle_add(GLib.PRIORITY_LOW,
+                this._idleAdd.bind(this));
 
             return true;
         } catch (e) {
