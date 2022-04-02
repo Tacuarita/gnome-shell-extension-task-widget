@@ -301,15 +301,23 @@ const TaskWidgetSettings = GObject.registerClass({
         ].forEach(([source, target]) =>
             source.bind_property_full('active', target, 'active',
                 GObject.BindingFlags.BIDIRECTIONAL,
-                value => [() => {
-                    if (value.source.active)
+                value => {
+                    if (value.source.active) {
                         value.target.set_active(false);
-                }],
+                        return [true];
+                    }
 
-                value => [() => {
-                    if (value.target.active)
+                    return [false];
+                },
+
+                value => {
+                    if (value.target.active) {
                         value.source.set_active(false);
-                }])
+                        return [true];
+                    }
+
+                    return [false];
+                })
         );
 
         if (!Utils.shellVersionAtLeast_(40)) {
@@ -416,6 +424,7 @@ const TaskWidgetSettings = GObject.registerClass({
     /**
      * Lists task lists and accounts of remote task lists.
      *
+     * @async
      * @param {boolean} [accountsOnly] - Only refresh the account list.
      */
     async _listTaskListsAndAccounts(accountsOnly = false) {
@@ -488,6 +497,8 @@ const TaskWidgetSettings = GObject.registerClass({
 
     /**
      * Initializes the source registry.
+     *
+     * @async
      */
     async _initRegistry() {
         const sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
@@ -532,6 +543,7 @@ const TaskWidgetSettings = GObject.registerClass({
     /**
      * Handles account button click events.
      *
+     * @async
      * @param {EDataServer.SourceCollection} source - Account data source.
      * @param {string} account - Account name.
      */
@@ -569,6 +581,7 @@ const TaskWidgetSettings = GObject.registerClass({
     /**
      * Handles task list events (additions, removals and changes).
      *
+     * @async
      * @param {string} event - Type of event.
      * @param {EDataServer.Source} source - Associated data source.
      */
@@ -824,6 +837,7 @@ const TaskListRow = GObject.registerClass({
      * Updates the task content of the task list when it's `Refresh Tasks`
      * button gets clicked.
      *
+     * @async
      * @param {ECal.Client} client - `ECal.Client` of the task list.
      */
     async _onRefreshButtonClicked(client) {
@@ -1155,9 +1169,9 @@ const SettingsMenuButton = GObject.registerClass({
      * Generates the support log. User is notified to remove or censor any
      * information he/she considers to be private.
      *
+     * @async
      * @author Andy Holmes <andrew.g.r.holmes@gmail.com> (the original code was
      * extended to include more data).
-     *
      * @param {GLib.DateTime} time - Restricts log entries displayed to those
      * after this time.
      */

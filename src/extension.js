@@ -94,6 +94,8 @@ class TaskWidget extends St.BoxLayout {
 
     /**
      * Initializes task lists.
+     *
+     * @async
      */
     async _initTaskLists() {
         try {
@@ -336,6 +338,8 @@ class TaskWidget extends St.BoxLayout {
      * Initializes the source registry: defines task lists as desired
      * source type and connects signal handlers to monitor for task list
      * additions, removals and changes.
+     *
+     * @async
      */
     async _initSourceRegistry() {
         try {
@@ -371,6 +375,7 @@ class TaskWidget extends St.BoxLayout {
      * Stores a list of task list data (UIDs and names) for quick access.
      * Task lists are sorted according to user-defined order.
      *
+     * @async
      * @param {boolean} [cleanup] - Cleanup the settings (remove obsolete task
      * list uids).
      */
@@ -403,6 +408,7 @@ class TaskWidget extends St.BoxLayout {
      * Handles task list addition events and connects signal handlers to
      * monitor for its task additions, removals and changes.
      *
+     * @async
      * @param {EDataServer.SourceRegistry|null} registry - Source registry.
      * @param {EDataServer.Source} source - Task list that got added.
      */
@@ -508,6 +514,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles task events: additions, removals and changes.
      *
+     * @async
      * @param {ECal.ClientView} view - Task list which received the signal.
      */
     async _onTaskEvent(view) {
@@ -646,6 +653,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Initializes listing of tasks in the widget.
      *
+     * @async
      * @param {string} taskListUid - Unique task list identifier.
      * @param {boolean} merge - Task lists will be merged into one.
      *
@@ -1147,7 +1155,9 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Filters tasks and task lists based on user-defined settings.
      *
+     * @async
      * @param {ECal.Client} client - Task list to filter.
+     *
      * @returns {Promise<ECal.Component[]>} List of tasks.
      */
     async _filterTasks(client) {
@@ -1346,6 +1356,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Handles task click events. Adds/removes styling and stores changes.
      *
+     * @async
      * @param {Checkbox} checkbox - Checkbox that got clicked.
      * @param {ECal.Client} client - Task list that the task belongs to.
      */
@@ -1422,6 +1433,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Either sets and shows the active task list or shows the placeholder.
      *
+     * @async
      * @param {number|null} index - Index of the task list to activate or
      * `null` to show the placeholder instead.
      */
@@ -1771,6 +1783,7 @@ class TaskWidget extends St.BoxLayout {
     /**
      * Updates the widget when extension settings change.
      *
+     * @async
      * @param {Gio.Settings} _api - API for storing and retrieving settings.
      * @param {string} key - The name of the settings key that changed.
      */
