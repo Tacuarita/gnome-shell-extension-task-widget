@@ -264,32 +264,18 @@ const TaskWidgetSettings = GObject.registerClass({
             flags = Gio.SettingsBindFlags.DEFAULT]) =>
             this._settings.bind(key, object, property, flags));
 
-        const categories = this._settings.get_strv('selected-task-categories');
+        const selected = this._settings.get_strv('selected-task-categories');
 
-        categories.forEach(category => {
-            switch (category) {
-                case 'past':
-                    this._taskCategoryPast.set_active(true);
-                    break;
-                case 'today':
-                    this._taskCategoryToday.set_active(true);
-                    break;
-                case 'tomorrow':
-                    this._taskCategoryTomorrow.set_active(true);
-                    break;
-                case 'next-seven-days':
-                    this._taskCategoryNextSevenDays.set_active(true);
-                    break;
-                case 'scheduled':
-                    this._taskCategoryScheduled.set_active(true);
-                    break;
-                case 'not-cancelled':
-                    this._taskCategoryNotCancelled.set_active(true);
-                    break;
-                case 'started':
-                    this._taskCategoryStarted.set_active(true);
-            }
-        });
+        [
+            this._taskCategoryPast,
+            this._taskCategoryToday,
+            this._taskCategoryTomorrow,
+            this._taskCategoryNextSevenDays,
+            this._taskCategoryScheduled,
+            this._taskCategoryNotCancelled,
+            this._taskCategoryStarted,
+        ].forEach(category => category.set_active(selected.includes(
+            category.name)));
 
         [
             [this._taskCategoryPast, this._taskCategoryScheduled],
