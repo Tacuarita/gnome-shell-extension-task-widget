@@ -70,7 +70,7 @@
               <child>
                 <object class="GtkMenuButton" id="taskListOptionsButton">
                   <property name="focus-on-click">0</property>
-                  <property name="menu_model">optionsMenu</property>
+                  <property name="menu-model">optionsMenu</property>
                   <property name="icon-name">view-more-symbolic</property>
                   <property name="has-frame">0</property>
                   <accessibility>
