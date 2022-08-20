@@ -487,43 +487,47 @@ const TaskWidgetSettings = GObject.registerClass({
      * @async
      */
     async _initRegistry() {
-        const sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
-        this._sourceRegistry = await Utils.getSourceRegistry_();
-        const customOrder = this._settings.get_strv('task-list-order');
+        try {
+            const sourceType = EDataServer.SOURCE_EXTENSION_TASK_LIST;
+            this._sourceRegistry = await Utils.getSourceRegistry_();
+            const customOrder = this._settings.get_strv('task-list-order');
 
-        const customSort = customOrder.length ? Utils.customSort_.bind(
-            this, customOrder) : undefined;
+            const customSort = customOrder.length ? Utils.customSort_.bind(
+                this, customOrder) : undefined;
 
-        const sources = this._sourceRegistry.list_sources(
-            sourceType).sort(customSort);
+            const sources = this._sourceRegistry.list_sources(
+                sourceType).sort(customSort);
 
-        const clients = await Promise.all(sources.map(source =>
-            Utils.getECalClient_(source, ECal.ClientSourceType.TASKS,
-                1, null)));
+            const clients = await Promise.all(sources.map(source =>
+                Utils.getECalClient_(source, ECal.ClientSourceType.TASKS,
+                    1, null)));
 
-        this._clients = new Map(clients.map(client =>
-            [client.source.uid, client]));
+            this._clients = new Map(clients.map(client =>
+                [client.source.uid, client]));
 
-        this._taskListAddedId = this._sourceRegistry.connect(
-            'source-added', (_self, source) => {
-                if (source.has_extension(sourceType))
-                    this._onTaskListEvent('added', source);
-            }
-        );
+            this._taskListAddedId = this._sourceRegistry.connect(
+                'source-added', (_self, source) => {
+                    if (source.has_extension(sourceType))
+                        this._onTaskListEvent('added', source);
+                }
+            );
 
-        this._taskListRemovedId = this._sourceRegistry.connect(
-            'source-removed', (_self, source) => {
-                if (source.has_extension(sourceType))
-                    this._onTaskListEvent('removed', source);
-            }
-        );
+            this._taskListRemovedId = this._sourceRegistry.connect(
+                'source-removed', (_self, source) => {
+                    if (source.has_extension(sourceType))
+                        this._onTaskListEvent('removed', source);
+                }
+            );
 
-        this._taskListChangedId = this._sourceRegistry.connect(
-            'source-changed', (_self, source) => {
-                if (source.has_extension(sourceType))
-                    this._onTaskListEvent('changed', source);
-            }
-        );
+            this._taskListChangedId = this._sourceRegistry.connect(
+                'source-changed', (_self, source) => {
+                    if (source.has_extension(sourceType))
+                        this._onTaskListEvent('changed', source);
+                }
+            );
+        } catch (e) {
+            logError(e);
+        }
     }
 
     /**
