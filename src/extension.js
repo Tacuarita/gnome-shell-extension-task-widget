@@ -875,7 +875,8 @@ class TaskWidget extends St.BoxLayout {
         const arrow = new St.Label({
             accessible_name: _('Beginning of a subtask list'),
             accessible_role: Atk.Role.ARROW,
-            text: rtl ? '\u21B2' : '\u21B3',
+            style_class: 'subtask-indicator',
+            text: rtl ? '\u256F' : '\u2570',
         });
 
         checkbox._arrow = arrow;
@@ -1730,7 +1731,7 @@ class TaskWidget extends St.BoxLayout {
      * open, hiding of completed tasks is time dependent and the number of
      * occurred refreshes is <= 60.
      *
-     * @param {Object|null} _menu - Menu of a `dateMenu` button.
+     * @param {object|null} _menu - Menu of a `dateMenu` button.
      * @param {boolean} isOpen - Menu is open.
      */
     _onMenuOpen(_menu, isOpen) {
@@ -1770,7 +1771,6 @@ class TaskWidget extends St.BoxLayout {
                 }
 
                 delete this._cleanUpId;
-                return GLib.SOURCE_REMOVE;
             });
 
             delete this._rootTasks;

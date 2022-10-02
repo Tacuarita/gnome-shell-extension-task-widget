@@ -32,6 +32,11 @@
   font-size: 95%;
 }
 
+.task-widget-column .subtask-indicator {
+  font-size: 1.3em;
+  color: rgba(128, 128, 128, 0.7);
+}
+
 .task-widget-column .world-clocks-city:rtl {
   text-align: right;
 }
