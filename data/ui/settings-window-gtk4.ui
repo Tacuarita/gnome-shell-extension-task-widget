@@ -248,10 +248,11 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="taskCategoryNotCancelled">
-                                <property name="name">not-cancelled</property>
+                              <object class="GtkCheckButton" id="taskCategoryUnscheduled">
+                                <property name="name">unscheduled</property>
                                 <property name="hexpand">1</property>
-                                <property name="label" translatable="yes" context="used in Not Cancelled Tasks">Not Cancelled</property>
+                                <property name="label" translatable="yes" context="used in Unscheduled Tasks">Unscheduled</property>
+                                <property name="tooltip-text" translatable="yes">Tasks that have no due date</property>
                                 <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>
@@ -266,6 +267,14 @@
                                 <property name="hexpand">1</property>
                                 <property name="label" translatable="yes" context="used in Started Tasks">Started</property>
                                 <property name="tooltip-text" translatable="yes">Tasks that either do not have a start date or the start date is earlier than current time</property>
+                                <signal name="toggled" handler="_toggleTaskCategory"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="taskCategoryNotCancelled">
+                                <property name="name">not-cancelled</property>
+                                <property name="hexpand">1</property>
+                                <property name="label" translatable="yes" context="used in Not Cancelled Tasks">Not Cancelled</property>
                                 <signal name="toggled" handler="_toggleTaskCategory"/>
                               </object>
                             </child>

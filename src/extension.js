@@ -848,7 +848,7 @@ class TaskWidget extends St.BoxLayout {
      */
     _styleOrphanTaskCheckbox(checkbox) {
         const indicator = new St.Label({
-            text: '\u2930',
+            text: '!',
             y_align: Clutter.ActorAlign.CENTER,
             style: 'color: coral',
             /* Translators: this denotes a subtask with an inaccessible
@@ -1340,8 +1340,11 @@ class TaskWidget extends St.BoxLayout {
             if (selected.includes('scheduled'))
                 query = '(and ' + query + ' (has-due?))';
 
+            if (selected.includes('unscheduled'))
+                query = '(or ' + query + '(not (has-due?)))';
+
             if (selected.includes('started')) {
-                query = '(or (and ' + query + ' (starts-before? ' +
+                query = '(or (or ' + query + ' (starts-before? ' +
                         '(time-now))) (not (has-start?)))';
             }
 

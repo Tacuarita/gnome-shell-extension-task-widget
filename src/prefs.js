@@ -175,6 +175,7 @@ const TaskWidgetSettings = GObject.registerClass({
         'taskCategoryTomorrow',
         'taskCategoryNextSevenDays',
         'taskCategoryScheduled',
+        'taskCategoryUnscheduled',
         'taskCategoryNotCancelled',
         'taskCategoryStarted',
         'hctRow',
@@ -272,6 +273,7 @@ const TaskWidgetSettings = GObject.registerClass({
             this._taskCategoryTomorrow,
             this._taskCategoryNextSevenDays,
             this._taskCategoryScheduled,
+            this._taskCategoryUnscheduled,
             this._taskCategoryNotCancelled,
             this._taskCategoryStarted,
         ].forEach(category => category.set_active(selected.includes(
@@ -283,6 +285,7 @@ const TaskWidgetSettings = GObject.registerClass({
             [this._taskCategoryToday, this._taskCategoryScheduled],
             [this._taskCategoryTomorrow, this._taskCategoryNextSevenDays],
             [this._taskCategoryTomorrow, this._taskCategoryScheduled],
+            [this._taskCategoryScheduled, this._taskCategoryUnscheduled],
             [this._taskCategoryNextSevenDays, this._taskCategoryScheduled],
         ].forEach(([source, target]) =>
             source.bind_property_full('active', target, 'active',
@@ -316,6 +319,7 @@ const TaskWidgetSettings = GObject.registerClass({
                 }));
             });
 
+            this._taskCategoryUnscheduled.set_sensitive(false);
             this._taskCategoryScheduled.set_sensitive(false);
             this._taskCategoryStarted.set_sensitive(false);
         }
