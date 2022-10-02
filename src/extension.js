@@ -876,7 +876,7 @@ class TaskWidget extends St.BoxLayout {
             accessible_name: _('Beginning of a subtask list'),
             accessible_role: Atk.Role.ARROW,
             style_class: 'subtask-indicator',
-            text: rtl ? '\u256F' : '\u2570',
+            text: rtl ? Utils.ARC_UP_LEFT_CHAR_ : Utils.ARC_UP_RIGHT_CHAR_,
         });
 
         checkbox._arrow = arrow;
@@ -1344,7 +1344,7 @@ class TaskWidget extends St.BoxLayout {
                 query = '(or ' + query + '(not (has-due?)))';
 
             if (selected.includes('started')) {
-                query = '(or (or ' + query + ' (starts-before? ' +
+                query = '(or (and ' + query + ' (starts-before? ' +
                         '(time-now))) (not (has-start?)))';
             }
 

@@ -5,6 +5,9 @@ const {Gio, GLib} = imports.gi;
 var _debounceTimeoutIds = new Map();
 var HAS_EDS_ = true;
 var ELLIPSIS_CHAR_ = '\u2026';
+var ARC_UP_LEFT_CHAR_ = '\u256F';
+var ARC_UP_RIGHT_CHAR_ = '\u2570';
+var EM_DASH_CHAR_ = '\u2014';
 var MINUTES_PER_HOUR_ = 60;
 var MINUTES_PER_DAY_ = MINUTES_PER_HOUR_ * 24;
 var MSECS_IN_DAY_ = MINUTES_PER_DAY_ * 60 * 1000;
@@ -191,8 +194,8 @@ function modifyObjects_(client, obj, mod, flag, cancellable = null) {
  * uid is not in the list, move it to the end of the list.
  *
  * @param {string[]} order - A list of task list uids.
- * @param {Object} a - Task list object.
- * @param {Object} b - Task list object.
+ * @param {object} a - Task list object.
+ * @param {object} b - Task list object.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
 function customSort_(order, a, b) {

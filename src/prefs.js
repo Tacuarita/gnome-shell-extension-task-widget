@@ -1008,8 +1008,10 @@ const TaskListPropertiesDialog = GObject.registerClass({
     _init(widget, source) {
         super._init();
         this.set_transient_for(widget._window);
-        this.set_title(`${this.get_title()} \u2014 ${source.display_name}`);
         this._source = source;
+
+        this.set_title(this.get_title() + ' ' + Utils.EM_DASH_CHAR_ + ' ' +
+            source.display_name);
 
         this._extension = source.get_extension(
             EDataServer.SOURCE_EXTENSION_REFRESH);
