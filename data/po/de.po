@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-08 11:16+0200\n"
-"PO-Revision-Date: 2022-03-26 20:48\n"
+"PO-Revision-Date: 2022-10-08 17:54\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -188,18 +188,11 @@ msgstr "Über"
 
 #: data/ui/settings-menu.ui:31
 msgid "Copyright © 2020-2023 Juozas Miškinis"
-msgstr ""
+msgstr "Urheberrecht © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen "
-"Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das "
-"Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, "
-"entfernen oder zensieren."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, entfernen oder zensieren."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -223,7 +216,7 @@ msgstr "Vergangene Aufgaben gruppieren"
 
 #: data/ui/settings-window.ui:49
 msgid "Hide header for singular task lists"
-msgstr ""
+msgstr "Verstecke die Kopfzeile für einzelne Aufgabenlisten"
 
 #: data/ui/settings-window.ui:60
 msgid "Hide empty and completed task lists"
@@ -231,7 +224,7 @@ msgstr "Verstecke leere und abgeschlossene Aufgabelisten"
 
 #: data/ui/settings-window.ui:71
 msgid "Show only selected task categories"
-msgstr ""
+msgstr "Zeige nur ausgewählte Aufgabenkategorien"
 
 #: data/ui/settings-window.ui:93
 msgid "Tasks that were due yesterday or earlier"
@@ -239,53 +232,51 @@ msgstr "Aufgaben, die gestern oder früher fällig waren"
 
 #: data/ui/settings-window.ui:101
 msgid "Due Today"
-msgstr ""
+msgstr "Heute fällig"
 
 #: data/ui/settings-window.ui:109
 msgid "Due Tomorrow"
-msgstr ""
+msgstr "Morgen fällig"
 
 #: data/ui/settings-window.ui:122
 msgid "Due in the Next 7 Days"
-msgstr ""
+msgstr "In den nächsten 7 Tagen fällig"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr ""
+msgstr "Aufgaben, die in den nächsten 7 Tagen (inkl. heute) fällig sind"
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
 msgid "Scheduled"
-msgstr ""
+msgstr "Geplant"
 
 #: data/ui/settings-window.ui:132
 msgid "Tasks that have a due date"
-msgstr ""
+msgstr "Aufgaben, die ein Fälligkeitsdatum haben"
 
 #: data/ui/settings-window.ui:140
 msgctxt "used in Unscheduled Tasks"
 msgid "Unscheduled"
-msgstr ""
+msgstr "Ungeplant"
 
 #: data/ui/settings-window.ui:141
 msgid "Tasks that have no due date"
-msgstr ""
+msgstr "Aufgaben ohne Fälligkeitsdatum"
 
 #: data/ui/settings-window.ui:154
 msgctxt "used in Started Tasks"
 msgid "Started"
-msgstr ""
+msgstr "Begonnen"
 
 #: data/ui/settings-window.ui:155
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
-msgstr ""
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgstr "Aufgaben, die entweder kein Startdatum haben oder bei denen das Startdatum vor der momentanen Zeit liegt"
 
 #: data/ui/settings-window.ui:163
 msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
-msgstr ""
+msgstr "NIcht abgebrochen"
 
 #: data/ui/settings-window.ui:175
 msgid "Hide completed tasks"
@@ -322,11 +313,8 @@ msgid "Task Lists"
 msgstr "Aufgabenlisten"
 
 #: data/ui/settings-window.ui:271
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der "
-"Aufgabenlisten im Widget zu ändern."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der Aufgabenlisten im Widget zu ändern."
 
 #: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
@@ -355,12 +343,13 @@ msgstr "Optionen der Aufgabenliste"
 
 #: data/ui/donate-menu.ui:19
 msgid "Cryptocurrencies"
-msgstr ""
+msgstr "Kryptowährungen"
 
 #: data/ui/donate-menu.ui:29
 msgid "Donate"
-msgstr ""
+msgstr "Spenden"
 
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
-msgstr ""
+msgstr "Spende Kryptowährungen"
+
