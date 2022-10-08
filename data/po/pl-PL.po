@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-26 21:42+0100\n"
-"PO-Revision-Date: 2022-03-26 20:48\n"
+"POT-Creation-Date: 2022-10-08 11:16+0200\n"
+"PO-Revision-Date: 2022-10-08 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -22,43 +22,43 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: src/extension.js:202
+#: src/extension.js:204
 msgid "Previous task list"
 msgstr ""
 
-#: src/extension.js:234
+#: src/extension.js:236
 msgid "Select task list"
 msgstr ""
 
-#: src/extension.js:262
+#: src/extension.js:264
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:321 src/extension.js:1445
+#: src/extension.js:323 src/extension.js:1460
 msgid "All Tasks"
 msgstr ""
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:849
+#: src/extension.js:856
 msgid "Orphan task"
 msgstr ""
 
-#: src/extension.js:869
+#: src/extension.js:876
 msgid "Beginning of a subtask list"
 msgstr ""
 
-#: src/extension.js:925
+#: src/extension.js:933
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:927
+#: src/extension.js:935
 msgid "Today"
 msgstr ""
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:932 data/ui/settings-window.ui:92
+#: src/extension.js:940 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr ""
 
@@ -75,21 +75,21 @@ msgstr ""
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:951
+#: src/extension.js:959
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:952
+#: src/extension.js:960
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:1480
+#: src/extension.js:1495
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:1486 src/prefs.js:140
+#: src/extension.js:1501 src/prefs.js:140
 msgid "Error: Missing Dependencies"
 msgstr ""
 
@@ -97,11 +97,11 @@ msgstr ""
 msgid "Please install Evolution Data Server to use this extension."
 msgstr ""
 
-#: src/prefs.js:145 data/ui/settings-menu.ui:26
+#: src/prefs.js:145 data/ui/settings-menu.ui:25
 msgid "Help"
 msgstr ""
 
-#: src/prefs.js:399
+#: src/prefs.js:396
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
@@ -110,7 +110,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/prefs.js:401
+#: src/prefs.js:398
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
@@ -119,7 +119,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/prefs.js:402
+#: src/prefs.js:399
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
@@ -128,7 +128,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/prefs.js:404
+#: src/prefs.js:401
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -137,27 +137,27 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/prefs.js:459
+#: src/prefs.js:457
 msgid "No remote task lists found"
 msgstr ""
 
-#: src/prefs.js:462 data/ui/settings-window.ui:288
+#: src/prefs.js:460 data/ui/settings-window.ui:296
 msgid "Refresh the list of account task lists"
 msgstr ""
 
-#: src/prefs.js:550 data/ui/settings-window.ui:300 data/ui/task-list-row.ui:86
+#: src/prefs.js:557 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
 msgid "Refresh in progress"
 msgstr ""
 
-#: src/prefs.js:747
+#: src/prefs.js:750
 msgid "Refresh Tasks"
 msgstr ""
 
-#: src/prefs.js:754
+#: src/prefs.js:757
 msgid "Properties"
 msgstr ""
 
-#: src/prefs.js:1040
+#: src/prefs.js:1046
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
@@ -166,7 +166,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/prefs.js:1042
+#: src/prefs.js:1048
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
@@ -175,7 +175,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/prefs.js:1044
+#: src/prefs.js:1050
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -187,12 +187,12 @@ msgstr[3] ""
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1110
+#: src/prefs.js:1116
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr ""
 
-#: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:38
+#: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:37
 msgid "Support Log"
 msgstr ""
 
@@ -200,19 +200,19 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: data/ui/settings-menu.ui:32
-msgid "Copyright © 2020-2021 Juozas Miškinis"
+#: data/ui/settings-menu.ui:31
+msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr ""
 
-#: data/ui/settings-menu.ui:39
+#: data/ui/settings-menu.ui:38
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
 msgstr ""
 
-#: data/ui/settings-menu.ui:42 data/ui/task-list-properties-dialog.ui:42
+#: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
 msgstr ""
 
-#: data/ui/settings-menu.ui:47
+#: data/ui/settings-menu.ui:46
 msgid "Review Log"
 msgstr ""
 
@@ -270,68 +270,77 @@ msgid "Tasks that have a due date"
 msgstr ""
 
 #: data/ui/settings-window.ui:140
-msgctxt "used in Not Cancelled Tasks"
-msgid "Not Cancelled"
+msgctxt "used in Unscheduled Tasks"
+msgid "Unscheduled"
 msgstr ""
 
-#: data/ui/settings-window.ui:153
+#: data/ui/settings-window.ui:141
+msgid "Tasks that have no due date"
+msgstr ""
+
+#: data/ui/settings-window.ui:154
 msgctxt "used in Started Tasks"
 msgid "Started"
 msgstr ""
 
-#: data/ui/settings-window.ui:154
+#: data/ui/settings-window.ui:155
 msgid "Tasks that either do not have a start date or the start date is earlier than current time"
 msgstr ""
 
-#: data/ui/settings-window.ui:166
-msgid "Hide completed tasks"
-msgstr ""
-
-#: data/ui/settings-window.ui:172
-msgid "Never"
-msgstr ""
-
-#: data/ui/settings-window.ui:173
-msgid "Immediately"
-msgstr ""
-
-#: data/ui/settings-window.ui:174
-msgid "After a period of time after completion"
+#: data/ui/settings-window.ui:163
+msgctxt "used in Not Cancelled Tasks"
+msgid "Not Cancelled"
 msgstr ""
 
 #: data/ui/settings-window.ui:175
+msgid "Hide completed tasks"
+msgstr ""
+
+#: data/ui/settings-window.ui:181
+msgid "Never"
+msgstr ""
+
+#: data/ui/settings-window.ui:182
+msgid "Immediately"
+msgstr ""
+
+#: data/ui/settings-window.ui:183
+msgid "After a period of time after completion"
+msgstr ""
+
+#: data/ui/settings-window.ui:184
 msgid "After a specific time of the day"
 msgstr ""
 
-#: data/ui/settings-window.ui:196
+#: data/ui/settings-window.ui:205
 msgctxt "e.g. After 5 minutes"
 msgid "After"
 msgstr ""
 
-#: data/ui/settings-window.ui:227
+#: data/ui/settings-window.ui:236
 msgctxt "e.g. After 9:00"
 msgid "After"
 msgstr ""
 
-#: data/ui/settings-window.ui:261
+#: data/ui/settings-window.ui:270
 msgid "Task Lists"
 msgstr ""
 
-#: data/ui/settings-window.ui:262
+#: data/ui/settings-window.ui:271
 msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr ""
 
-#: data/ui/task-list-properties-dialog.ui:13
+#: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
 msgstr ""
 
-#. Translators: e.g. "Refresh every 10 minutes".
-#: data/ui/task-list-properties-dialog.ui:24
-msgid "Refresh every"
+#: data/ui/task-list-properties-dialog.ui:26
+msgid "OK"
 msgstr ""
 
-#: data/ui/task-list-properties-dialog.ui:47
-msgid "OK"
+#. Translators: e.g. "Refresh every 10 minutes".
+#: data/ui/task-list-properties-dialog.ui:40
+msgid "Refresh every"
 msgstr ""
 
 #: data/ui/task-list-row.ui:6
@@ -342,7 +351,7 @@ msgstr ""
 msgid "Move Down"
 msgstr ""
 
-#: data/ui/task-list-row.ui:67
+#: data/ui/task-list-row.ui:66
 msgid "Task list options"
 msgstr ""
 
@@ -350,11 +359,11 @@ msgstr ""
 msgid "Cryptocurrencies"
 msgstr ""
 
-#: data/ui/donate-menu.ui:30
+#: data/ui/donate-menu.ui:29
 msgid "Donate"
 msgstr ""
 
-#: data/ui/donate-menu.ui:34
+#: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr ""
 
