@@ -11,7 +11,7 @@ build:
     - export DEBIAN_FRONTEND=noninteractive
     - apt-get -y update
     - > 
-      apt-get -y install python3-pip libglib2.0-dev
+      apt-get -y install python3-pip ninja-build libglib2.0-dev
       libxml2-utils zip gettext
     - pip3 install meson
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
