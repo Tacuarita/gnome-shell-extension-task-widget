@@ -9,9 +9,9 @@ build:
   stage: build
   before_script:
     - export DEBIAN_FRONTEND=noninteractive
-    - apt-get -qq update
+    - apt-get -y update
     - > 
-      apt-get -qq install -y python3-pip ninja-build libglib2.0-dev
+      apt-get -y install python3-pip libglib2.0-dev
       libxml2-utils zip gettext
     - pip3 install meson
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -27,17 +27,3 @@ build:
     paths:
       - _build
     expire_in: 1 day
-# https://gitlab.com/gitlab-org/gitlab/-/issues/17838
-#   artifacts:
-#     expire_in: 1 minute
-#     paths:
-#       - _build/task-widget@juozasmiskinis.gitlab.io.zip
-
-# release:
-#   stage: release
-#   dependencies:
-#     - build
-#   rules:
-#     - if: $CI_COMMIT_TAG
-#   script:
-#     - file task-widget@juozasmiskinis.gitlab.io.zip
