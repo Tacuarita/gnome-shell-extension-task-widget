@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-08 11:16+0200\n"
-"PO-Revision-Date: 2022-10-08 17:54\n"
+"PO-Revision-Date: 2022-10-14 16:49\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -202,7 +202,7 @@ msgstr "О расширении"
 
 #: data/ui/settings-menu.ui:31
 msgid "Copyright © 2020-2023 Juozas Miškinis"
-msgstr ""
+msgstr "Copyright © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
@@ -272,11 +272,11 @@ msgstr "Задачи с датой выполнения"
 #: data/ui/settings-window.ui:140
 msgctxt "used in Unscheduled Tasks"
 msgid "Unscheduled"
-msgstr ""
+msgstr "Незапланированные"
 
 #: data/ui/settings-window.ui:141
 msgid "Tasks that have no due date"
-msgstr ""
+msgstr "Задачи без срока выполнения"
 
 #: data/ui/settings-window.ui:154
 msgctxt "used in Started Tasks"
