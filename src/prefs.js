@@ -1,6 +1,6 @@
 'use strict';
 
-const {Gdk, Gio, GLib, GObject, Gtk} = imports.gi;
+const { Gdk, Gio, GLib, GObject, Gtk } = imports.gi;
 
 const Cairo = imports.cairo;
 const Gettext = imports.gettext;
@@ -11,7 +11,7 @@ const Utils = Me.imports.utils;
 const Adw = Utils.shellVersionAtLeast_(42) ? imports.gi.Adw : undefined;
 
 /* exported ICalGLib */
-const {ECal, EDataServer, ICalGLib} = Utils.HAS_EDS_ ? imports.gi : {undefined};
+const { ECal, EDataServer, ICalGLib } = Utils.HAS_EDS_ ? imports.gi : { undefined };
 const _ = Gettext.gettext;
 
 /**
@@ -25,10 +25,8 @@ const _ = Gettext.gettext;
  * @returns {string} Translated string.
  */
 const _npgettext = (context, singular, plural, n) => {
-    if (n !== 1)
-        return Gettext.ngettext(`${context}\u0004${singular}`, plural, n);
-    else
-        return Gettext.pgettext(context, singular);
+    return n !== 1 ? Gettext.ngettext(`${context}\u0004${singular}`, plural, n)
+        : Gettext.pgettext(context, singular);
 };
 
 let _resource = null;
@@ -41,7 +39,7 @@ const _loadResource = () => {
         return;
 
     const resourcePath = GLib.build_filenamev([Me.dir.get_path(),
-        Me.metadata.gresource]);
+    Me.metadata.gresource]);
 
     _resource = Gio.Resource.load(resourcePath);
     Gio.resources_register(_resource);
@@ -113,52 +111,52 @@ function buildPrefsWidget() {
 }
 
 const BeGoneWidget = GObject.registerClass(
-class BeGoneWidget extends Gtk.Box {
-    /**
-     * Shows a message dialog if required dependencies are not installed on the
-     * system. Also, closes the settings window if there's another instance of
-     * it already opened (only X11 sessions are affected by this).
-     */
-    _init() {
-        super._init();
+    class BeGoneWidget extends Gtk.Box {
+        /**
+         * Shows a message dialog if required dependencies are not installed on the
+         * system. Also, closes the settings window if there's another instance of
+         * it already opened (only X11 sessions are affected by this).
+         */
+        _init() {
+            super._init();
 
-        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-            (Utils.shellVersionAtLeast_(40) ? this.get_root()
-                : this.get_toplevel()).close();
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                (Utils.shellVersionAtLeast_(40) ? this.get_root()
+                    : this.get_toplevel()).close();
 
-            if (Utils.HAS_EDS_)
-                return;
+                if (Utils.HAS_EDS_)
+                    return;
 
-            let [dialog] = Gtk.Window.list_toplevels().filter(window =>
-                window.get_name() === 'task-widget-error');
+                let [dialog] = Gtk.Window.list_toplevels().filter(window =>
+                    window.get_name() === 'task-widget-error');
 
-            if (dialog)
-                return;
+                if (dialog)
+                    return;
 
-            dialog = new Gtk.MessageDialog({
-                buttons: Gtk.ButtonsType.CLOSE,
-                text: _('Error: Missing Dependencies'),
-                secondary_text: _('Please install Evolution Data' +
-                    ' Server to use this extension.'),
+                dialog = new Gtk.MessageDialog({
+                    buttons: Gtk.ButtonsType.CLOSE,
+                    text: _('Error: Missing Dependencies'),
+                    secondary_text: _('Please install Evolution Data' +
+                        ' Server to use this extension.'),
+                });
+
+                dialog.add_button(_('Help'), 0);
+                dialog.set_name('task-widget-error');
+                dialog.present();
+
+                dialog.connect('response', (widget, responseId) => {
+                    if (responseId === 0) {
+                        Gio.AppInfo.launch_default_for_uri_async(
+                            Me.metadata.dependencies, null, null, null);
+                    }
+
+                    widget.destroy();
+                });
+
+                return GLib.SOURCE_REMOVE;
             });
-
-            dialog.add_button(_('Help'), 0);
-            dialog.set_name('task-widget-error');
-            dialog.present();
-
-            dialog.connect('response', (widget, responseId) =>  {
-                if (responseId === 0) {
-                    Gio.AppInfo.launch_default_for_uri_async(
-                        Me.metadata.dependencies, null, null, null);
-                }
-
-                widget.destroy();
-            });
-
-            return GLib.SOURCE_REMOVE;
-        });
-    }
-});
+        }
+    });
 
 const TaskWidgetSettings = GObject.registerClass({
     GTypeName: 'TaskWidgetSettings',
@@ -464,9 +462,12 @@ const TaskWidgetSettings = GObject.registerClass({
                 const menu = Gio.Menu.new();
                 const actionGroup = new Gio.SimpleActionGroup();
 
+                // Here we use a simple integer-based naming convention to
+                // override true account names that may containt special
+                // characters and cause issues:
                 for (const [account, source] of accounts) {
                     menu.append(account, `accounts.${i}`);
-                    action = new Gio.SimpleAction({name: `${i}`});
+                    action = new Gio.SimpleAction({ name: `${i}` });
 
                     action.connect('activate', () =>
                         this._onAccountButtonClicked(source, account));
@@ -709,7 +710,7 @@ const TaskListRow = GObject.registerClass({
         'taskListOptionsButton',
         'taskListOptionsSpinner',
     ].concat(!Utils.shellVersionAtLeast_(42) ? ['taskListName'] : [])
-     .concat(!Utils.shellVersionAtLeast_(40) ? ['dragBox'] : []),
+        .concat(!Utils.shellVersionAtLeast_(40) ? ['dragBox'] : []),
 }, class TaskListRow extends (Utils.shellVersionAtLeast_(42)
     ? Adw.ActionRow : Gtk.ListBoxRow) {
     /**
@@ -738,24 +739,24 @@ const TaskListRow = GObject.registerClass({
 
         let action;
         const actionGroup = new Gio.SimpleActionGroup();
-        action = new Gio.SimpleAction({name: 'up'});
+        action = new Gio.SimpleAction({ name: 'up' });
         action.connect('activate', () => this._moveRow(true));
         actionGroup.add_action(action);
-        action = new Gio.SimpleAction({name: 'down'});
+        action = new Gio.SimpleAction({ name: 'down' });
         action.connect('activate', () => this._moveRow(false));
         actionGroup.add_action(action);
 
         if (remote) {
             const menu = this._taskListOptionsButton.menu_model;
             menu.append(_('Refresh Tasks'), 'options-menu.refresh');
-            action = new Gio.SimpleAction({name: 'refresh'});
+            action = new Gio.SimpleAction({ name: 'refresh' });
 
             action.connect('activate', () =>
                 this._onRefreshButtonClicked(client));
 
             actionGroup.add_action(action);
             menu.append(_('Properties'), 'options-menu.properties');
-            action = new Gio.SimpleAction({name: 'properties'});
+            action = new Gio.SimpleAction({ name: 'properties' });
 
             action.connect('activate', () =>
                 new TaskListPropertiesDialog(widget, this._source).present());
@@ -825,7 +826,6 @@ const TaskListRow = GObject.registerClass({
 
         this.get_root().set_cursor(Gdk.Cursor.new_from_name(cursor, null));
     }
-
 
     /**
      * Updates the task content of the task list when it's `Refresh Tasks`
@@ -1102,7 +1102,7 @@ const SettingsMenuButton = GObject.registerClass({
      */
     _init(widget) {
         super._init();
-        const {modal} = widget._window;
+        const { modal } = widget._window;
         this._aboutDialog.transient_for = widget._window;
         this._aboutDialog.program_name = _(Me.metadata.name);
         this._aboutDialog.version = Me.metadata.version.toString();
@@ -1116,7 +1116,7 @@ const SettingsMenuButton = GObject.registerClass({
             Gettext.pgettext('translator name <email>', 'translator-credits');
 
         const actionGroup = new Gio.SimpleActionGroup();
-        let action = new Gio.SimpleAction({name: 'log'});
+        let action = new Gio.SimpleAction({ name: 'log' });
 
         action.connect('activate', () => {
             this._supportLogDialog._time =
@@ -1130,7 +1130,7 @@ const SettingsMenuButton = GObject.registerClass({
         });
 
         actionGroup.add_action(action);
-        action = new Gio.SimpleAction({name: 'wiki'});
+        action = new Gio.SimpleAction({ name: 'wiki' });
 
         action.connect('activate', () => {
             Gio.AppInfo.launch_default_for_uri_async(Me.metadata.wiki,
@@ -1138,7 +1138,7 @@ const SettingsMenuButton = GObject.registerClass({
         });
 
         actionGroup.add_action(action);
-        action = new Gio.SimpleAction({name: 'about'});
+        action = new Gio.SimpleAction({ name: 'about' });
         action.connect('activate', () => this._aboutDialog.present());
         actionGroup.add_action(action);
         this.insert_action_group('settings-menu', actionGroup);
@@ -1244,7 +1244,7 @@ const SettingsMenuButton = GObject.registerClass({
 
             const process = new Gio.Subprocess({
                 flags: Gio.SubprocessFlags.STDOUT_PIPE |
-                       Gio.SubprocessFlags.STDERR_MERGE,
+                    Gio.SubprocessFlags.STDERR_MERGE,
                 argv: ['journalctl', '--no-host', '--since', time],
             });
 
@@ -1289,7 +1289,7 @@ const DonateMenuButton = GObject.registerClass({
         super._init();
         this._donateCrypto.set_transient_for(widget._window);
         const actionGroup = new Gio.SimpleActionGroup();
-        let action = new Gio.SimpleAction({name: 'coffee'});
+        let action = new Gio.SimpleAction({ name: 'coffee' });
 
         action.connect('activate', () => {
             Gio.AppInfo.launch_default_for_uri_async(Me.metadata.coffee,
@@ -1297,7 +1297,7 @@ const DonateMenuButton = GObject.registerClass({
         });
 
         actionGroup.add_action(action);
-        action = new Gio.SimpleAction({name: 'paypal'});
+        action = new Gio.SimpleAction({ name: 'paypal' });
 
         action.connect('activate', () => {
             Gio.AppInfo.launch_default_for_uri_async(Me.metadata.paypal,
@@ -1305,7 +1305,7 @@ const DonateMenuButton = GObject.registerClass({
         });
 
         actionGroup.add_action(action);
-        action = new Gio.SimpleAction({name: 'liberapay'});
+        action = new Gio.SimpleAction({ name: 'liberapay' });
 
         action.connect('activate', () => {
             Gio.AppInfo.launch_default_for_uri_async(Me.metadata.liberapay,
@@ -1313,7 +1313,7 @@ const DonateMenuButton = GObject.registerClass({
         });
 
         actionGroup.add_action(action);
-        action = new Gio.SimpleAction({name: 'crypto'});
+        action = new Gio.SimpleAction({ name: 'crypto' });
         action.connect('activate', () => this._donateCrypto.present());
         actionGroup.add_action(action);
         this.insert_action_group('donate-menu', actionGroup);

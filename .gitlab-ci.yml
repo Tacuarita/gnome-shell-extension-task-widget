@@ -3,7 +3,6 @@ default:
 
 stages:
   - build
-  - release
 
 build:
   stage: build

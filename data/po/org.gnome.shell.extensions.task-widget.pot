@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: org.gnome.shell.extensions.task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 11:16+0200\n"
+"POT-Creation-Date: 2023-04-22 13:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,31 +35,31 @@ msgstr ""
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:323 src/extension.js:1460
+#: src/extension.js:323 src/extension.js:1459
 msgid "All Tasks"
 msgstr ""
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:856
+#: src/extension.js:855
 msgid "Orphan task"
 msgstr ""
 
-#: src/extension.js:876
+#: src/extension.js:875
 msgid "Beginning of a subtask list"
 msgstr ""
 
-#: src/extension.js:933
+#: src/extension.js:932
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:935
+#: src/extension.js:934
 msgid "Today"
 msgstr ""
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:940 data/ui/settings-window.ui:92
+#: src/extension.js:939 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr ""
 
@@ -76,77 +76,77 @@ msgstr ""
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:959
+#: src/extension.js:958
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:960
+#: src/extension.js:959
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:1495
+#: src/extension.js:1494
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:1501 src/prefs.js:140
+#: src/extension.js:1500 src/prefs.js:138
 msgid "Error: Missing Dependencies"
 msgstr ""
 
-#: src/prefs.js:141
+#: src/prefs.js:139
 msgid "Please install Evolution Data Server to use this extension."
 msgstr ""
 
-#: src/prefs.js:145 data/ui/settings-menu.ui:25
+#: src/prefs.js:143 data/ui/settings-menu.ui:25
 msgid "Help"
 msgstr ""
 
-#: src/prefs.js:396
+#: src/prefs.js:394
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:398
+#: src/prefs.js:396
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:399
+#: src/prefs.js:397
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:401
+#: src/prefs.js:399
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:457
+#: src/prefs.js:455
 msgid "No remote task lists found"
 msgstr ""
 
-#: src/prefs.js:460 data/ui/settings-window.ui:296
+#: src/prefs.js:458 data/ui/settings-window.ui:296
 msgid "Refresh the list of account task lists"
 msgstr ""
 
-#: src/prefs.js:557 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
+#: src/prefs.js:558 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
 msgid "Refresh in progress"
 msgstr ""
 
-#: src/prefs.js:750
+#: src/prefs.js:751
 msgid "Refresh Tasks"
 msgstr ""
 
-#: src/prefs.js:757
+#: src/prefs.js:758
 msgid "Properties"
 msgstr ""
 

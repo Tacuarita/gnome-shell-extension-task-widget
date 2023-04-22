@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 11:16+0200\n"
+"POT-Creation-Date: 2023-04-22 13:49+0200\n"
 "PO-Revision-Date: 2022-10-08 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
@@ -34,31 +34,31 @@ msgstr "Seleziona elenco attività"
 msgid "Next task list"
 msgstr "Elenco attività successivo"
 
-#: src/extension.js:323 src/extension.js:1460
+#: src/extension.js:323 src/extension.js:1459
 msgid "All Tasks"
 msgstr "Tutte le attività"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:856
+#: src/extension.js:855
 msgid "Orphan task"
 msgstr "Attività orfana"
 
-#: src/extension.js:876
+#: src/extension.js:875
 msgid "Beginning of a subtask list"
 msgstr "Inizio di un elenco di sotto-attività"
 
-#: src/extension.js:933
+#: src/extension.js:932
 msgid "No due date"
 msgstr "Nessuna data di scadenza"
 
-#: src/extension.js:935
+#: src/extension.js:934
 msgid "Today"
 msgstr "Oggi"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:940 data/ui/settings-window.ui:92
+#: src/extension.js:939 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr "Passato"
 
@@ -75,77 +75,77 @@ msgstr "Passato"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:959
+#: src/extension.js:958
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %-d %B"
 
-#: src/extension.js:960
+#: src/extension.js:959
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %-d %B %Y"
 
-#: src/extension.js:1495
+#: src/extension.js:1494
 msgid "No Tasks"
 msgstr "Nessuna attività"
 
-#: src/extension.js:1501 src/prefs.js:140
+#: src/extension.js:1500 src/prefs.js:138
 msgid "Error: Missing Dependencies"
 msgstr "Errore: Dipendenze Mancanti"
 
-#: src/prefs.js:141
+#: src/prefs.js:139
 msgid "Please install Evolution Data Server to use this extension."
 msgstr "Installa il data server Evolution per utilizzare questa estensione."
 
-#: src/prefs.js:145 data/ui/settings-menu.ui:25
+#: src/prefs.js:143 data/ui/settings-menu.ui:25
 msgid "Help"
 msgstr "Aiuto"
 
-#: src/prefs.js:396
+#: src/prefs.js:394
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "secondo"
 msgstr[1] "secondi"
 
-#: src/prefs.js:398
+#: src/prefs.js:396
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuto"
 msgstr[1] "minuti"
 
-#: src/prefs.js:399
+#: src/prefs.js:397
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ora"
 msgstr[1] "ore"
 
-#: src/prefs.js:401
+#: src/prefs.js:399
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] "giorno"
 msgstr[1] "giorni"
 
-#: src/prefs.js:457
+#: src/prefs.js:455
 msgid "No remote task lists found"
 msgstr "Nessun elenco attività remoto trovato"
 
-#: src/prefs.js:460 data/ui/settings-window.ui:296
+#: src/prefs.js:458 data/ui/settings-window.ui:296
 msgid "Refresh the list of account task lists"
 msgstr "Aggiorna l'elenco di attività dell'elenco degli account"
 
-#: src/prefs.js:557 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
+#: src/prefs.js:558 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
 msgid "Refresh in progress"
 msgstr "Aggiornamento in corso"
 
-#: src/prefs.js:750
+#: src/prefs.js:751
 msgid "Refresh Tasks"
 msgstr "Aggiorna attività"
 
-#: src/prefs.js:757
+#: src/prefs.js:758
 msgid "Properties"
 msgstr "Proprietà"
 
@@ -191,8 +191,14 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr ""
 
 #: data/ui/settings-menu.ui:38
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "I messaggi di debug stanno venendo registrati. Prendi tutte le misure necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti rimuovere o censurare qualsiasi informazione che ritieni privata."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"I messaggi di debug stanno venendo registrati. Prendi tutte le misure "
+"necessarie per riprodurre un problema, quindi rivedi il registro. Dovresti "
+"rimuovere o censurare qualsiasi informazione che ritieni privata."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -270,7 +276,9 @@ msgid "Started"
 msgstr ""
 
 #: data/ui/settings-window.ui:155
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
 msgstr ""
 
 #: data/ui/settings-window.ui:163
@@ -313,8 +321,11 @@ msgid "Task Lists"
 msgstr "Elenco attività"
 
 #: data/ui/settings-window.ui:271
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "È possibile trascinare le righe per modificare l'ordine degli elenchi di attività nel widget."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"È possibile trascinare le righe per modificare l'ordine degli elenchi di "
+"attività nel widget."
 
 #: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
@@ -352,4 +363,3 @@ msgstr ""
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr ""
-

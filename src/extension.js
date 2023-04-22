@@ -31,8 +31,8 @@ class TaskWidget extends St.BoxLayout {
         });
 
         this._calendarArea = DateMenu.box.find_child_by_name('calendarArea');
-        this._messageList = this._calendarArea.get_child_at_index(0);
-        this._calendarWidget = this._calendarArea.get_child_at_index(1);
+        this._messageList = this._calendarArea.get_first_child();
+        this._calendarWidget = this._calendarArea.get_last_child();
 
         // Set the height of the widget to the height of the calendar widget:
         this.add_constraint(new Clutter.BindConstraint({
@@ -99,7 +99,7 @@ class TaskWidget extends St.BoxLayout {
      */
     async _initTaskLists() {
         try {
-            this._contentBox = new St.BoxLayout({
+            this._contentBox = new St.BoxLayout({    
                 style_class: 'calendar world-clocks-button',
                 vertical: true,
             });
@@ -116,6 +116,8 @@ class TaskWidget extends St.BoxLayout {
                 'visible', GObject.BindingFlags.INVERT_BOOLEAN);
 
             this.add_child(this._contentBox);
+            const themeContext = St.ThemeContext.get_for_stage(global.stage);
+            this._loadThemeHacks(themeContext);
 
             if (!Utils.HAS_EDS_) {
                 this._showPlaceholderWithStatus('missing-dependencies');
@@ -142,7 +144,6 @@ class TaskWidget extends St.BoxLayout {
                 Utils.debounce_(this._onTaskListScrolled.bind(this), 'vscroll',
                     100, false));
 
-            const themeContext = St.ThemeContext.get_for_stage(global.stage);
             this._threshold = Utils.LL_THRESHOLD_ * themeContext.scale_factor;
             const spacing = this.get_theme_node().get_length('spacing') * 2;
 
@@ -153,7 +154,6 @@ class TaskWidget extends St.BoxLayout {
 
             this._scrollView.add_actor(this._taskBox);
             this._contentBox.add_child(this._scrollView);
-            this._loadThemeHacks(themeContext);
 
             this._themeChangedId = themeContext.connect('notify::scale-factor',
                 this._loadThemeHacks.bind(this));
@@ -736,7 +736,6 @@ class TaskWidget extends St.BoxLayout {
     _toUTC(date) {
         return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
     }
-
 
     /**
      * For a given checkbox, returns UID of the next or previous

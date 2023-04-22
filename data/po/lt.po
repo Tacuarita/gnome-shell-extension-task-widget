@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 11:16+0200\n"
+"POT-Creation-Date: 2023-04-22 13:49+0200\n"
 "PO-Revision-Date: 2022-10-08 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
@@ -10,7 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : "
+"(n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
 "X-Crowdin-Project: task-widget\n"
 "X-Crowdin-Project-ID: 418358\n"
 "X-Crowdin-Language: lt\n"
@@ -34,31 +35,31 @@ msgstr "Pasirinkite užduočių sąrašą"
 msgid "Next task list"
 msgstr "Sekantis užduočių sąrašas"
 
-#: src/extension.js:323 src/extension.js:1460
+#: src/extension.js:323 src/extension.js:1459
 msgid "All Tasks"
 msgstr "Visos užduotys"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:856
+#: src/extension.js:855
 msgid "Orphan task"
 msgstr "Pogrupio užduotis be tėvinės užduoties"
 
-#: src/extension.js:876
+#: src/extension.js:875
 msgid "Beginning of a subtask list"
 msgstr "Užduočių pogrupio pradžia"
 
-#: src/extension.js:933
+#: src/extension.js:932
 msgid "No due date"
 msgstr "Be termino"
 
-#: src/extension.js:935
+#: src/extension.js:934
 msgid "Today"
 msgstr "Šiandien"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:940 data/ui/settings-window.ui:92
+#: src/extension.js:939 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr "Praeities"
 
@@ -75,33 +76,34 @@ msgstr "Praeities"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:959
+#: src/extension.js:958
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %B %-d d."
 
-#: src/extension.js:960
+#: src/extension.js:959
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %Y m. %B %-d d."
 
-#: src/extension.js:1495
+#: src/extension.js:1494
 msgid "No Tasks"
 msgstr "Nėra užduočių"
 
-#: src/extension.js:1501 src/prefs.js:140
+#: src/extension.js:1500 src/prefs.js:138
 msgid "Error: Missing Dependencies"
 msgstr "Klaida: trūksta reikalingų modulių"
 
-#: src/prefs.js:141
+#: src/prefs.js:139
 msgid "Please install Evolution Data Server to use this extension."
-msgstr "Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
+msgstr ""
+"Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
 
-#: src/prefs.js:145 data/ui/settings-menu.ui:25
+#: src/prefs.js:143 data/ui/settings-menu.ui:25
 msgid "Help"
 msgstr "Pagalba"
 
-#: src/prefs.js:396
+#: src/prefs.js:394
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
@@ -110,7 +112,7 @@ msgstr[1] "sekundžių"
 msgstr[2] "sekundės"
 msgstr[3] "sekundžių"
 
-#: src/prefs.js:398
+#: src/prefs.js:396
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
@@ -119,7 +121,7 @@ msgstr[1] "minučių"
 msgstr[2] "minutės"
 msgstr[3] "minučių"
 
-#: src/prefs.js:399
+#: src/prefs.js:397
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
@@ -128,7 +130,7 @@ msgstr[1] "valandų"
 msgstr[2] "valandos"
 msgstr[3] "valandų"
 
-#: src/prefs.js:401
+#: src/prefs.js:399
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -137,23 +139,23 @@ msgstr[1] "dienų"
 msgstr[2] "dienos"
 msgstr[3] "dienų"
 
-#: src/prefs.js:457
+#: src/prefs.js:455
 msgid "No remote task lists found"
 msgstr "Nuotolinių užduočių sąrašų nerasta"
 
-#: src/prefs.js:460 data/ui/settings-window.ui:296
+#: src/prefs.js:458 data/ui/settings-window.ui:296
 msgid "Refresh the list of account task lists"
 msgstr "Atnaujinti užduočių sąrašų sąrašą"
 
-#: src/prefs.js:557 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
+#: src/prefs.js:558 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
 msgid "Refresh in progress"
 msgstr "Vyksta atnaujinimas"
 
-#: src/prefs.js:750
+#: src/prefs.js:751
 msgid "Refresh Tasks"
 msgstr "Atnaujinti užduotis"
 
-#: src/prefs.js:757
+#: src/prefs.js:758
 msgid "Properties"
 msgstr "Savybės"
 
@@ -205,8 +207,14 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr "Visos teisės saugomos © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Derinimo pranešimai yra registruojami. Atlikite reikiamus veiksmus, kad pakartotumėte problemą, o tuomet peržiūrėkite žurnalą. Prašome pašalinti ar cenzūruoti informaciją, kurią laikote privačia."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Derinimo pranešimai yra registruojami. Atlikite reikiamus veiksmus, kad "
+"pakartotumėte problemą, o tuomet peržiūrėkite žurnalą. Prašome pašalinti ar "
+"cenzūruoti informaciją, kurią laikote privačia."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -258,7 +266,9 @@ msgstr "Terminas per ateinančią savaitę"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr "Užduotys, kurių terminas yra per ateinančias septynias dienas, įskaitant šiandien"
+msgstr ""
+"Užduotys, kurių terminas yra per ateinančias septynias dienas, įskaitant "
+"šiandien"
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
@@ -284,8 +294,12 @@ msgid "Started"
 msgstr "Pradėtos"
 
 #: data/ui/settings-window.ui:155
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
-msgstr "Užduotys, kurios arba neturi pradžios datos, arba kurių pradžios data yra anksčiau nei dabartinis laikas"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
+msgstr ""
+"Užduotys, kurios arba neturi pradžios datos, arba kurių pradžios data yra "
+"anksčiau nei dabartinis laikas"
 
 #: data/ui/settings-window.ui:163
 msgctxt "used in Not Cancelled Tasks"
@@ -327,8 +341,11 @@ msgid "Task Lists"
 msgstr "Užduočių sąrašai"
 
 #: data/ui/settings-window.ui:271
-msgid "You can drag and drop rows to change the order of task lists in the widget."
-msgstr "Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą valdiklyje."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
+msgstr ""
+"Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą "
+"valdiklyje."
 
 #: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
@@ -366,4 +383,3 @@ msgstr "Paremti"
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr "Paremti kriptovaliutomis"
-
