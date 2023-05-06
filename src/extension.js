@@ -99,8 +99,11 @@ class TaskWidget extends St.BoxLayout {
      */
     async _initTaskLists() {
         try {
+            const transparent = Utils.shellVersionAtLeast_(44)
+                ? " transparent" : "";
+
             this._contentBox = new St.BoxLayout({    
-                style_class: 'calendar world-clocks-button',
+                style_class: `calendar world-clocks-button${transparent}`,
                 vertical: true,
             });
 
