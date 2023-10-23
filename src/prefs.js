@@ -7,6 +7,7 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
+import * as Config from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js';
 import * as Utils from './utils.js';
 
 import {
@@ -20,6 +21,8 @@ import {
 const { ECal, EDataServer, ICalGLib } = Utils.HAS_EDS_
     ? imports.gi
     : { undefined };
+
+const GJSVersion = imports.system.version;
 
 /**
  * Enables the use of context in translation of plurals.
@@ -1167,9 +1170,6 @@ const SettingsMenuButton = GObject.registerClass(
                     'org.gnome.desktop.interface'
                 ).get_string('gtk-theme');
 
-                const userType =
-                    Me.metadata.locale === 'user-specific' ? 'user' : 'system';
-
                 let shellTheme;
 
                 try {
@@ -1202,16 +1202,14 @@ const SettingsMenuButton = GObject.registerClass(
 
                 const logHeader =
                     widgetName +
-                    ' (' +
-                    userType +
-                    ')\n' +
+                    '\n' +
                     GLib.get_os_info('PRETTY_NAME') +
                     '\n' +
                     'GNOME Shell ' +
-                    imports.misc.config.PACKAGE_VERSION +
+                    Config.PACKAGE_VERSION +
                     '\n' +
                     'gjs ' +
-                    imports.system.version +
+                    GJSVersion +
                     '\n' +
                     (Adw ? 'Libadwaita ' + Adw.VERSION_S + '\n' : '') +
                     'Language: ' +
