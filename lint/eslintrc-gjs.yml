@@ -55,9 +55,9 @@ rules:
     - error
     - 4
     - ignoredNodes:
-      # Allow not indenting the body of GObject.registerClass, since in the
-      # future it's intended to be a decorator
-      - 'CallExpression[callee.object.name=GObject][callee.property.name=registerClass] > ClassExpression:first-child'
+        # Allow not indenting the body of GObject.registerClass, since in the
+        # future it's intended to be a decorator
+        - 'CallExpression[callee.object.name=GObject][callee.property.name=registerClass] > ClassExpression:first-child'
       # Allow dedenting chained member expressions
       MemberExpression: 'off'
   jsdoc/check-alignment: error
@@ -65,7 +65,10 @@ rules:
   jsdoc/check-tag-names: error
   jsdoc/check-types: error
   jsdoc/implements-on-classes: error
-  jsdoc/newline-after-description: error
+  jsdoc/tag-lines:
+    - error
+    - any
+    - startLines: 1
   jsdoc/require-jsdoc: error
   jsdoc/require-param: error
   jsdoc/require-param-description: error
@@ -109,7 +112,7 @@ rules:
   no-implicit-coercion:
     - error
     - allow:
-      - '!!'
+        - '!!'
   no-invalid-this: error
   no-iterator: error
   no-label-var: error
@@ -124,12 +127,6 @@ rules:
   no-restricted-globals: [error, window]
   no-restricted-properties:
     - error
-    - object: imports
-      property: format
-      message: Use template strings
-    - object: pkg
-      property: initFormat
-      message: Use template strings
     - object: Lang
       property: copyProperties
       message: Use Object.assign()

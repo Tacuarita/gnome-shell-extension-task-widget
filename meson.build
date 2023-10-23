@@ -1,42 +1,27 @@
 project('task-widget', 'c',
-  version: '16',
-  meson_version: '>= 0.60.0'
+  version: '18',
+  meson_version: '>= 1.2.2'
 )
 
 ext_uuid = 'task-widget@juozasmiskinis.gitlab.io'
 ext_base = 'org.gnome.shell.extensions.task-widget'
+ext_path = '/org/gnome/shell/extensions/task-widget'
 
 gnome = import('gnome')
 i18n = import('i18n')
 fs = import('fs')
 
-prefix = get_option('prefix')
-data_dir = join_paths(prefix, get_option('datadir'))
-ext_dir = join_paths(data_dir, 'gnome-shell', 'extensions', ext_uuid)
-locale_dir = join_paths(prefix, get_option('localedir'))
+exp = fs.expanduser('~/.local/share/gnome-shell/extensions')
 tmp_dir = join_paths(meson.project_build_root(), ext_uuid)
-
-if get_option('gschema_dir') != ''
-  gschema_dir = get_option('gschema_dir')
-else
-  gschema_dir = join_paths(data_dir, 'glib-2.0', 'schemas')
-endif
+ext_dir = join_paths(exp, ext_uuid)
+gschema_dir = join_paths(tmp_dir, 'schemas')
+locale_dir = join_paths(tmp_dir, 'locale')
 
 ext_config = configuration_data()
 ext_config.set('EXTENSION_UUID', ext_uuid)
 ext_config.set('EXTENSION_VERSION', meson.project_version())
 ext_config.set('EXTENSION_BASE', ext_base)
-ext_config.set('GSCHEMA_DIR', gschema_dir)
-ext_config.set('LOCALE_DIR', locale_dir)
-
-if get_option('per_user')
-  exp = fs.expanduser('~/.local/share/gnome-shell/extensions')
-  ext_dir = join_paths(exp, ext_uuid)
-  gschema_dir = join_paths(tmp_dir, 'schemas')
-  locale_dir = join_paths(tmp_dir, 'locale')
-  ext_config.set('GSCHEMA_DIR', 'user-specific')
-  ext_config.set('LOCALE_DIR', 'user-specific')
-endif
+ext_config.set('EXTENSION_PATH', ext_path)
 
 install_subdir(
   'src',
@@ -44,14 +29,14 @@ install_subdir(
   strip_directory: true
 )
 
-subdir('data') 
+subdir('data')
 
 meson.add_install_script('glib-compile-schemas', gschema_dir)
 meson.add_install_script('mkdir', '-p', ext_dir)
 meson.add_install_script('rm', '-rf', ext_dir)
 meson.add_install_script('mv', tmp_dir, ext_dir)
 
-if (get_option('per_user') and get_option('build_zip'))
+if (get_option('build_zip'))
   zip = find_program('zip', required: true)
   zip_file = join_paths(meson.project_build_root(), ext_uuid) + '.zip'
   meson.add_install_script('build-aux/zip.sh', ext_dir, zip_file)

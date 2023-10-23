@@ -1,44 +1,47 @@
 'use strict';
 
-const {Gio, GLib} = imports.gi;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
-var _debounceTimeoutIds = new Map();
-var HAS_EDS_ = true;
-var ELLIPSIS_CHAR_ = '\u2026';
-var ARC_UP_LEFT_CHAR_ = '\u256F';
-var ARC_UP_RIGHT_CHAR_ = '\u2570';
-var EM_DASH_CHAR_ = '\u2014';
-var MINUTES_PER_HOUR_ = 60;
-var MINUTES_PER_DAY_ = MINUTES_PER_HOUR_ * 24;
-var MSECS_IN_DAY_ = MINUTES_PER_DAY_ * 60 * 1000;
-var LL_THRESHOLD_ = 100;
-
+export let HAS_EDS_ = true;
 let ECal, EDataServer, ICalGLib;
 
 try {
-    /* exported ICalGLib */
-    ({ECal, EDataServer, ICalGLib} = imports.gi);
+    // eslint-disable-next-line no-unused-vars
+    ({ ECal, EDataServer, ICalGLib } = imports.gi);
 } catch (e) {
     HAS_EDS_ = false;
 }
 
-var TIME_UNITS_ = {
-    'seconds': 0,
-    'minutes': 1,
-    'hours': 2,
-    'days': 3,
+export const _debounceTimeoutIds = new Map();
+export const ELLIPSIS_CHAR_ = '\u2026';
+export const ARC_UP_LEFT_CHAR_ = '\u256F';
+export const ARC_UP_RIGHT_CHAR_ = '\u2570';
+export const EM_DASH_CHAR_ = '\u2014';
+export const MINUTES_PER_HOUR_ = 60;
+export const MINUTES_PER_DAY_ = MINUTES_PER_HOUR_ * 24;
+export const MSECS_IN_DAY_ = MINUTES_PER_DAY_ * 60 * 1000;
+export const LL_THRESHOLD_ = 100;
+
+export const TIME_UNITS_ = {
+    seconds: 0,
+    minutes: 1,
+    hours: 2,
+    days: 3
 };
 
-var HIDE_COMPLETED_TASKS_ = {
-    'never': 0,
-    'immediately': 1,
+export const HIDE_COMPLETED_TASKS_ = {
+    never: 0,
+    immediately: 1,
     'after-time-period': 2,
-    'after-specified-time': 3,
+    'after-specified-time': 3
 };
 
-var HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT_ = value => {
-    return [HIDE_COMPLETED_TASKS_['after-time-period'],
-        HIDE_COMPLETED_TASKS_['after-specified-time']].includes(value);
+export const HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT_ = (value) => {
+    return [
+        HIDE_COMPLETED_TASKS_['after-time-period'],
+        HIDE_COMPLETED_TASKS_['after-specified-time']
+    ].includes(value);
 };
 
 /**
@@ -47,7 +50,7 @@ var HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT_ = value => {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<EDataServer.SourceRegistry>} Source registry.
  */
-function getSourceRegistry_(cancellable = null) {
+export function getSourceRegistry_(cancellable = null) {
     return new Promise((resolve, reject) => {
         EDataServer.SourceRegistry.new(cancellable, (_registry, res) => {
             try {
@@ -70,7 +73,7 @@ function getSourceRegistry_(cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<ECal.Client>} `ECal.Client` of the source.
  */
-function getECalClient_(source, type, wait, cancellable = null) {
+export function getECalClient_(source, type, wait, cancellable = null) {
     return new Promise((resolve, reject) => {
         ECal.Client.connect(source, type, wait, cancellable, (_source, res) => {
             try {
@@ -91,7 +94,7 @@ function getECalClient_(source, type, wait, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<ECal.ClientView>} `ECal.ClientView` of the source.
  */
-function getECalClientView_(client, query, cancellable = null) {
+export function getECalClientView_(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.get_view(query, cancellable, (self, res) => {
             try {
@@ -113,7 +116,7 @@ function getECalClientView_(client, query, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if no errors occurred.
  */
-function refreshBackend_(registry, uid, cancellable = null) {
+export function refreshBackend_(registry, uid, cancellable = null) {
     return new Promise((resolve, reject) => {
         registry.refresh_backend(uid, cancellable, (self, res) => {
             try {
@@ -133,7 +136,7 @@ function refreshBackend_(registry, uid, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if no errors occurred.
  */
-function refreshClient_(client, cancellable = null) {
+export function refreshClient_(client, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.refresh(cancellable, (self, res) => {
             try {
@@ -154,7 +157,7 @@ function refreshClient_(client, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<ECal.Component[]>} A list of objects.
  */
-function getTasks_(client, query, cancellable = null) {
+export function getTasks_(client, query, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.get_object_list_as_comps(query, cancellable, (self, res) => {
             try {
@@ -177,7 +180,7 @@ function getTasks_(client, query, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if no errors occurred.
  */
-function modifyObjects_(client, obj, mod, flag, cancellable = null) {
+export function modifyObjects_(client, obj, mod, flag, cancellable = null) {
     return new Promise((resolve, reject) => {
         client.modify_objects(obj, mod, flag, cancellable, (self, res) => {
             try {
@@ -198,12 +201,10 @@ function modifyObjects_(client, obj, mod, flag, cancellable = null) {
  * @param {object} b - Task list object.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function customSort_(order, a, b) {
-    if (order.indexOf(a.uid) === -1)
-        return 1;
+export function customSort_(order, a, b) {
+    if (order.indexOf(a.uid) === -1) return 1;
 
-    if (order.indexOf(b.uid) === -1)
-        return -1;
+    if (order.indexOf(b.uid) === -1) return -1;
 
     return order.indexOf(a.uid) - order.indexOf(b.uid);
 }
@@ -215,14 +216,12 @@ function customSort_(order, a, b) {
  * @param {ECal.Component[]} b - A list consisting of task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function sortByName_(a, b) {
-    const lc = x => x.get_summary().get_value().toLowerCase();
+export function sortByName_(a, b) {
+    const lc = (x) => x.get_summary().get_value().toLowerCase();
 
-    if (a.get_summary() === null)
-        return 1;
+    if (a.get_summary() === null) return 1;
 
-    if (b.get_summary() === null)
-        return -1;
+    if (b.get_summary() === null) return -1;
 
     return lc(a).localeCompare(lc(b));
 }
@@ -235,17 +234,15 @@ function sortByName_(a, b) {
  * @param {ECal.Component[]} b - A list consisting of task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function sortByDueDate_(a, b) {
-    const time = x => x.get_due().get_value().as_timet();
+export function sortByDueDate_(a, b) {
+    const time = (x) => x.get_due().get_value().as_timet();
 
     if (a.get_due() === null && b.get_due() === null)
         return sortByPriority_(a, b);
 
-    if (b.get_due() === null)
-        return -1;
+    if (b.get_due() === null) return -1;
 
-    if (a.get_due() === null)
-        return 1;
+    if (a.get_due() === null) return 1;
 
     return time(a) - time(b);
 }
@@ -258,17 +255,14 @@ function sortByDueDate_(a, b) {
  * @param {ECal.Component[]} b - A list consisting of task objects.
  * @returns {int} Negative, zero or positive value to facilitate sorting.
  */
-function sortByPriority_(a, b) {
-    const priority = x => x.get_priority();
+export function sortByPriority_(a, b) {
+    const priority = (x) => x.get_priority();
 
-    if (priority(a) < 1 && priority(b) < 1)
-        return sortByName_(a, b);
+    if (priority(a) < 1 && priority(b) < 1) return sortByName_(a, b);
 
-    if (priority(b) < 1)
-        return -1;
+    if (priority(b) < 1) return -1;
 
-    if (priority(a) < 1)
-        return 1;
+    if (priority(a) < 1) return 1;
 
     return priority(a) - priority(b);
 }
@@ -282,7 +276,7 @@ function sortByPriority_(a, b) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<number>} Number of bytes written to the stream.
  */
-function writeBytesAsync_(output, bytes, priority, cancellable = null) {
+export function writeBytesAsync_(output, bytes, priority, cancellable = null) {
     return new Promise((resolve, reject) => {
         output.write_bytes_async(bytes, priority, cancellable, (file, res) => {
             try {
@@ -301,7 +295,7 @@ function writeBytesAsync_(output, bytes, priority, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - Cancellable object.
  * @returns {Promise<boolean>} `true` if successful.
  */
-function waitCheckAsync_(process, cancellable = null) {
+export function waitCheckAsync_(process, cancellable = null) {
     return new Promise((resolve, reject) => {
         process.wait_check_async(cancellable, (self, result) => {
             try {
@@ -310,7 +304,7 @@ function waitCheckAsync_(process, cancellable = null) {
 
                     throw new Gio.IOErrorEnum({
                         code: Gio.io_error_from_errno(status),
-                        message: GLib.strerror(status),
+                        message: GLib.strerror(status)
                     });
                 }
 
@@ -334,32 +328,22 @@ function waitCheckAsync_(process, cancellable = null) {
  * leading edge, instead of the trailing.
  * @returns {Function} The `func` function with all its arguments.
  */
-function debounce_(func, id, wait, immediate = false) {
+export function debounce_(func, id, wait, immediate = false) {
     return (...args) => {
         const later = () => {
             _debounceTimeoutIds.delete(id);
 
-            if (!immediate)
-                func(...args);
+            if (!immediate) func(...args);
         };
 
         if (_debounceTimeoutIds.get(id))
             GLib.source_remove(_debounceTimeoutIds.get(id));
 
-        _debounceTimeoutIds.set(id, GLib.timeout_add(GLib.PRIORITY_DEFAULT,
-            wait, later));
+        _debounceTimeoutIds.set(
+            id,
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, wait, later)
+        );
 
-        if (immediate && !_debounceTimeoutIds.get(id))
-            func(...args);
+        if (immediate && !_debounceTimeoutIds.get(id)) func(...args);
     };
-}
-
-/**
- * Checks if running GNOME Shell version is at least `required`.
- *
- * @param {number} required - Lower bound for required GNOME Shell version.
- * @returns {boolean} `true` if GNOME Shell version is at least `required`.
- */
-function shellVersionAtLeast_(required) {
-    return parseFloat(imports.misc.config.PACKAGE_VERSION) >= required;
 }
