@@ -3,14 +3,13 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-export let HAS_EDS_ = true;
-let ECal, EDataServer, ICalGLib;
+let EDataServer, ECal;
 
 try {
-    // eslint-disable-next-line no-unused-vars
-    ({ ECal, EDataServer, ICalGLib } = imports.gi);
+    EDataServer = (await import('gi://EDataServer')).default;
+    ECal = (await import('gi://ECal')).default;
 } catch (e) {
-    HAS_EDS_ = false;
+    // One or more required modules are not installed on the system.
 }
 
 export const _debounceTimeoutIds = new Map();
@@ -331,6 +330,7 @@ export function waitCheckAsync_(process, cancellable = null) {
 export function debounce_(func, id, wait, immediate = false) {
     return (...args) => {
         const later = () => {
+            GLib.source_remove(_debounceTimeoutIds.get(id));
             _debounceTimeoutIds.delete(id);
 
             if (!immediate) func(...args);

@@ -17,10 +17,15 @@ import {
     gettext as _
 } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-// eslint-disable-next-line no-unused-vars
-const { ECal, EDataServer, ICalGLib } = Utils.HAS_EDS_
-    ? imports.gi
-    : { undefined };
+let HAS_EDS = true;
+let EDataServer, ECal;
+
+try {
+    EDataServer = (await import('gi://EDataServer')).default;
+    ECal = (await import('gi://ECal')).default;
+} catch (e) {
+    HAS_EDS = false;
+}
 
 const GJSVersion = imports.system.version;
 
@@ -40,7 +45,6 @@ const _npgettext = (context, singular, plural, n) => {
         : pgettext(context, singular);
 };
 
-let Me = null;
 let _resource = null;
 
 /**
@@ -68,13 +72,11 @@ export default class TaskWidgetExtensionPreferences extends ExtensionPreferences
      * @param {Adw.PreferencesWindow} window - The preferences window.
      */
     fillPreferencesWindow(window) {
-        Me = ExtensionPreferences.lookupByURL(import.meta.url);
-        const settings = this.getSettings();
         _loadResource();
 
-        const widget = Utils.HAS_EDS_
-            ? new TaskWidgetSettings(settings)
-            : new BeGoneWidget();
+        const widget = HAS_EDS
+            ? new TaskWidgetSettings(this.getSettings(), this.metadata)
+            : new BeGoneWidget(this.metadata);
 
         window.add(widget);
     }
@@ -85,8 +87,10 @@ const BeGoneWidget = GObject.registerClass(
         /**
          * Shows a message dialog if required dependencies are not installed on
          * the system.
+         *
+         * @param {object} metadata - Extension metadata.
          */
-        _init() {
+        _init(metadata) {
             super._init();
 
             GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
@@ -108,7 +112,7 @@ const BeGoneWidget = GObject.registerClass(
                 dialog.connect('response', (widget, responseId) => {
                     if (responseId === 0) {
                         Gio.AppInfo.launch_default_for_uri_async(
-                            Me.metadata.dependencies,
+                            metadata.dependencies,
                             null,
                             null,
                             null
@@ -118,7 +122,6 @@ const BeGoneWidget = GObject.registerClass(
                     widget.destroy();
                 });
 
-                Me = null;
                 Gio.resources_unregister(_resource);
                 _resource = null;
 
@@ -165,12 +168,14 @@ const TaskWidgetSettings = GObject.registerClass(
          * Initializes the settings widget.
          *
          * @param {Gio.Settings} settings - Settings object.
+         * @param {object} metadata - Extension metadata.
          */
-        _init(settings) {
+        _init(settings, metadata) {
             super._init();
             this._settings = settings;
+            this._metadata = metadata;
             const provider = new Gtk.CssProvider();
-            provider.load_from_resource(`${Me.metadata.epath}/prefs.css`);
+            provider.load_from_resource(`${this._metadata.epath}/prefs.css`);
 
             Gtk.StyleContext.add_provider_for_display(
                 Gdk.Display.get_default(),
@@ -673,7 +678,6 @@ const TaskWidgetSettings = GObject.registerClass(
             if (this._backendRefreshId)
                 GLib.source_remove(this._backendRefreshId);
 
-            Me = null;
             Gio.resources_unregister(_resource);
             _resource = null;
         }
@@ -1082,11 +1086,12 @@ const SettingsMenuButton = GObject.registerClass(
         _init(widget) {
             super._init();
             const { modal } = widget._window;
+            this._metadata = widget._metadata;
             this._aboutDialog.transient_for = widget._window;
-            this._aboutDialog.program_name = _(Me.metadata.name);
-            this._aboutDialog.version = Me.metadata.version.toString();
-            this._aboutDialog.website = Me.metadata.url;
-            this._aboutDialog.comments = _(Me.metadata.description);
+            this._aboutDialog.program_name = _(this._metadata.name);
+            this._aboutDialog.version = this._metadata.version.toString();
+            this._aboutDialog.website = this._metadata.url;
+            this._aboutDialog.comments = _(this._metadata.description);
 
             this._aboutDialog.translator_credits =
                 /* Translators: put down your name/nickname and email (optional)
@@ -1112,7 +1117,7 @@ const SettingsMenuButton = GObject.registerClass(
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    Me.metadata.wiki,
+                    this._metadata.wiki,
                     null,
                     null,
                     null
@@ -1160,7 +1165,7 @@ const SettingsMenuButton = GObject.registerClass(
 
                 const [file, stream] = Gio.File.new_tmp('taskwidget.XXXXXX');
                 const logFile = stream.get_output_stream();
-                const widgetName = `${Me.metadata.name} v${Me.metadata.version}`;
+                const widgetName = `${this._metadata.name} v${this._metadata.version}`;
 
                 const iconTheme = gschema(
                     'org.gnome.desktop.interface'
@@ -1299,13 +1304,14 @@ const DonateMenuButton = GObject.registerClass(
          */
         _init(widget) {
             super._init();
+            this._metadata = widget._metadata;
             this._donateCrypto.set_transient_for(widget._window);
             const actionGroup = new Gio.SimpleActionGroup();
             let action = new Gio.SimpleAction({ name: 'coffee' });
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    Me.metadata.coffee,
+                    this._metadata.coffee,
                     null,
                     null,
                     null
@@ -1317,7 +1323,7 @@ const DonateMenuButton = GObject.registerClass(
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    Me.metadata.paypal,
+                    this._metadata.paypal,
                     null,
                     null,
                     null
@@ -1329,7 +1335,7 @@ const DonateMenuButton = GObject.registerClass(
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    Me.metadata.liberapay,
+                    this._metadata.liberapay,
                     null,
                     null,
                     null

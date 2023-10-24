@@ -26,11 +26,16 @@ import {
 const DateMenu = Main.panel.statusArea.dateMenu.menu;
 const NC_ = (c, s) => pgettext(c, s);
 
-const { ECal, EDataServer, ICalGLib } = Utils.HAS_EDS_
-    ? imports.gi
-    : { undefined };
+let HAS_EDS = true;
+let EDataServer, ECal, ICalGLib;
 
-let Me;
+try {
+    EDataServer = (await import('gi://EDataServer')).default;
+    ECal = (await import('gi://ECal')).default;
+    ICalGLib = (await import('gi://ICalGLib')).default;
+} catch (e) {
+    HAS_EDS = false;
+}
 
 export default class TaskWidgetExtension extends Extension {
     /**
@@ -39,8 +44,7 @@ export default class TaskWidgetExtension extends Extension {
      * https://gjs.guide/extensions/overview/anatomy.html#extension-js-required
      */
     enable() {
-        Me = Extension.lookupByURL(import.meta.url);
-        this._widget = new TaskWidget();
+        this._widget = new TaskWidget(this.getSettings(), this.metadata);
     }
 
     /**
@@ -50,7 +54,6 @@ export default class TaskWidgetExtension extends Extension {
     disable() {
         this._widget.destroy();
         this._widget = null;
-        Me = null;
     }
 }
 
@@ -58,8 +61,11 @@ const TaskWidget = GObject.registerClass(
     class TaskWidget extends St.BoxLayout {
         /**
          * Initializes the widget.
+         *
+         * @param {Gio.Settings} settings - Extension settings object.
+         * @param {object} metadata - Extension metadata.
          */
-        _init() {
+        _init(settings, metadata) {
             super._init({
                 name: 'taskWidget',
                 // Re-use style classes. We'll do it in multiple places for
@@ -84,7 +90,8 @@ const TaskWidget = GObject.registerClass(
             );
 
             this._calendarArea.add_child(this);
-            this._settings = Me.getSettings();
+            this._settings = settings;
+            this._metadata = metadata;
             this.connect('destroy', this._onDestroy.bind(this));
             this._buildPlaceholder();
             this._initTaskLists();
@@ -158,7 +165,7 @@ const TaskWidget = GObject.registerClass(
 
                 this._loadThemeHacks(themeContext);
 
-                if (!Utils.HAS_EDS_) {
+                if (!HAS_EDS) {
                     this._showPlaceholderWithStatus('missing-dependencies');
                     return;
                 }
@@ -1740,7 +1747,7 @@ const TaskWidget = GObject.registerClass(
 
                     this._statusLabel.connect('button-release-event', () => {
                         Gio.app_info_launch_default_for_uri(
-                            Me.metadata.dependencies,
+                            this._metadata.dependencies,
                             global.create_app_launch_context(0, -1)
                         );
 
@@ -2103,6 +2110,12 @@ const TaskWidget = GObject.registerClass(
 
             if (this._refreshTimeoutId)
                 GLib.source_remove(this._refreshTimeoutId);
+
+            if (Utils._debounceTimeoutIds.size) {
+                Utils._debounceTimeoutIds
+                    .keys()
+                    .forEach((id) => GLib.source_remove(id));
+            }
 
             if (this._idleAddId) GLib.source_remove(this._idleAddId);
 
