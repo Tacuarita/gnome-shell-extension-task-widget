@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 11:28+0200\n"
-"PO-Revision-Date: 2023-10-23 10:27\n"
+"POT-Creation-Date: 2023-10-24 23:43+0200\n"
+"PO-Revision-Date: 2023-10-24 22:06\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -19,47 +19,47 @@ msgstr ""
 
 #. Translators: without the ellipsis as it's appended
 #. automatically.
-#: src/extension.js:116
+#: src/extension.js:123
 msgid "Loading"
 msgstr ""
 
-#: src/extension.js:260
+#: src/extension.js:267
 msgid "Previous task list"
 msgstr ""
 
-#: src/extension.js:296
+#: src/extension.js:303
 msgid "Select task list"
 msgstr ""
 
-#: src/extension.js:331
+#: src/extension.js:338
 msgid "Next task list"
 msgstr ""
 
-#: src/extension.js:392 src/extension.js:1664
+#: src/extension.js:399 src/extension.js:1671
 msgid "All Tasks"
 msgstr ""
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:987
+#: src/extension.js:994
 msgid "Orphan task"
 msgstr ""
 
-#: src/extension.js:1007
+#: src/extension.js:1014
 msgid "Beginning of a subtask list"
 msgstr ""
 
-#: src/extension.js:1073
+#: src/extension.js:1080
 msgid "No due date"
 msgstr ""
 
-#: src/extension.js:1075
+#: src/extension.js:1082
 msgid "Today"
 msgstr ""
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:1083 data/ui/settings-window.ui:92
+#: src/extension.js:1090 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr ""
 
@@ -76,95 +76,95 @@ msgstr ""
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:1102
+#: src/extension.js:1109
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr ""
 
-#: src/extension.js:1103
+#: src/extension.js:1110
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr ""
 
-#: src/extension.js:1706
+#: src/extension.js:1713
 msgid "No Tasks"
 msgstr ""
 
-#: src/extension.js:1714 src/prefs.js:97
+#: src/extension.js:1721 src/prefs.js:101
 msgid "Error: Missing Dependencies"
 msgstr ""
 
-#: src/prefs.js:99
+#: src/prefs.js:103
 msgid "Please install Evolution Data Server to use this extension."
 msgstr ""
 
-#: src/prefs.js:104 data/ui/settings-menu.ui:25
+#: src/prefs.js:108 data/ui/settings-menu.ui:25
 msgid "Help"
 msgstr ""
 
-#: src/prefs.js:355
+#: src/prefs.js:360
 msgctxt "after X second(s)"
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:364
+#: src/prefs.js:369
 msgctxt "after X minute(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:371
+#: src/prefs.js:376
 msgctxt "after X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:375
+#: src/prefs.js:380
 msgctxt "after X day(s)"
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:430
+#: src/prefs.js:435
 msgid "No remote task lists found"
 msgstr ""
 
-#: src/prefs.js:434 data/ui/settings-window.ui:296
+#: src/prefs.js:439 data/ui/settings-window.ui:296
 msgid "Refresh the list of account task lists"
 msgstr ""
 
-#: src/prefs.js:556 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
+#: src/prefs.js:561 data/ui/settings-window.ui:308 data/ui/task-list-row.ui:85
 msgid "Refresh in progress"
 msgstr ""
 
-#: src/prefs.js:751
+#: src/prefs.js:755
 msgid "Refresh Tasks"
 msgstr ""
 
-#: src/prefs.js:759
+#: src/prefs.js:763
 msgid "Properties"
 msgstr ""
 
-#: src/prefs.js:1004
+#: src/prefs.js:1008
 msgctxt "refresh every X minutes(s)"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:1013
+#: src/prefs.js:1017
 msgctxt "refresh every X hour(s)"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/prefs.js:1022
+#: src/prefs.js:1026
 msgctxt "refresh every X day(s)"
 msgid "day"
 msgid_plural "days"
@@ -174,7 +174,7 @@ msgstr[1] ""
 #. Translators: put down your name/nickname and email (optional)
 #. according to the format below. This will credit you in the "About"
 #. window of the extension settings.
-#: src/prefs.js:1095
+#: src/prefs.js:1100
 msgctxt "translator name <email>"
 msgid "translator-credits"
 msgstr ""
