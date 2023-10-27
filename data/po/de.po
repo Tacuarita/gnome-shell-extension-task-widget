@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 23:43+0200\n"
-"PO-Revision-Date: 2023-04-22 11:56\n"
+"PO-Revision-Date: 2023-10-24 22:06\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -192,15 +192,8 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr "Urheberrecht © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen "
-"Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das "
-"Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, "
-"entfernen oder zensieren."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Debug-Meldungen werden protokolliert. Ergreifen Sie alle notwendigen Schritte, um ein Problem zu reproduzieren, und überprüfen Sie dann das Protokoll. Sie sollten alle Informationen, die Sie als privat betrachten, entfernen oder zensieren."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -278,12 +271,8 @@ msgid "Started"
 msgstr "Begonnen"
 
 #: data/ui/settings-window.ui:155
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
-msgstr ""
-"Aufgaben, die entweder kein Startdatum haben oder bei denen das Startdatum "
-"vor der momentanen Zeit liegt"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgstr "Aufgaben, die entweder kein Startdatum haben oder bei denen das Startdatum vor der momentanen Zeit liegt"
 
 #: data/ui/settings-window.ui:163
 msgctxt "used in Not Cancelled Tasks"
@@ -325,11 +314,8 @@ msgid "Task Lists"
 msgstr "Aufgabenlisten"
 
 #: data/ui/settings-window.ui:271
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der "
-"Aufgabenlisten im Widget zu ändern."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Sie können Zeilen per Drag & Drop verschieben, um die Reihenfolge der Aufgabenlisten im Widget zu ändern."
 
 #: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
@@ -367,3 +353,4 @@ msgstr "Spenden"
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr "Spende Kryptowährungen"
+
