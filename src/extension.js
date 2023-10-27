@@ -2111,12 +2111,6 @@ const TaskWidget = GObject.registerClass(
             if (this._refreshTimeoutId)
                 GLib.source_remove(this._refreshTimeoutId);
 
-            if (Utils._debounceTimeoutIds.size) {
-                Utils._debounceTimeoutIds
-                    .keys()
-                    .forEach((id) => GLib.source_remove(id));
-            }
-
             if (this._idleAddId) GLib.source_remove(this._idleAddId);
 
             if (this._onMenuOpenId) DateMenu.disconnect(this._onMenuOpenId);
@@ -2133,6 +2127,10 @@ const TaskWidget = GObject.registerClass(
             if (this._clientViews) {
                 for (const [, view] of this._clientViews)
                     this._onTaskListRemoved(null, view.client.source);
+            }
+
+            if (Utils._debounceTimeoutIds.size) {
+                Utils.removeDebounceTimeouts_();
             }
         }
     }

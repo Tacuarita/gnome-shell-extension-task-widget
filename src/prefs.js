@@ -9,6 +9,7 @@ import Gtk from 'gi://Gtk';
 
 import * as Config from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js';
 import * as Utils from './utils.js';
+import system from 'system';
 
 import {
     ExtensionPreferences,
@@ -26,8 +27,6 @@ try {
 } catch (e) {
     HAS_EDS = false;
 }
-
-const GJSVersion = imports.system.version;
 
 /**
  * Enables the use of context in translation of plurals.
@@ -1214,7 +1213,7 @@ const SettingsMenuButton = GObject.registerClass(
                     Config.PACKAGE_VERSION +
                     '\n' +
                     'gjs ' +
-                    GJSVersion +
+                    system.version +
                     '\n' +
                     (Adw ? 'Libadwaita ' + Adw.VERSION_S + '\n' : '') +
                     'Language: ' +
