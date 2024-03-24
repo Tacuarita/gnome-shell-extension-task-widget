@@ -45,22 +45,19 @@
   background-color: transparent;
 }
 
-/**
- * HACK: some of the overriden properties below are there to normalize looks in
- * custom Shell themes.
-*/
-
-.task-widget-column .calendar-month-header .pager {
-  padding: 0;
-}
-
 .task-widget-column .world-clocks-city {
   font-weight: normal;
 }
 
 .task-widget-column .task-list-name {
+  background: transparent;
   margin: 0;
-  height: auto;
+  width: auto;
+}
+
+.task-widget-column .task-list-name-button {
+  padding: 5px 10px;
+  margin: 0;
 }
 
 .task-widget-column .task-list-name:ltr {
@@ -69,22 +66,4 @@
 
 .task-widget-column .task-list-name:rtl {
   padding: 0 0 0 5px;
-}
-
-.task-widget-column .task-list-name-button {
-  padding: 5px 10px;
-  text-shadow: none;
-  min-height: auto;
-  color: inherit;
-}
-
-.task-widget-column .check-box * {
-  padding: 0;
-  margin: 0;
-  min-height: auto;
-  border-radius: 0;
-}
-
-.task-widget-column .check-box StBin {
-  background-size: contain;
 }

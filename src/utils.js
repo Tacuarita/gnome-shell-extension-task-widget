@@ -352,5 +352,6 @@ export function debounce_(func, id, wait, immediate = false) {
  * Removes any remaining timeouts created by the `debounce_` function.
  */
 export function removeDebounceTimeouts_() {
-    _debounceTimeoutIds.keys().forEach((id) => GLib.source_remove(id));
+    if (_debounceTimeoutIds.size)
+        _debounceTimeoutIds.keys().forEach((id) => GLib.source_remove(id));
 }

@@ -75,8 +75,9 @@ const TaskWidget = GObject.registerClass(
                 vertical: true
             });
 
-            this._calendarArea =
-                DateMenu.box.find_child_by_name('calendarArea');
+            this._calendarArea = DateMenu.box
+                .get_first_child()
+                .get_first_child();
             this._messageList = this._calendarArea.get_first_child();
             this._calendarWidget = this._calendarArea.get_last_child();
 
@@ -206,7 +207,7 @@ const TaskWidget = GObject.registerClass(
                     style: `spacing: ${spacing / themeContext.scaleFactor}px`
                 });
 
-                this._scrollView.add_actor(this._taskBox);
+                this._scrollView.add_child(this._taskBox);
                 this._contentBox.add_child(this._scrollView);
 
                 this._themeChangedId = themeContext.connect(
@@ -268,7 +269,7 @@ const TaskWidget = GObject.registerClass(
                 can_focus: true
             });
 
-            this._backButton.add_actor(
+            this._backButton.add_child(
                 new St.Icon({
                     icon_name: 'pan-start-symbolic'
                 })
@@ -313,7 +314,7 @@ const TaskWidget = GObject.registerClass(
                 St.Side.BOTTOM
             );
 
-            Main.uiGroup.add_actor(this._taskListMenu.actor);
+            Main.uiGroup.add_child(this._taskListMenu.actor);
             this._taskListMenu.actor.hide();
             const placeholder = new PopupMenu.PopupMenuItem('placeholder');
             this._taskListMenu.addMenuItem(placeholder);
@@ -339,7 +340,7 @@ const TaskWidget = GObject.registerClass(
                 can_focus: true
             });
 
-            this._forwardButton.add_actor(
+            this._forwardButton.add_child(
                 new St.Icon({
                     icon_name: 'pan-end-symbolic'
                 })
@@ -351,7 +352,7 @@ const TaskWidget = GObject.registerClass(
             );
 
             this._headerBox.add_child(this._backButton);
-            this._headerBox.add_actor(this._taskListNameButton);
+            this._headerBox.add_child(this._taskListNameButton);
             this._headerBox.add_child(this._forwardButton);
             this._contentBox.add_child(this._headerBox);
         }
@@ -952,7 +953,11 @@ const TaskWidget = GObject.registerClass(
             checkbox._task = task;
             checkbox._uid = task._uid;
 
-            checkbox.getLabelActor().add_style_class_name('world-clocks-city');
+            checkbox
+                .getLabelActor()
+                .add_style_class_name(
+                    'world-clocks-header no-world-clocks world-clocks-city'
+                );
 
             checkbox.getLabelActor().clutter_text.line_wrap_mode =
                 Pango.WrapMode.WORD_CHAR;
@@ -2129,9 +2134,7 @@ const TaskWidget = GObject.registerClass(
                     this._onTaskListRemoved(null, view.client.source);
             }
 
-            if (Utils._debounceTimeoutIds.size) {
-                Utils.removeDebounceTimeouts_();
-            }
+            Utils.removeDebounceTimeouts_();
         }
     }
 );
