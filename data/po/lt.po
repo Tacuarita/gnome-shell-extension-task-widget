@@ -3,15 +3,14 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-24 12:57+0100\n"
-"PO-Revision-Date: 2023-10-24 22:06\n"
+"PO-Revision-Date: 2024-03-24 12:01\n"
 "Last-Translator: \n"
 "Language-Team: Lithuanian\n"
 "Language: lt_LT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : "
-"(n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
 "X-Crowdin-Project: task-widget\n"
 "X-Crowdin-Project-ID: 418358\n"
 "X-Crowdin-Language: lt\n"
@@ -97,8 +96,7 @@ msgstr "Klaida: trūksta reikalingų modulių"
 
 #: src/prefs.js:102
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
+msgstr "Kad galėtumėte naudotis šiuo plėtiniu, įrašykite Evolution Data Server."
 
 #: src/prefs.js:107 data/ui/settings-menu.ui:25
 msgid "Help"
@@ -208,14 +206,8 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr "Visos teisės saugomos © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Derinimo pranešimai yra registruojami. Atlikite reikiamus veiksmus, kad "
-"pakartotumėte problemą, o tuomet peržiūrėkite žurnalą. Prašome pašalinti ar "
-"cenzūruoti informaciją, kurią laikote privačia."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Derinimo pranešimai yra registruojami. Atlikite reikiamus veiksmus, kad pakartotumėte problemą, o tuomet peržiūrėkite žurnalą. Prašome pašalinti ar cenzūruoti informaciją, kurią laikote privačia."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -267,9 +259,7 @@ msgstr "Terminas per ateinančią savaitę"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr ""
-"Užduotys, kurių terminas yra per ateinančias septynias dienas, įskaitant "
-"šiandien"
+msgstr "Užduotys, kurių terminas yra per ateinančias septynias dienas, įskaitant šiandien"
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
@@ -295,12 +285,8 @@ msgid "Started"
 msgstr "Pradėtos"
 
 #: data/ui/settings-window.ui:155
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
-msgstr ""
-"Užduotys, kurios arba neturi pradžios datos, arba kurių pradžios data yra "
-"anksčiau nei dabartinis laikas"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgstr "Užduotys, kurios arba neturi pradžios datos, arba kurių pradžios data yra anksčiau nei dabartinis laikas"
 
 #: data/ui/settings-window.ui:163
 msgctxt "used in Not Cancelled Tasks"
@@ -342,11 +328,8 @@ msgid "Task Lists"
 msgstr "Užduočių sąrašai"
 
 #: data/ui/settings-window.ui:271
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą "
-"valdiklyje."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Galite pertempti užduočių sąrašo eilutę ir taip pakeisti jos eiliškumą valdiklyje."
 
 #: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
@@ -384,3 +367,4 @@ msgstr "Paremti"
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr "Paremti kriptovaliutomis"
+
