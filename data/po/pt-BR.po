@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-24 12:57+0100\n"
-"PO-Revision-Date: 2024-03-24 12:01\n"
+"PO-Revision-Date: 2024-03-26 12:29\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -37,7 +37,7 @@ msgstr "Próxima lista de tarefas"
 
 #: src/extension.js:400 src/extension.js:1676
 msgid "All Tasks"
-msgstr "Todas Tarefas"
+msgstr "Todas as tarefas"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
@@ -88,11 +88,11 @@ msgstr "%-d de %B de %Y, %A"
 
 #: src/extension.js:1718
 msgid "No Tasks"
-msgstr "Sem Tarefas"
+msgstr "Sem tarefas"
 
 #: src/extension.js:1726 src/prefs.js:100
 msgid "Error: Missing Dependencies"
-msgstr "Erro: Dependências Faltando"
+msgstr "Erro: dependências faltantes"
 
 #: src/prefs.js:102
 msgid "Please install Evolution Data Server to use this extension."
@@ -144,7 +144,7 @@ msgstr "Atualização em progresso"
 
 #: src/prefs.js:754
 msgid "Refresh Tasks"
-msgstr "Atualizar Tarefas"
+msgstr "Atualizar tarefas"
 
 #: src/prefs.js:762
 msgid "Properties"
@@ -177,11 +177,12 @@ msgstr[1] "dias"
 #: src/prefs.js:1099
 msgctxt "translator name <email>"
 msgid "translator-credits"
-msgstr "Cap <caapppp@outlook.com>"
+msgstr "Cap <caapppp@outlook.com>\n"
+"Filipe Motta <luizfilipemotta@gmail.com>"
 
 #: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:37
 msgid "Support Log"
-msgstr "Log de Suporte"
+msgstr "Log de suporte"
 
 #: data/ui/settings-menu.ui:15
 msgid "About"
@@ -189,11 +190,11 @@ msgstr "Sobre"
 
 #: data/ui/settings-menu.ui:31
 msgid "Copyright © 2020-2023 Juozas Miškinis"
-msgstr ""
+msgstr "Copyright © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
 msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Mensagens de depuração estão sendo registradas. Faça qualquer passo necessário para reproduzir um problema, e então revise o log. Você deve remover ou censurar qualquer informação que considere privada."
+msgstr "Mensagens de depuração estão sendo registradas. Realize os passos necessários para reproduzir um problema, e então revise o log. Você deve remover ou censurar qualquer informação que considere privada."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -201,7 +202,7 @@ msgstr "Cancelar"
 
 #: data/ui/settings-menu.ui:46
 msgid "Review Log"
-msgstr "Consultar log"
+msgstr "Revisar log"
 
 #: data/ui/settings-window.ui:24
 msgid "Settings"
@@ -217,7 +218,7 @@ msgstr "Agrupar tarefas anteriores"
 
 #: data/ui/settings-window.ui:49
 msgid "Hide header for singular task lists"
-msgstr ""
+msgstr "Ocultar cabeçalho para lista única de tarefas"
 
 #: data/ui/settings-window.ui:60
 msgid "Hide empty and completed task lists"
@@ -225,59 +226,59 @@ msgstr "Ocultar listas de tarefas vazias e concluídas"
 
 #: data/ui/settings-window.ui:71
 msgid "Show only selected task categories"
-msgstr ""
+msgstr "Mostrar apenas as categorias de tarefa selecionadas"
 
 #: data/ui/settings-window.ui:93
 msgid "Tasks that were due yesterday or earlier"
-msgstr ""
+msgstr "Tarefas que eram para ontem ou antes"
 
 #: data/ui/settings-window.ui:101
 msgid "Due Today"
-msgstr ""
+msgstr "Para hoje"
 
 #: data/ui/settings-window.ui:109
 msgid "Due Tomorrow"
-msgstr ""
+msgstr "Para amanhã"
 
 #: data/ui/settings-window.ui:122
 msgid "Due in the Next 7 Days"
-msgstr ""
+msgstr "Para os próximos 7 dias"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr ""
+msgstr "Tarefas que são para os próximos sete dias, incluindo hoje"
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
 msgid "Scheduled"
-msgstr ""
+msgstr "Agendadas"
 
 #: data/ui/settings-window.ui:132
 msgid "Tasks that have a due date"
-msgstr ""
+msgstr "Tarefas com prazo determinado"
 
 #: data/ui/settings-window.ui:140
 msgctxt "used in Unscheduled Tasks"
 msgid "Unscheduled"
-msgstr ""
+msgstr "Não agendadas"
 
 #: data/ui/settings-window.ui:141
 msgid "Tasks that have no due date"
-msgstr ""
+msgstr "Tarefas sem prazo determinado"
 
 #: data/ui/settings-window.ui:154
 msgctxt "used in Started Tasks"
 msgid "Started"
-msgstr ""
+msgstr "Iniciadas"
 
 #: data/ui/settings-window.ui:155
 msgid "Tasks that either do not have a start date or the start date is earlier than current time"
-msgstr ""
+msgstr "Tarefas sem data de início ou cuja data de início é anterior ao horário atual"
 
 #: data/ui/settings-window.ui:163
 msgctxt "used in Not Cancelled Tasks"
 msgid "Not Cancelled"
-msgstr ""
+msgstr "Não canceladas"
 
 #: data/ui/settings-window.ui:175
 msgid "Hide completed tasks"
@@ -332,11 +333,11 @@ msgstr "Atuaizar a cada"
 
 #: data/ui/task-list-row.ui:6
 msgid "Move Up"
-msgstr "Mover para Cima"
+msgstr "Mover para cima"
 
 #: data/ui/task-list-row.ui:10
 msgid "Move Down"
-msgstr "Mover para Baixo"
+msgstr "Mover para baixo"
 
 #: data/ui/task-list-row.ui:66
 msgid "Task list options"
@@ -352,5 +353,5 @@ msgstr "Doar"
 
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
-msgstr "Doar Criptomoedas"
+msgstr "Doar criptomoedas"
 
