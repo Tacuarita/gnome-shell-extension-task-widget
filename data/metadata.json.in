@@ -7,11 +7,13 @@
     "name": "Task Widget",
     "description": "Display tasks next to the calendar widget.\n\nVisit our Wiki page for more information and troubleshooting.",
     "version": @EXTENSION_VERSION@,
-    "shell-version": [ "46" ],
+    "shell-version": [ "46", "47" ],
+    "donations": {
+      "buymeacoffee": "jmiskinis",
+      "paypal": "jmiskinis",
+      "liberapay": "joasis"
+    },
     "url": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget",
     "wiki": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis",
-    "dependencies": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Installation",
-    "paypal": "https://paypal.me/jmiskinis",
-    "coffee": "https://www.buymeacoffee.com/nbxwfpm",
-    "liberapay": "https://liberapay.com/joasis/"
+    "dependencies": "https://gitlab.com/jmiskinis/gnome-shell-extension-task-widget/wikis/Installation"
 }

@@ -1310,7 +1310,7 @@ const DonateMenuButton = GObject.registerClass(
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    this._metadata.coffee,
+                    this._metadata.donations.buymeacoffee,
                     null,
                     null,
                     null
@@ -1322,7 +1322,7 @@ const DonateMenuButton = GObject.registerClass(
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    this._metadata.paypal,
+                    this._metadata.donations.paypal,
                     null,
                     null,
                     null
@@ -1334,7 +1334,7 @@ const DonateMenuButton = GObject.registerClass(
 
             action.connect('activate', () => {
                 Gio.AppInfo.launch_default_for_uri_async(
-                    this._metadata.liberapay,
+                    this._metadata.donations.liberapay,
                     null,
                     null,
                     null
