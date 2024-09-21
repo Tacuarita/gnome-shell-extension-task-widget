@@ -187,15 +187,17 @@ const TaskWidget = GObject.registerClass(
                     clip_to_allocation: true
                 });
 
-                this._scrollView.vscroll.adjustment.connect(
-                    'notify::value',
-                    Utils.debounce_(
-                        this._onTaskListScrolled.bind(this),
-                        'vscroll',
-                        100,
-                        false
-                    )
-                );
+                this._scrollView
+                    .get_vscroll_bar()
+                    .adjustment.connect(
+                        'notify::value',
+                        Utils.debounce_(
+                            this._onTaskListScrolled.bind(this),
+                            'vscroll',
+                            100,
+                            false
+                        )
+                    );
 
                 this._threshold =
                     Utils.LL_THRESHOLD_ * themeContext.scale_factor;
@@ -921,7 +923,7 @@ const TaskWidget = GObject.registerClass(
                 };
 
                 const allocation = self.get_allocation_box();
-                const { adjustment } = this._scrollView.vscroll;
+                const { adjustment } = this._scrollView.get_vscroll_bar();
                 const height = this._taskBox.allocation.get_height();
 
                 // Updates scrollbar adjustment when user navigates task
@@ -1202,7 +1204,7 @@ const TaskWidget = GObject.registerClass(
         _idleAddHelper(item) {
             if (!this._idleAddId) return;
 
-            const { adjustment } = this._scrollView.vscroll;
+            const { adjustment } = this._scrollView.get_vscroll_bar();
             const height = this._taskBox.get_allocation_box().get_height();
             const limit = this._upperLimit + height + this._threshold;
 
@@ -1865,7 +1867,9 @@ const TaskWidget = GObject.registerClass(
             if (!fullReset) return;
 
             delete this._focused;
-            this._scrollView.vscroll.adjustment.set_values(0, 0, 0, 0, 0, 0);
+            this._scrollView
+                .get_vscroll_bar()
+                .adjustment.set_values(0, 0, 0, 0, 0, 0);
             this._upperLimit = 0;
         }
 
