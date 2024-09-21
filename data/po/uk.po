@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-24 12:57+0100\n"
+"POT-Creation-Date: 2024-09-21 19:55+0200\n"
 "PO-Revision-Date: 2024-03-24 12:01\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -10,7 +10,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 "
+"&& n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 "
+"&& n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Crowdin-Project: task-widget\n"
 "X-Crowdin-Project-ID: 418358\n"
 "X-Crowdin-Language: uk\n"
@@ -23,43 +25,43 @@ msgstr ""
 msgid "Loading"
 msgstr "Завантаження"
 
-#: src/extension.js:268
+#: src/extension.js:270
 msgid "Previous task list"
 msgstr "Попередній список завдань"
 
-#: src/extension.js:304
+#: src/extension.js:306
 msgid "Select task list"
 msgstr "Вибір списку завдань"
 
-#: src/extension.js:339
+#: src/extension.js:341
 msgid "Next task list"
 msgstr "Наступний список завдань"
 
-#: src/extension.js:400 src/extension.js:1676
+#: src/extension.js:402 src/extension.js:1678
 msgid "All Tasks"
 msgstr "Усі завдання"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:999
+#: src/extension.js:1001
 msgid "Orphan task"
 msgstr "Загублене завдання"
 
-#: src/extension.js:1019
+#: src/extension.js:1021
 msgid "Beginning of a subtask list"
 msgstr "Початок списку підзавдань"
 
-#: src/extension.js:1085
+#: src/extension.js:1087
 msgid "No due date"
 msgstr "Без терміну"
 
-#: src/extension.js:1087
+#: src/extension.js:1089
 msgid "Today"
 msgstr "Сьогодні"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:1095 data/ui/settings-window.ui:92
+#: src/extension.js:1097 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr "Минулі"
 
@@ -76,21 +78,21 @@ msgstr "Минулі"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:1114
+#: src/extension.js:1116
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%A, %-d %B"
 
-#: src/extension.js:1115
+#: src/extension.js:1117
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%A, %-d %B, %Y р."
 
-#: src/extension.js:1718
+#: src/extension.js:1720
 msgid "No Tasks"
 msgstr "Завдань немає"
 
-#: src/extension.js:1726 src/prefs.js:100
+#: src/extension.js:1728 src/prefs.js:100
 msgid "Error: Missing Dependencies"
 msgstr "Помилка: треба задовольнити залежності"
 
@@ -206,8 +208,14 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr "Copyright © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
-msgstr "Увімкнено режим налагодження із журналюванням повідомлень. Виконайте дії, що призводять до виникнення проблем, перегляньте журнал і приховайте в ньому всю особисту інформацію, перш ніж надсилати."
+msgid ""
+"Debug messages are being logged. Take any steps necessary to reproduce a "
+"problem, then review the log. You should remove or censor any information "
+"you consider private."
+msgstr ""
+"Увімкнено режим налагодження із журналюванням повідомлень. Виконайте дії, що "
+"призводять до виникнення проблем, перегляньте журнал і приховайте в ньому "
+"всю особисту інформацію, перш ніж надсилати."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -259,7 +267,8 @@ msgstr "На наступні 7 днів"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr "Завдання, які треба зробити за наступні 7 днів, включно з сьогоднішнім."
+msgstr ""
+"Завдання, які треба зробити за наступні 7 днів, включно з сьогоднішнім."
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
@@ -285,7 +294,9 @@ msgid "Started"
 msgstr "Розпочаті"
 
 #: data/ui/settings-window.ui:155
-msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgid ""
+"Tasks that either do not have a start date or the start date is earlier than "
+"current time"
 msgstr "Завдання, що почалися раніше або не мають дати початку."
 
 #: data/ui/settings-window.ui:163
@@ -328,7 +339,8 @@ msgid "Task Lists"
 msgstr "Списки завдань"
 
 #: data/ui/settings-window.ui:271
-msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgid ""
+"You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Перетягуйте рядки, щоб змінити порядок показу списків у віджеті."
 
 #: data/ui/task-list-properties-dialog.ui:12
@@ -367,4 +379,3 @@ msgstr "Підтримати"
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr "Підтримати крипотовалютами"
-
