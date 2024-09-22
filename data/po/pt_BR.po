@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-24 12:57+0100\n"
-"PO-Revision-Date: 2024-03-26 12:29\n"
+"PO-Revision-Date: 2024-09-22 21:08\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -61,7 +61,7 @@ msgstr "Hoje"
 #. due date in the past.
 #: src/extension.js:1095 data/ui/settings-window.ui:92
 msgid "Past"
-msgstr "Passadas"
+msgstr "Anteriores"
 
 #. Translators: %A is the weekday name (e.g. Friday)
 #. %B is the name of the month (e.g. February)
