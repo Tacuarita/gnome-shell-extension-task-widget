@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-21 19:55+0200\n"
+"POT-Creation-Date: 2024-03-24 12:57+0100\n"
 "PO-Revision-Date: 2024-03-26 12:29\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
@@ -23,43 +23,43 @@ msgstr ""
 msgid "Loading"
 msgstr "Carregando"
 
-#: src/extension.js:270
+#: src/extension.js:268
 msgid "Previous task list"
 msgstr "Lista de tarefas anterior"
 
-#: src/extension.js:306
+#: src/extension.js:304
 msgid "Select task list"
 msgstr "Selecione uma lista de tarefas"
 
-#: src/extension.js:341
+#: src/extension.js:339
 msgid "Next task list"
 msgstr "Próxima lista de tarefas"
 
-#: src/extension.js:402 src/extension.js:1678
+#: src/extension.js:400 src/extension.js:1676
 msgid "All Tasks"
 msgstr "Todas as tarefas"
 
 #. Translators: this denotes a subtask with an inaccessible
 #. parent task.
-#: src/extension.js:1001
+#: src/extension.js:999
 msgid "Orphan task"
 msgstr "Tarefa órfã"
 
-#: src/extension.js:1021
+#: src/extension.js:1019
 msgid "Beginning of a subtask list"
 msgstr "Início de uma lista de subtarefas"
 
-#: src/extension.js:1087
+#: src/extension.js:1085
 msgid "No due date"
 msgstr "Sem prazo"
 
-#: src/extension.js:1089
+#: src/extension.js:1087
 msgid "Today"
 msgstr "Hoje"
 
 #. Translators: this is a category name for tasks with
 #. due date in the past.
-#: src/extension.js:1097 data/ui/settings-window.ui:92
+#: src/extension.js:1095 data/ui/settings-window.ui:92
 msgid "Past"
 msgstr "Passadas"
 
@@ -76,28 +76,27 @@ msgstr "Passadas"
 #.
 #. The idea is of course to adjust these placeholders
 #. according to the format used in your language.
-#: src/extension.js:1116
+#: src/extension.js:1114
 msgctxt "task due date"
 msgid "%A, %B %-d"
 msgstr "%-d de %B, %A"
 
-#: src/extension.js:1117
+#: src/extension.js:1115
 msgctxt "task due date with a year"
 msgid "%A, %B %-d, %Y"
 msgstr "%-d de %B de %Y, %A"
 
-#: src/extension.js:1720
+#: src/extension.js:1718
 msgid "No Tasks"
 msgstr "Sem tarefas"
 
-#: src/extension.js:1728 src/prefs.js:100
+#: src/extension.js:1726 src/prefs.js:100
 msgid "Error: Missing Dependencies"
 msgstr "Erro: dependências faltantes"
 
 #: src/prefs.js:102
 msgid "Please install Evolution Data Server to use this extension."
-msgstr ""
-"Por favor instale o Servidor de Dados do Evolution para usar esta extensão."
+msgstr "Por favor instale o Servidor de Dados do Evolution para usar esta extensão."
 
 #: src/prefs.js:107 data/ui/settings-menu.ui:25
 msgid "Help"
@@ -178,8 +177,7 @@ msgstr[1] "dias"
 #: src/prefs.js:1099
 msgctxt "translator name <email>"
 msgid "translator-credits"
-msgstr ""
-"Cap <caapppp@outlook.com>\n"
+msgstr "Cap <caapppp@outlook.com>\n"
 "Filipe Motta <luizfilipemotta@gmail.com>"
 
 #: data/ui/settings-menu.ui:7 data/ui/settings-menu.ui:37
@@ -195,14 +193,8 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr "Copyright © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Mensagens de depuração estão sendo registradas. Realize os passos "
-"necessários para reproduzir um problema, e então revise o log. Você deve "
-"remover ou censurar qualquer informação que considere privada."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Mensagens de depuração estão sendo registradas. Realize os passos necessários para reproduzir um problema, e então revise o log. Você deve remover ou censurar qualquer informação que considere privada."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -280,11 +272,8 @@ msgid "Started"
 msgstr "Iniciadas"
 
 #: data/ui/settings-window.ui:155
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
-msgstr ""
-"Tarefas sem data de início ou cuja data de início é anterior ao horário atual"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
+msgstr "Tarefas sem data de início ou cuja data de início é anterior ao horário atual"
 
 #: data/ui/settings-window.ui:163
 msgctxt "used in Not Cancelled Tasks"
@@ -326,11 +315,8 @@ msgid "Task Lists"
 msgstr "Listas de Tarefas"
 
 #: data/ui/settings-window.ui:271
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
-msgstr ""
-"Você pode arrastar e soltar as linhas para alterar a ordem das listas de "
-"tarefas no widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
+msgstr "Você pode arrastar e soltar as linhas para alterar a ordem das listas de tarefas no widget."
 
 #: data/ui/task-list-properties-dialog.ui:12
 msgid "Task List Properties"
@@ -368,3 +354,4 @@ msgstr "Doar"
 #: data/ui/donate-menu.ui:33
 msgid "Donate Cryptocurrencies"
 msgstr "Doar criptomoedas"
+
