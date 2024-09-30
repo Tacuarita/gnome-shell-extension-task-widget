@@ -862,40 +862,22 @@ const TaskListRow = GObject.registerClass(
         /**
          * Prepares drag and drop operations.
          *
-         * @param {*} y - the Y coordinate of the drag starting point.
-         * @param {*} x - the X coordinate of the drag starting point.
+         * @param {Gtk.DragSource} source - `Gtk.DragSource` of the drag and
+         * drop operation.
          *
          * @returns {Gdk.ContentProvider} Type of content to provide in drag and
          * drop operations.
          */
-        _dragPrepare(y, x) {
-            const taskListBox = this.get_parent();
-            taskListBox.dragX = x;
-            taskListBox.dragY = y;
-            return Gdk.ContentProvider.new_for_value(this);
-        }
-
-        /**
-         * Initializes drag and drop operations.
-         *
-         * @param {Gtk.DragSource} source - `Gtk.DragSource` of the drag and
-         * drop operation.
-         */
-        _dragBegin(source) {
+        _dragPrepare(source) {
             this.get_style_context().add_class('drag-icon');
-            const taskListBox = this.get_parent();
-
-            source.set_icon(
-                Gtk.WidgetPaintable.new(this),
-                taskListBox.dragX,
-                taskListBox.dragY
-            );
+            source.set_icon(Gtk.WidgetPaintable.new(this), 0, 0);
+            return Gdk.ContentProvider.new_for_value(this);
         }
 
         /**
          * Handles the `drop` part of a drag and drop operation.
          *
-         * @param {Gtk.DropTarget} target - `tk.DropTarget` of the drag and
+         * @param {Gtk.DropTarget} target - `Gtk.DropTarget` of the drag and
          * drop operation.
          */
         _dragDrop(target) {
