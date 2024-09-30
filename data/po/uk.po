@@ -3,16 +3,14 @@ msgstr ""
 "Project-Id-Version: task-widget\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 16:45+0200\n"
-"PO-Revision-Date: 2024-09-22 21:08\n"
+"PO-Revision-Date: 2024-09-30 14:48\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 "
-"&& n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 "
-"&& n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Crowdin-Project: task-widget\n"
 "X-Crowdin-Project-ID: 418358\n"
 "X-Crowdin-Language: uk\n"
@@ -208,14 +206,8 @@ msgid "Copyright © 2020-2023 Juozas Miškinis"
 msgstr "Copyright © 2020-2023 Juozas Miškinis"
 
 #: data/ui/settings-menu.ui:38
-msgid ""
-"Debug messages are being logged. Take any steps necessary to reproduce a "
-"problem, then review the log. You should remove or censor any information "
-"you consider private."
-msgstr ""
-"Увімкнено режим налагодження із журналюванням повідомлень. Виконайте дії, що "
-"призводять до виникнення проблем, перегляньте журнал і приховайте в ньому "
-"всю особисту інформацію, перш ніж надсилати."
+msgid "Debug messages are being logged. Take any steps necessary to reproduce a problem, then review the log. You should remove or censor any information you consider private."
+msgstr "Увімкнено режим налагодження із журналюванням повідомлень. Виконайте дії, що призводять до виникнення проблем, перегляньте журнал і приховайте в ньому всю особисту інформацію, перш ніж надсилати."
 
 #: data/ui/settings-menu.ui:41 data/ui/task-list-properties-dialog.ui:21
 msgid "Cancel"
@@ -267,8 +259,7 @@ msgstr "На наступні 7 днів"
 
 #: data/ui/settings-window.ui:123
 msgid "Tasks that are due in the next seven days including today"
-msgstr ""
-"Завдання, які треба зробити за наступні 7 днів, включно з сьогоднішнім."
+msgstr "Завдання, які треба зробити за наступні 7 днів, включно з сьогоднішнім."
 
 #: data/ui/settings-window.ui:131
 msgctxt "used in Scheduled Tasks"
@@ -294,9 +285,7 @@ msgid "Started"
 msgstr "Розпочаті"
 
 #: data/ui/settings-window.ui:155
-msgid ""
-"Tasks that either do not have a start date or the start date is earlier than "
-"current time"
+msgid "Tasks that either do not have a start date or the start date is earlier than current time"
 msgstr "Завдання, що почалися раніше або не мають дати початку."
 
 #: data/ui/settings-window.ui:163
@@ -339,8 +328,7 @@ msgid "Task Lists"
 msgstr "Списки завдань"
 
 #: data/ui/settings-window.ui:271
-msgid ""
-"You can drag and drop rows to change the order of task lists in the widget."
+msgid "You can drag and drop rows to change the order of task lists in the widget."
 msgstr "Перетягуйте рядки, щоб змінити порядок показу списків у віджеті."
 
 #: data/ui/task-list-properties-dialog.ui:12
@@ -368,11 +356,3 @@ msgstr "Пересунути вниз"
 msgid "Task list options"
 msgstr "Параметри списку завдань"
 
-#~ msgid "Cryptocurrencies"
-#~ msgstr "Криптовалюти"
-
-#~ msgid "Donate"
-#~ msgstr "Підтримати"
-
-#~ msgid "Donate Cryptocurrencies"
-#~ msgstr "Підтримати крипотовалютами"
