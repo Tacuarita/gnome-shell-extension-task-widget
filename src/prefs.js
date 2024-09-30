@@ -697,7 +697,6 @@ const TaskWidgetSettings = GObject.registerClass(
             );
 
             headerBar.pack_end(new SettingsMenuButton(this));
-            headerBar.pack_end(new DonateMenuButton(this));
         }
     }
 );
@@ -1261,94 +1260,6 @@ const SettingsMenuButton = GObject.registerClass(
             } catch (e) {
                 logError(e);
             }
-        }
-    }
-);
-
-const DonateMenuButton = GObject.registerClass(
-    {
-        GTypeName: 'DonateMenuButton',
-        Template:
-            'resource:///org/gnome/shell/extensions/task-widget/donate-menu.ui',
-        InternalChildren: [
-            'donateCrypto',
-            'donateOptionsComboBox',
-            'donateOptionsStack'
-        ]
-    },
-    class DonateMenuButton extends Gtk.MenuButton {
-        /**
-         * Initializes the donations menu.
-         *
-         * @param {TaskWidgetSettings} widget - Reference to the main widget
-         * class.
-         */
-        _init(widget) {
-            super._init();
-            this._metadata = widget._metadata;
-            this._donateCrypto.set_transient_for(widget._window);
-            const actionGroup = new Gio.SimpleActionGroup();
-            let action = new Gio.SimpleAction({ name: 'coffee' });
-
-            action.connect('activate', () => {
-                Gio.AppInfo.launch_default_for_uri_async(
-                    this._metadata.donations.buymeacoffee,
-                    null,
-                    null,
-                    null
-                );
-            });
-
-            actionGroup.add_action(action);
-            action = new Gio.SimpleAction({ name: 'paypal' });
-
-            action.connect('activate', () => {
-                Gio.AppInfo.launch_default_for_uri_async(
-                    this._metadata.donations.paypal,
-                    null,
-                    null,
-                    null
-                );
-            });
-
-            actionGroup.add_action(action);
-            action = new Gio.SimpleAction({ name: 'liberapay' });
-
-            action.connect('activate', () => {
-                Gio.AppInfo.launch_default_for_uri_async(
-                    this._metadata.donations.liberapay,
-                    null,
-                    null,
-                    null
-                );
-            });
-
-            actionGroup.add_action(action);
-            action = new Gio.SimpleAction({ name: 'crypto' });
-            action.connect('activate', () => this._donateCrypto.present());
-            actionGroup.add_action(action);
-            this.insert_action_group('donate-menu', actionGroup);
-
-            this._donateOptionsComboBox.connect('changed', (option) => {
-                switch (option.active_id) {
-                    case 'bitcoin':
-                        this._donateOptionsStack.set_visible_child_name(
-                            'donateBitcoinPage'
-                        );
-
-                        break;
-                    case 'bitcoin-cash':
-                        this._donateOptionsStack.set_visible_child_name(
-                            'donateBitcoinCashPage'
-                        );
-
-                        break;
-                    case 'ethereum':
-                        this._donateOptionsStack.set_visible_child_name(
-                            'donateEthereumPage'
-                        );
-                }
-            });
         }
     }
 );
