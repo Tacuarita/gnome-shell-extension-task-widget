@@ -72,12 +72,13 @@ const TaskWidget = GObject.registerClass(
                 // better compatibility with custom Shell themes.
                 style_class:
                     'datemenu-calendar-column task-widget-column message-list',
-                vertical: true
+                orientation: Clutter.Orientation.VERTICAL
             });
 
             this._calendarArea = DateMenu.box
                 .get_first_child()
                 .get_first_child();
+
             this._messageList = this._calendarArea.get_first_child();
             this._calendarWidget = this._calendarArea.get_last_child();
 
@@ -110,7 +111,7 @@ const TaskWidget = GObject.registerClass(
             });
 
             const labeledIconBox = new St.BoxLayout({
-                vertical: true,
+                orientation: Clutter.Orientation.VERTICAL,
                 style_class: 'message-list-placeholder'
             });
 
@@ -140,7 +141,7 @@ const TaskWidget = GObject.registerClass(
             try {
                 this._contentBox = new St.BoxLayout({
                     style_class: `calendar world-clocks-button transparent`,
-                    vertical: true
+                    orientation: Clutter.Orientation.VERTICAL
                 });
 
                 this._calendarWidget.add_style_class_name(
@@ -188,8 +189,8 @@ const TaskWidget = GObject.registerClass(
                 });
 
                 this._scrollView
-                    .get_vscroll_bar()
-                    .adjustment.connect(
+                    .get_vadjustment()
+                    .connect(
                         'notify::value',
                         Utils.debounce_(
                             this._onTaskListScrolled.bind(this),
@@ -205,7 +206,7 @@ const TaskWidget = GObject.registerClass(
                 const spacing = this.get_theme_node().get_length('spacing') * 2;
 
                 this._taskBox = new St.BoxLayout({
-                    vertical: true,
+                    orientation: Clutter.Orientation.VERTICAL,
                     style: `spacing: ${spacing / themeContext.scaleFactor}px`
                 });
 
@@ -923,7 +924,7 @@ const TaskWidget = GObject.registerClass(
                 };
 
                 const allocation = self.get_allocation_box();
-                const { adjustment } = this._scrollView.get_vscroll_bar();
+                const adjustment = this._scrollView.get_vadjustment();
                 const height = this._taskBox.allocation.get_height();
 
                 // Updates scrollbar adjustment when user navigates task
@@ -1139,7 +1140,7 @@ const TaskWidget = GObject.registerClass(
             if (!due || checkbox.checked) return checkbox;
 
             const box = new St.BoxLayout({
-                vertical: true
+                orientation: Clutter.Orientation.VERTICAL
             });
 
             const subTaskSummary = checkbox.child.get_child_at_index(2);
@@ -1204,7 +1205,7 @@ const TaskWidget = GObject.registerClass(
         _idleAddHelper(item) {
             if (!this._idleAddId) return;
 
-            const { adjustment } = this._scrollView.get_vscroll_bar();
+            const adjustment = this._scrollView.get_vadjustment();
             const height = this._taskBox.get_allocation_box().get_height();
             const limit = this._upperLimit + height + this._threshold;
 
@@ -1867,9 +1868,7 @@ const TaskWidget = GObject.registerClass(
             if (!fullReset) return;
 
             delete this._focused;
-            this._scrollView
-                .get_vscroll_bar()
-                .adjustment.set_values(0, 0, 0, 0, 0, 0);
+            this._scrollView.get_vadjustment().set_values(0, 0, 0, 0, 0, 0);
             this._upperLimit = 0;
         }
 
@@ -1916,7 +1915,7 @@ const TaskWidget = GObject.registerClass(
             // widget:
             const [r, l] = [St.Side.RIGHT, St.Side.LEFT].map(
                 (side) =>
-                    this._messageList._sectionList
+                    this._messageList._messageView
                         .get_theme_node()
                         .get_margin(side) / context.scale_factor
             );
