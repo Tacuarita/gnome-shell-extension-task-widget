@@ -1,4 +1,5 @@
 {
+    "_comment": "Modified by Tacuarita on 2026-11-04 and 2026-11-23.",
     "uuid": "@EXTENSION_UUID@",
     "settings-schema": "@EXTENSION_BASE@",
     "gettext-domain": "@EXTENSION_BASE@",
@@ -7,7 +8,7 @@
     "name": "Task Widget",
     "description": "Display tasks next to the calendar widget.\n\nVisit our Wiki page for more information and troubleshooting.",
     "version": @EXTENSION_VERSION@,
-    "shell-version": [ "48" ],
+    "shell-version": [ "48", "51" ],
     "donations": {
       "buymeacoffee": "jmiskinis",
       "paypal": "jmiskinis",

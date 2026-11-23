@@ -1,3 +1,4 @@
+/* Modified by Tacuarita on 2026-11-04 and 2026-11-05. */
 .task-widget-remove-calendar-margin:ltr {
   margin-right: 0;
 }
@@ -14,6 +15,14 @@
 .task-widget-column {
   margin: 0;
   padding: 0;
+}
+
+#taskWidget.task-widget-transparent,
+#taskWidget.task-widget-transparent .calendar {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .task-widget-column .task-icon {
@@ -66,4 +75,71 @@
 
 .task-widget-column .task-list-name:rtl {
   padding: 0 0 0 5px;
+}
+
+.task-widget-add-task {
+  margin: 8px;
+}
+
+.task-widget-task-menu {
+  padding: 4px;
+  margin-left: 8px;
+}
+
+#taskWidget .task-widget-task-menu StIcon {
+  icon-size: 14px;
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+#taskWidget .task-widget-task-title {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  text-align: left;
+}
+
+#taskWidget .task-widget-task-title:focus {
+  background-color: rgba(128, 128, 128, 0.15);
+}
+
+.task-widget-inline-actions {
+  spacing: 6px;
+  margin: 4px 0 4px 24px;
+}
+
+.task-widget-inline-actions .button,
+.task-widget-editor .button {
+  padding: 5px 8px;
+}
+
+.task-widget-editor {
+  padding: 8px;
+  spacing: 8px;
+  border-radius: 8px;
+  background-color: rgba(128, 128, 128, 0.12);
+}
+
+.task-widget-editor-subtask {
+  margin-left: 24px;
+}
+
+.task-widget-editor-title {
+  font-weight: bold;
+}
+
+.task-widget-editor-buttons {
+  spacing: 6px;
+}
+
+.task-widget-editor-notes {
+  min-height: 3em;
+}
+
+.task-widget-editor-error {
+  color: #ff8080;
 }

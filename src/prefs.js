@@ -1,3 +1,4 @@
+// Modified by Tacuarita on 2026-11-04 and 2026-11-05.
 'use strict';
 
 import Adw from 'gi://Adw';
@@ -136,6 +137,7 @@ const TaskWidgetSettings = GObject.registerClass(
         Template:
             'resource:///org/gnome/shell/extensions/task-widget/settings-window.ui',
         InternalChildren: [
+            'transparentBackgroundSwitch',
             'mtlSwitch',
             'gptSwitch',
             'hhfstlSwitch',
@@ -213,6 +215,7 @@ const TaskWidgetSettings = GObject.registerClass(
             });
 
             [
+                ['transparent-background', this._transparentBackgroundSwitch],
                 ['merge-task-lists', this._mtlSwitch],
                 ['group-past-tasks', this._gptSwitch],
                 ['hide-header-for-singular-task-lists', this._hhfstlSwitch],
@@ -403,21 +406,16 @@ const TaskWidgetSettings = GObject.registerClass(
 
                 for (const [, client] of this._clients) {
                     const remote = client.check_refresh_supported();
+                    const parent = Utils.getParentSource_(
+                        this._sourceRegistry, client.source);
 
-                    if (remote) {
+                    if (remote && parent) {
                         // Account name (usually an email address):
-                        const account = this._sourceRegistry.ref_source(
-                            client.source.get_parent()
-                        ).display_name;
+                        const account = parent.display_name;
 
                         // Keep an object of unique accounts:
                         if (!accounts.get(account)) {
-                            accounts.set(
-                                account,
-                                this._sourceRegistry.ref_source(
-                                    client.source.get_parent()
-                                )
-                            );
+                            accounts.set(account, parent);
                         }
                     }
 
@@ -729,10 +727,10 @@ const TaskListRow = GObject.registerClass(
             this._uid = this._source.uid;
             this.set_title(this._source.display_name);
 
+            const parent = Utils.getParentSource_(
+                widget._sourceRegistry, this._source);
             this._taskListProvider.set_text(
-                widget._sourceRegistry.ref_source(this._source.get_parent())
-                    .display_name
-            );
+                parent?.display_name ?? _('Standalone'));
 
             this._taskListSwitch.active =
                 this._settings

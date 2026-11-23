@@ -1,6 +1,9 @@
+# Modified by Tacuarita on 2026-11-04.
 src/extension.js
 src/prefs.js
 src/utils.js
+src/taskEditor.js
+src/taskStore.js
 data/ui/settings-menu.ui
 data/ui/settings-window.ui
 data/ui/task-list-properties-dialog.ui

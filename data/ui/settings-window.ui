@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Modified by Tacuarita on 2026-11-04. -->
 <interface domain="org.gnome.shell.extensions.task-widget">
   <requires lib="gtk" version="4.0"/>
   <object class="GtkAdjustment" id="hctApotacAdjustment">
@@ -22,6 +23,18 @@
     <child>
       <object class="AdwPreferencesGroup" id="mainSettingsGroup">
         <property name="title" translatable="yes">Settings</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Transparent background</property>
+            <property name="subtitle" translatable="yes">Show tasks without a background panel</property>
+            <property name="activatable-widget">transparentBackgroundSwitch</property>
+            <child>
+              <object class="GtkSwitch" id="transparentBackgroundSwitch">
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Merge task lists</property>

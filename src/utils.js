@@ -1,3 +1,4 @@
+// Modified by Tacuarita on 2026-11-04 and 2026-11-05.
 'use strict';
 
 import Gio from 'gi://Gio';
@@ -42,6 +43,12 @@ export const HIDE_COMPLETED_TASKS_IS_TIME_DEPENDENT_ = (value) => {
         HIDE_COMPLETED_TASKS_['after-specified-time']
     ].includes(value);
 };
+
+/** Gets the parent account, if this source belongs to one. */
+export function getParentSource_(registry, source) {
+    const uid = source.get_parent();
+    return uid ? registry.ref_source(uid) : null;
+}
 
 /**
  * Gets the source registry.

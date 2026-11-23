@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Modified by Tacuarita on 2026-11-04. -->
 <schemalist>
   <schema id="org.gnome.shell.extensions.task-widget"
         path="/org/gnome/shell/extensions/task-widget/">
@@ -7,6 +8,11 @@
     </key>
     <key name="merge-task-lists" type="b">
       <default>false</default>
+    </key>
+    <key name="transparent-background" type="b">
+      <default>false</default>
+      <summary>Transparent background</summary>
+      <description>Show tasks without a background panel.</description>
     </key>
     <key name="group-past-tasks" type="b">
       <default>true</default>

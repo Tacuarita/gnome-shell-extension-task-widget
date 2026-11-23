@@ -1,3 +1,4 @@
+// Modified by Tacuarita on 2026-11-04 and 2026-11-05.
 'use strict';
 
 import Atk from 'gi://Atk';
@@ -94,9 +95,23 @@ const TaskWidget = GObject.registerClass(
             this._calendarArea.add_child(this);
             this._settings = settings;
             this._metadata = metadata;
+            this._syncBackground();
+            this._settings.connectObject(
+                'changed::transparent-background',
+                () => this._syncBackground(),
+                this
+            );
             this.connect('destroy', this._onDestroy.bind(this));
             this._buildPlaceholder();
             this._initTaskLists();
+        }
+
+        /** Updates the optional background styling without reloading tasks. */
+        _syncBackground() {
+            if (this._settings.get_boolean('transparent-background'))
+                this.add_style_class_name('task-widget-transparent');
+            else
+                this.remove_style_class_name('task-widget-transparent');
         }
 
         /**
@@ -182,6 +197,13 @@ const TaskWidget = GObject.registerClass(
                 await this._initSourceRegistry();
                 await this._storeTaskLists(true);
                 this._buildHeader();
+                this._addTaskButton = new St.Button({
+                    label: _('Add task…'),
+                    style_class: 'button task-widget-add-task',
+                    can_focus: true
+                });
+                this._addTaskButton.connect('clicked', () => this._openTaskEditor());
+                this.add_child(this._addTaskButton);
 
                 this._scrollView = new St.ScrollView({
                     style_class: 'vfade',
@@ -792,6 +814,8 @@ const TaskWidget = GObject.registerClass(
                         )
                     );
 
+                    if (this._destroyed || this._editor) return true;
+
                     if (!taskLists.length || this._idleAddId) return;
 
                     if (
@@ -830,6 +854,8 @@ const TaskWidget = GObject.registerClass(
                     const tasks = await this._filterTasks(
                         this._clientViews.get(taskListUid).client
                     );
+
+                    if (this._destroyed || this._editor) return true;
 
                     if (!tasks || this._idleAddId) return;
 
@@ -912,6 +938,9 @@ const TaskWidget = GObject.registerClass(
             const checkbox = new CheckBox.CheckBox(
                 task.get_summary().get_value()
             );
+            // CheckBox's internal expanding container must not stretch rows
+            // when the task list is reallocated after an interaction.
+            checkbox.y_expand = false;
 
             // Keep track of the focused checkbox for users using
             // keyboard navigation:
@@ -956,6 +985,34 @@ const TaskWidget = GObject.registerClass(
             checkbox._task = task;
             checkbox._uid = task._uid;
 
+            const client = this._clientViews.get(task._taskList)?.client;
+            if (client && !client.is_readonly()) {
+                const menuButton = new St.Button({
+                    style_class: 'button flat task-widget-task-menu',
+                    accessible_name: _('Task actions'),
+                    can_focus: true,
+                    y_align: Clutter.ActorAlign.CENTER,
+                    child: new St.Icon({icon_name: 'view-more-symbolic'})
+                });
+                menuButton.connect('clicked', () =>
+                    this._openTaskActions(checkbox));
+                checkbox._actionsButton = menuButton;
+                checkbox.getLabelActor().x_expand = true;
+                const summary = checkbox.getLabelActor();
+                checkbox.child.remove_child(summary);
+                const titleButton = new St.Button({
+                    child: summary,
+                    style_class: 'task-widget-task-title',
+                    can_focus: true,
+                    x_expand: true,
+                    y_expand: false
+                });
+                titleButton.connect('clicked', () => this._openTaskEditor(task));
+                checkbox._titleButton = titleButton;
+                checkbox.child.add_child(titleButton);
+                checkbox.child.add_child(menuButton);
+            }
+
             checkbox
                 .getLabelActor()
                 .add_style_class_name(
@@ -971,13 +1028,15 @@ const TaskWidget = GObject.registerClass(
                 checkbox.set_can_focus(false);
 
                 checkbox.getLabelActor().add_style_class_name('task-cancelled');
-            } else {
+            } else if (client && !client.is_readonly()) {
                 checkbox.connect('clicked', () =>
                     this._taskClicked(
                         checkbox,
                         this._clientViews.get(task._taskList).client
                     )
                 );
+            } else {
+                checkbox.set_toggle_mode(false);
             }
 
             if (task._orphan) return this._styleOrphanTaskCheckbox(checkbox);
@@ -1651,6 +1710,168 @@ const TaskWidget = GObject.registerClass(
             }
         }
 
+        _closeTaskActions() {
+            this._taskActions?.destroy();
+            this._taskActions = null;
+        }
+
+        _openTaskActions(checkbox) {
+            if (this._editor) {
+                this._editor.open();
+                return;
+            }
+            const same = this._taskActions?._anchor === checkbox;
+            this._closeTaskActions();
+            if (same) return;
+            const actions = new St.BoxLayout({
+                style_class: 'task-widget-inline-actions',
+                y_expand: false
+            });
+            actions._anchor = checkbox;
+            this._taskActions = actions;
+            for (const [label, action] of [
+                [_('Edit task'), () => this._openTaskEditor(checkbox._task)],
+                [_('Add subtask'), () =>
+                    this._openTaskEditor(null, checkbox._task)],
+                [_('Delete'), () => this._openTaskDelete(checkbox._task)]
+            ]) {
+                const button = new St.Button({label, style_class: 'button',
+                    can_focus: true, x_expand: true, y_expand: false});
+                button.connect('clicked', action);
+                actions.add_child(button);
+            }
+            this._taskBox.insert_child_at_index(actions,
+                this._taskBox.get_children().indexOf(checkbox) + 1);
+            actions.connect('key-press-event', (_actor, event) => {
+                if (event.get_key_symbol() !== Clutter.KEY_Escape)
+                    return Clutter.EVENT_PROPAGATE;
+                this._closeTaskActions();
+                checkbox._actionsButton.grab_key_focus();
+                return Clutter.EVENT_STOP;
+            });
+            actions.connect('destroy', () => {
+                if (this._taskActions === actions) this._taskActions = null;
+            });
+            actions.get_first_child().grab_key_focus();
+        }
+
+        _mountInlineEditor(editor, anchorTask = null, subtask = false) {
+            const previousListUid =
+                this._taskLists[this._activeTaskList]?.uid;
+            this._closeTaskActions();
+            this._resetTaskBox();
+            if (this._cleanUpId) {
+                GLib.source_remove(this._cleanUpId);
+                delete this._cleanUpId;
+            }
+            this._editor = editor;
+            const anchor = this._taskBox.get_children().find(row =>
+                row._task && row._uid === anchorTask?._uid);
+            const index = anchor
+                ? this._taskBox.get_children().indexOf(anchor) + 1 : 0;
+            if (subtask)
+                editor.add_style_class_name('task-widget-editor-subtask');
+            editor.connect('notify::allocation', () => {
+                if (editor._didScroll || editor.height <= 0) return;
+                const adjustment = this._scrollView.get_vadjustment();
+                if (adjustment.page_size <= 0) return;
+                editor._didScroll = true;
+                const box = editor.get_allocation_box();
+                if (box.y1 < adjustment.value)
+                    adjustment.value = box.y1;
+                else if (box.y2 > adjustment.value + adjustment.page_size)
+                    adjustment.value = Math.min(box.y1,
+                        box.y2 - adjustment.page_size);
+            });
+            this._taskBox.insert_child_at_index(editor, index);
+            this._contentBox.show();
+            this._addTaskButton.hide();
+            this._setHeader();
+            if (!this._taskLists.length) this._headerBox.hide();
+            editor.connect('destroy', () => {
+                if (this._editor !== editor) return;
+                this._editor = null;
+                if (this._destroyed) return;
+                this._addTaskButton.show();
+                this._refreshAfterEditor(editor.savedUid
+                    ? editor._selected?.uid : previousListUid);
+            });
+            editor.open();
+        }
+
+        async _refreshAfterEditor(savedListUid = null) {
+            await this._storeTaskLists();
+            if (this._destroyed || this._editor) return;
+            if (!this._taskLists.length) {
+                this._showPlaceholderWithStatus('no-tasks');
+                return;
+            }
+            this._setHeader();
+            this._resetTaskBox(true);
+            const saved = this._taskLists.findIndex(list =>
+                list.uid === savedListUid);
+            this._showActiveTaskList(saved !== -1 ? saved
+                : Math.min(this._activeTaskList ?? 0,
+                    this._taskLists.length - 1));
+        }
+
+        async _openTaskEditor(task = null, parent = null) {
+            if (this._editor) {
+                this._editor.open();
+                return;
+            }
+            if (this._openingEditor) return;
+            this._openingEditor = true;
+            try {
+                const {TaskEditor} = await import('./taskEditor.js');
+                if (this._destroyed) return;
+                const lists = [...this._clientViews.values()]
+                    .map(view => ({uid: view.client.source.uid,
+                        name: view.client.source.display_name, client: view.client}))
+                    .filter(list => !list.client.is_readonly());
+                const uid = (task ?? parent)?._taskList ?? this._taskLists[this._activeTaskList]?.uid;
+                const editor = new TaskEditor(
+                    task || parent ? lists.filter(list => list.uid === uid) : lists,
+                    uid, task, parent);
+                this._mountInlineEditor(editor, task ?? parent, !!parent);
+            } catch (error) {
+                logError(error);
+                this._showTaskError(error.message);
+            } finally {
+                this._openingEditor = false;
+            }
+        }
+
+        async _openTaskDelete(task) {
+            if (this._editor || this._openingEditor) return;
+            this._openingEditor = true;
+            try {
+                const {TaskDeleteConfirmation} = await import('./taskEditor.js');
+                if (this._destroyed) return;
+                const client = this._clientViews.get(task._taskList)?.client;
+                if (!client) return;
+                this._mountInlineEditor(
+                    new TaskDeleteConfirmation(client, task), task);
+            } catch (error) {
+                logError(error);
+                this._showTaskError(error.message);
+            } finally {
+                this._openingEditor = false;
+            }
+        }
+
+        _showTaskError(message) {
+            this._taskError?.destroy();
+            this._taskError = new St.Label({text: message,
+                style_class: 'task-widget-editor-error'});
+            const label = this._taskError;
+            label.connect('destroy', () => {
+                if (this._taskError === label) this._taskError = null;
+            });
+            this._taskError.clutter_text.set_line_wrap(true);
+            this._taskBox.insert_child_at_index(this._taskError, 0);
+        }
+
         /**
          * Either sets and shows the active task list or shows the placeholder.
          *
@@ -1660,6 +1881,9 @@ const TaskWidget = GObject.registerClass(
          */
         async _showActiveTaskList(index) {
             try {
+                // Preserve the inline draft while backend notifications arrive.
+                if (this._destroyed || this._editor) return;
+                this._closeTaskActions();
                 this._activeTaskList = index;
 
                 if ((!DateMenu.isOpen && index !== null) || this._idleAddId)
@@ -1847,6 +2071,9 @@ const TaskWidget = GObject.registerClass(
             )
                 this._headerBox.show();
             else this._headerBox.hide();
+            this._backButton.reactive = !this._editor;
+            this._forwardButton.reactive = !this._editor;
+            if (this._editor) this._taskListNameButton.reactive = false;
         }
 
         /**
@@ -1880,6 +2107,7 @@ const TaskWidget = GObject.registerClass(
          * @returns {boolean} `false` to continue the propagation of the event.
          */
         _onHeaderScrolled(_actor, event) {
+            if (this._editor) return Clutter.EVENT_STOP;
             if (
                 this._taskLists.length !== 1 &&
                 !this._settings.get_boolean('merge-task-lists')
@@ -1996,6 +2224,10 @@ const TaskWidget = GObject.registerClass(
          * @param {boolean} isOpen - Menu is open.
          */
         _onMenuOpen(_menu, isOpen) {
+            if (isOpen && this._editor) {
+                this._editor.open();
+                return;
+            }
             if (isOpen && this._activeTaskList !== null) {
                 let i = 0;
                 this._showActiveTaskList(this._activeTaskList);
@@ -2020,6 +2252,8 @@ const TaskWidget = GObject.registerClass(
                     GLib.source_remove(this._refreshTimeoutId);
                     delete this._refreshTimeoutId;
                 }
+                if (this._editor) return;
+                this._closeTaskActions();
 
                 const height = this._taskBox.get_allocation_box().get_height();
 
@@ -2052,7 +2286,7 @@ const TaskWidget = GObject.registerClass(
          */
         async _onSettingsChanged(_api, key) {
             try {
-                const silentKeys = ['last-active'];
+                const silentKeys = ['last-active', 'transparent-background'];
 
                 if (silentKeys.includes(key)) return;
 
@@ -2089,6 +2323,8 @@ const TaskWidget = GObject.registerClass(
          * Cleanup.
          */
         _onDestroy() {
+            this._destroyed = true;
+            this._editor?.destroy();
             if (
                 this._calendarWidget.has_style_class_name(
                     'task-widget-remove-calendar-margin'
